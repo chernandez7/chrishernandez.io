@@ -1,7 +1,9 @@
 source "https://rubygems.org"
 
-gem "jekyll", "~> 3.0"
-gem "jekyll-sitemap"
+gem "jekyll"
+gem "jekyll-paginate"
 gem "jekyll-gist"
-gem 'jekyll-mentions'
-gem 'jekyll-feed'
+gem "pygments.rb"
+gem "redcarpet"
+gem 'jekyll-github-metadata'
+gem 'github-pages', group: :jekyll_plugins
