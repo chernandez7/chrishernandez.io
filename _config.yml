@@ -8,20 +8,20 @@ highlighter:      rouge
 permalink:        pretty
 
 # Setup
-title:            BlackDoc
-tagline:          Black Theme for Jekyll
-description:      "A two-column black theme with a scrolling sidebar. Ideal for sites requiring a master-detail layout, e.g. documentation, cheatsheets, lyrics, notes..."
-url:              https://github.com/karloespiritu/blackdoc
+title:            Christopher Hernandez
+tagline:          Software Engineer
+description:      "Software Engineer"
+url:              https://chrishernandez.io
 baseurl:          /
 
 author:
-  name:           'Karlo Espiritu'
-  url:            https://twitter.com/karloespiritu
+  name:           'Christopher Hernandez'
+  url:            
 
 paginate:         5
 
 # Custom vars
-version:          1.0.1
+version:          1.0.0
 
 github:
-  repo:           https://github.com/karloespiritu/blackdoc
+repository:       https://github.com/chernandez7/chernandez7.github.io
