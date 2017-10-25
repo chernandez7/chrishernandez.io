@@ -13,7 +13,7 @@ tagline:          Software Engineer
 image:            ../../public/images/me2.jpg
 description:      "CTO @ BarScan Developer @ Tandlr"
 url:              http://chrishernandez.io
-baseurl:          /public
+baseurl:          /#
 
 author:
   name:           'Christopher Hernandez'
