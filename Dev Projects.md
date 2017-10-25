@@ -43,6 +43,20 @@ Table of Contents
 
 ## Aesthetic Kanji
 
+Technology Used
+*  React Native
+*  FireBase
+
+[__Repository__](https://github.com/chernandez7/Aesthetic-Kanji)
+
+![GoL](https://camo.githubusercontent.com/047904836988b057be53cfba723fc939f24a1b77/687474703a2f2f692e696d6775722e636f6d2f56524a7a5676302e706e67)
+
+This project was actually inspired by two things: A color pallete I saw on a UI site and for my love of 日本語 (Japanese). It was also my first time using a DataBase.
+
+I was studying vocabulary and kanjo heavily with help of a flash card app and I wondered if it would be difficult to implement my own. I was commited on using the color pallete that I had found and it ended up looking pretty nice in my opinion.
+
+Currently the FireBase integration is working and the app state pulls in the thousands of kanji. Which I would call a success. But the project isn't finished yet, maybe someday i'll continue it.
+
 ---
 
 ## Moon Phases
