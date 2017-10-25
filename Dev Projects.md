@@ -14,6 +14,8 @@ Table of Contents
 *  [Tandlr](#Tandlr)
 
 *  [NGHT / Barscan](#NGHT-Barscan)
+    *  [NGHT](#NGHT)
+    *  [BarScan](#BarScan)
 
 *  [Aesthetic Kanji](#Aesthetic-Kanji)
 
@@ -39,6 +41,33 @@ Table of Contents
 
 ## NGHT-Barscan
 
+### NGHT
+
+Technology Used
+*  React Native
+*  Redux
+*  GitLab
+*  Expo
+
+Repository: __Private__
+
+<img src="./public/images/NGHT_login.jpg" alt="Drawing" style="width: 200px;"/>
+<img src="./public/images/NGHT_home.jpg" alt="Drawing" style="width: 200px;"/>
+<img src="./public/images/NGHT_detail.jpg" alt="Drawing" style="width: 200px;"/>
+
+---
+
+### Barscan
+
+Technology Used
+*  Ionic
+*  FireBase
+
+Repository: __Private__
+
+<img src="./public/images/Barscan_map.jpg" alt="Drawing" style="width: 200px;"/>
+<img src="./public/images/Barscan_news.jpg" alt="Drawing" style="width: 200px;"/>
+
 ---
 
 ## Aesthetic Kanji
@@ -49,7 +78,7 @@ Technology Used
 
 [__Repository__](https://github.com/chernandez7/Aesthetic-Kanji)
 
-![GoL](https://camo.githubusercontent.com/047904836988b057be53cfba723fc939f24a1b77/687474703a2f2f692e696d6775722e636f6d2f56524a7a5676302e706e67)
+![Kanji](https://camo.githubusercontent.com/047904836988b057be53cfba723fc939f24a1b77/687474703a2f2f692e696d6775722e636f6d2f56524a7a5676302e706e67)
 
 This project was actually inspired by two things: A color pallete I saw on a UI site and for my love of 日本語 (Japanese). It was also my first time using a DataBase.
 
