@@ -51,9 +51,9 @@ Technology Used
 
 Repository: __Private__
 
-<img src="./public/images/NGHT_login.jpg" alt="Drawing" style="width: 200px;"/>
-<img src="./public/images/NGHT_home.jpg" alt="Drawing" style="width: 200px;"/>
-<img src="./public/images/NGHT_detail.jpg" alt="Drawing" style="width: 200px;"/>
+<img src="./public/images/NGHT_login.jpg" style="width: 200px;"/>
+<img src="./public/images/NGHT_home.jpg" style="width: 200px;"/>
+<img src="./public/images/NGHT_detail.jpg" style="width: 200px;"/>
 
 ---
 
@@ -62,6 +62,7 @@ Repository: __Private__
 Technology Used
 *  Ionic
 *  FireBase
+*  GitLab
 
 Repository: __Private__
 
@@ -78,7 +79,8 @@ Technology Used
 
 [__Repository__](https://github.com/chernandez7/Aesthetic-Kanji)
 
-![Kanji](https://camo.githubusercontent.com/047904836988b057be53cfba723fc939f24a1b77/687474703a2f2f692e696d6775722e636f6d2f56524a7a5676302e706e67)
+<img src="./public/images/A_kanji.png" style="width: 200px;"/>
+<img src="./public/images/A_kanji_2.png" style="width: 200px;"/>
 
 This project was actually inspired by two things: A color pallete I saw on a UI site and for my love of 日本語 (Japanese). It was also my first time using a DataBase.
 
@@ -137,7 +139,7 @@ Technology Used
 
 [__Repository__](https://github.com/chernandez7/Game-of-Life)
 
-![GoL](http://i.imgur.com/wfy4iMT.gif)
+<img src="./public/images/GoL.gif" style="width: 400px;"/>
 
 The Game of Life project started as the final project for my COMP 364 (High Performance Computing) course. I had access to and made use of the [TACC Supercomputer](https://portal.tacc.utexas.edu/user-guides/STAMPEDE) for parallelization in this project.
 
