@@ -47,9 +47,37 @@ Table of Contents
 
 ## Moon Phases
 
+Technology Used
+*  C++
+*  OpenGL
+
+[__Repository__](https://github.com/chernandez7/Moon-Phases)
+
+This project started as the final project to my PHYS 102 (Astronomy) course, while the requirments stated that we were supposed to make a diorama I convinced my professor to let me create a piece of software.
+
 ---
 
 ## Relativiti
+
+Technology Used
+*  Nodejs
+*  Polymer
+*  Cordova
+*  Travis CI
+
+[__Repository__](https://github.com/Rhernandez513/Relativiti)
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/gjB-TBw-Pcc?rel=0" frameborder="0" allowfullscreen></iframe>
+
+This project started as the final project to my COMP 374 (Software Engineering) course and was meant to be a webapp that took in audio and converted it to sheet music. It was never finished so I don't have a final video to show, but I do have some test videos.
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/LDq3luUazs4?rel=0" frameborder="0" allowfullscreen></iframe>
+
+This project was my first time using JavaScript and HTML. Also the first time that a project was rigorously documented and planned before it was started. First time creating build scripts and continuous deployment across multiple platforms.
+
+Since I was fairly new and the project was pretty ambitious it never got past the stage of parsing out note Hz into actual note values (which is fairly difficult). But this project did lead to the revitalization of my universities ACM student chapter.
+
+I would love to make a derivative of this project or continue it one day though.
 
 ---
 
