@@ -53,7 +53,13 @@ Technology Used
 
 [__Repository__](https://github.com/chernandez7/Moon-Phases)
 
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/gjB-TBw-Pcc?rel=0" frameborder="0" allowfullscreen></iframe>
+
 This project started as the final project to my PHYS 102 (Astronomy) course, while the requirments stated that we were supposed to make a diorama I convinced my professor to let me create a piece of software.
+
+In this project I went really in-depth into OpenGL, it's performance, and how it's camera system works. I ended up making an engine that simulates the phases of the moon throughout the year.
+
+This project wasn't very difficult to make but much harder than a diorama in my opinion. It did give me a good insight as to how it can be difficult to create a finalized product for an audience. Since each platform would need a different release.
 
 ---
 
@@ -66,8 +72,6 @@ Technology Used
 *  Travis CI
 
 [__Repository__](https://github.com/Rhernandez513/Relativiti)
-
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/gjB-TBw-Pcc?rel=0" frameborder="0" allowfullscreen></iframe>
 
 This project started as the final project to my COMP 374 (Software Engineering) course and was meant to be a webapp that took in audio and converted it to sheet music. It was never finished so I don't have a final video to show, but I do have some test videos.
 
