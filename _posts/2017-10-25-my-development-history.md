@@ -1,45 +1,47 @@
 ---
 layout: page
-title: Dev Projects
+title: My Development History
 ---
-
-# My Development History
 
 Table of Contents - *(Ordered from most recent to oldest)*
 
 ---
 
-*  [Own The Spot (Startup)](#Own-The-Spot)
+*  [Own The Spot (Startup)](#own-the-spot)
 
-*  [Tandlr (Startup)](#Tandlr)
+*  [Tandlr (Startup)](#tandlr)
 
-*  [NGHT / Barscan](#NGHT-Barscan)
-    *  [NGHT (Startup)](#NGHT)
-    *  [BarScan (Startup)](#BarScan)
+*  [NGHT / Barscan](#nght-barscan)
+    *  [NGHT (Startup)](#nght)
+    *  [BarScan (Startup)](#barscan)
 
-*  [Aesthetic Kanji](#Aesthetic-Kanji)
+*  [Aesthetic Kanji](#aesthetic-kanji)
 
-*  [Moon Phases](#Moon-Phases)
+*  [Moon Phases](#moon-phases)
 
-*  [Relativiti](#Relativiti)
+*  [Relativiti](#relativiti)
 
-*  [Game of Life](#Game-of-Life)
+*  [Game of Life](#game-of-life)
 
-*  [Boids](#Boids)
-    *  [First Implementation](#First-Implementation)
-    *  [Second Implementation](#Second-Implementation)
+*  [Boids](#boids)
+    *  [SFML Implementation](#sfml-implementation)
+    *  [CUDA Implementation](#cuda-implementation)
 
 ---
 
 ## Own The Spot
 
 Technology Used
+
 *  React Native
+
 *  Expo
+
 *  GraphQL
+
 *  Apollo
 
-[Repository](https://github.com/BWillis98/Own-The-Spot)
+[Repository Link](https://github.com/BWillis98/Own-The-Spot)
 
 Own The Spot is the most recent addition to the list of projects that i'm working on. The aim of the Own The Spot startup is to create a platform and social media for skateboarders. From our research this seems to be an un-tapped market and the concept comes from a skateboarding video game that uses a similar idea.
 
@@ -52,7 +54,9 @@ The project is VERY early in the development phase and currently working on an M
 ## Tandlr
 
 Technology Used
+
 *  AngularJS
+
 *  Django
 
 Repository: __Private__
@@ -63,10 +67,10 @@ Repository: __Private__
 
 Google Play Store: __TBD__
 
-<img src="./public/images/Tandlr1.jpg" style="width: 160px;"/>
-<img src="./public/images/Tandlr2.jpg" style="width: 160px;"/>
-<img src="./public/images/Tandlr3.jpg" style="width: 160px;"/>
-<img src="./public/images/Tandlr4.jpg" style="width: 160px;"/>
+<img src="../../public/images/Tandlr1.jpg" style="width: 160px; display: inline;"/>
+<img src="../../public/images/Tandlr2.jpg" style="width: 160px; display: inline;"/>
+<img src="../../public/images/Tandlr3.jpg" style="width: 160px; display: inline;"/>
+<img src="../../public/images/Tandlr4.jpg" style="width: 160px; display: inline;"/>
 
 I've joined the startup Tandlr quite recently and been a fun ride so far. Tandlr's aim is to create a platform that allows for students to connect with tutors and mentors to increase their grades.
 
@@ -79,9 +83,13 @@ Been developing there for about 4 months now and it's interesting working on a t
 ### NGHT
 
 Technology Used
+
 *  React Native
+
 *  Redux
+
 *  GitLab
+
 *  Expo
 
 Repository: __Private__
@@ -92,9 +100,9 @@ Google Play Store: __DEPRECATED__
 
 Apple Store: __DEPRECATED__
 
-<img src="./public/images/NGHT_login.jpg" style="width: 200px;"/>
-<img src="./public/images/NGHT_home.jpg" style="width: 200px;"/>
-<img src="./public/images/NGHT_detail.jpg" style="width: 200px;"/>
+<img src="../../public/images/NGHT_login.jpg" style="width: 200px; display: inline;"/>
+<img src="../../public/images/NGHT_home.jpg" style="width: 200px; display: inline;"/>
+<img src="../../public/images/NGHT_detail.jpg" style="width: 200px; display: inline;"/>
 
 Where to begin with this project...I joined the startup NGHT around October 2017 and helped build the app from the ground up. The intention of the app is to provide people with a way to find deals and simplify their nightlife experience.
 
@@ -107,8 +115,11 @@ After about six months with NGHT and aquiring my own share of equity in the comp
 ### BarScan
 
 Technology Used
+
 *  Ionic
+
 *  FireBase
+
 *  GitLab
 
 Repository: __Private__
@@ -121,8 +132,8 @@ Repository: __Private__
 
 [Instagram](https://www.instagram.com/barscanmobileapp/)
 
-<img src="./public/images/Barscan_map.jpg" alt="Drawing" style="width: 200px;"/>
-<img src="./public/images/Barscan_news.jpg" alt="Drawing" style="width: 200px;"/>
+<img src="../../public/images/Barscan_map.jpg" alt="Drawing" style="width: 200px; display: inline;"/>
+<img src="../../public/images/Barscan_news.jpg" alt="Drawing" style="width: 200px; display: inline;"/>
 
 Once we were situated with the merge of NGHT and BarScan it was time to merge the applications as well as inherit a _LOT_ of new code. We are mostly sticking with BarScan's stack since it's more robust and later in the development stage than NGHT's.
 
@@ -135,13 +146,15 @@ It is quite interesting to see where this will go since it's been about a year n
 ## Aesthetic Kanji
 
 Technology Used
+
 *  React Native
+
 *  FireBase
 
-[__Repository__](https://github.com/chernandez7/Aesthetic-Kanji)
+[Repository Link](https://github.com/chernandez7/Aesthetic-Kanji)
 
-<img src="./public/images/A_kanji.png" style="width: 200px;"/>
-<img src="./public/images/A_kanji_2.png" style="width: 200px;"/>
+<img src="../../public/images/A_kanji.png" style="width: 200px; display: inline;"/>
+<img src="../../public/images/A_kanji_2.png" style="width: 200px; display: inline;"/>
 
 This project was actually inspired by two things: A color pallete I saw on a UI site and for my love of 日本語 (Japanese). It was also my first time using a DataBase.
 
@@ -154,12 +167,14 @@ Currently the FireBase integration is working and the app state pulls in the tho
 ## Moon Phases
 
 Technology Used
+
 *  C++
+
 *  OpenGL
 
-[__Repository__](https://github.com/chernandez7/Moon-Phases)
+[Repository Link](https://github.com/chernandez7/Moon-Phases)
 
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/gjB-TBw-Pcc?rel=0" frameborder="0" allowfullscreen></iframe>
+<iframe width="720" height="404" src="https://www.youtube-nocookie.com/embed/gjB-TBw-Pcc?rel=0" frameborder="0" allowfullscreen></iframe>
 
 This project started as the final project to my PHYS 102 (Astronomy) course, while the requirments stated that we were supposed to make a diorama I convinced my professor to let me create a piece of software.
 
@@ -172,16 +187,20 @@ This project wasn't very difficult to make but much harder than a diorama in my 
 ## Relativiti
 
 Technology Used
+
 *  Nodejs
+
 *  Polymer
+
 *  Cordova
+
 *  Travis CI
 
-[__Repository__](https://github.com/Rhernandez513/Relativiti)
+[Repository Link](https://github.com/Rhernandez513/Relativiti)
 
 This project started as the final project to my COMP 374 (Software Engineering) course and was meant to be a webapp that took in audio and converted it to sheet music. It was never finished so I don't have a final video to show, but I do have some test videos.
 
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/LDq3luUazs4?rel=0" frameborder="0" allowfullscreen></iframe>
+<iframe width="720" height="404" src="https://www.youtube-nocookie.com/embed/LDq3luUazs4?rel=0" frameborder="0" allowfullscreen></iframe>
 
 This project was my first time using JavaScript and HTML. Also the first time that a project was rigorously documented and planned before it was started. First time creating build scripts and continuous deployment across multiple platforms.
 
@@ -194,13 +213,14 @@ I would love to make a derivative of this project or continue it one day though.
 ## Game of Life
 
 Technology Used
+
 *  C++
+
 *  OpenMP
+
 *  Travis CI
 
-[__Repository__](https://github.com/chernandez7/Game-of-Life)
-
-<img src="./public/images/GoL.gif" style="width: 400px;"/>
+[Repository Link](https://github.com/chernandez7/Game-of-Life)
 
 The Game of Life project started as the final project for my COMP 364 (High Performance Computing) course. I had access to and made use of the [TACC Supercomputer](https://portal.tacc.utexas.edu/user-guides/STAMPEDE) for parallelization in this project.
 
@@ -210,15 +230,17 @@ Benchmarks and analysis are in the repository so i'll leave this one as it is, b
 
 ## Boids
 
-### First Implementation
+### SFML Implementation
 
 Technology Used
+
 *  C++
+
 *  SFML
 
-[__Repository__](https://github.com/chernandez7/Boids.git)
+[Repository Link](https://github.com/chernandez7/Boids.git)
 
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/0RdnN7Sg1jA?rel=0" frameborder="0" allowfullscreen></iframe>
+<iframe width="720" height="404" src="https://www.youtube-nocookie.com/embed/0RdnN7Sg1jA?rel=0" frameborder="0" allowfullscreen></iframe>
 
 This project began as the final project to my COMP 271 (Data Structures) class. Originally I wanted it to be done in pure OpenGL but due to time constraints, I opted for SFML which wraps OpenGL quite nicely for C++.
 
@@ -228,22 +250,28 @@ I ended up doing that for my COMP 398 (Independent Study) course.
 
 ---
 
-### Second Implementation
+### CUDA Implementation
 
 Technology Used
+
 *  C++
+
 *  CUDA
+
 *  OpenGL
 
-[__Repository__](https://github.com/chernandez7/cuda-boids)
+[Repository Link](https://github.com/chernandez7/cuda-boids)
 
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/8TYSsUS-DBk?rel=0" frameborder="0" allowfullscreen></iframe>
+<iframe width="720" height="404" src="https://www.youtube-nocookie.com/embed/8TYSsUS-DBk?rel=0" frameborder="0" allowfullscreen></iframe>
 
 This time around I had a whole semester and a lot more experience as a developer. I ended up using CUDA for computing in parallel and OpenGL, this time I had some goals.
 
 I wanted to:
+
 *  Improve efficiency
+
 *  Add the z-axis
+
 *  Use OpenGL and CUDA together
 
 Since I had some High Performance Computing knowledge up my sleeve now, this was a bit easier to do. Some troubles came from the new libraries and hardware acceleration that I didn't know too well but it worked out. Another interesting thing was that I had access to the [TACC Supercomputer](https://portal.tacc.utexas.edu/user-guides/STAMPEDE) which allowed me to run my implementation on a distributed system.
