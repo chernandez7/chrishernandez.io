@@ -51,13 +51,25 @@ Technology Used
 
 Repository: __Private__
 
+Website: __DEPRECATED__
+
+Google Play Store: __DEPRECATED__
+
+Apple Store: __DEPRECATED__
+
 <img src="./public/images/NGHT_login.jpg" style="width: 200px;"/>
 <img src="./public/images/NGHT_home.jpg" style="width: 200px;"/>
 <img src="./public/images/NGHT_detail.jpg" style="width: 200px;"/>
 
+Where to begin with this project...I joined the startup NGHT around October 2017 and helped build the app from the ground up. The intention of the app is to provide people with a way to find deals and simplify their nightlife experience.
+
+We have plans to integrate POS system connections with bars across The United States and Canada but that was put on hold due to business reasons.
+
+After about six months with NGHT and aquiring my own share of equity in the company we decided to merge companies with a competitor who was also a student, that's how BarScan comes into play.
+
 ---
 
-### Barscan
+### BarScan
 
 Technology Used
 *  Ionic
@@ -66,8 +78,22 @@ Technology Used
 
 Repository: __Private__
 
+[Website](http://barscanapp.com/)
+
+[Google Play Store](https://play.google.com/store/apps/details?id=com.locusmobileapp&hl=en)
+
+[Apple Store](https://itunes.apple.com/us/app/barscan-nightlife/id1161996900?mt=8)
+
+[Instagram](https://www.instagram.com/barscanmobileapp/)
+
 <img src="./public/images/Barscan_map.jpg" alt="Drawing" style="width: 200px;"/>
 <img src="./public/images/Barscan_news.jpg" alt="Drawing" style="width: 200px;"/>
+
+Once we were situated with the merge of NGHT and BarScan it was time to merge the applications as well as inherit a _LOT_ of new code. We are mostly sticking with BarScan's stack since it's more robust and later in the development stage than NGHT's.
+
+It does make me sad at times that the whole stack and app that I built for NGHT isn't going to be used anymore but I guess that's how things are in life.
+
+It is quite interesting to see where this will go since it's been about a year now in total with both startups.
 
 ---
 
