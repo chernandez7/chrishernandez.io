@@ -12,8 +12,8 @@ title:            Christopher Hernandez
 tagline:          Software Engineer
 image:            ../../public/images/me2.jpg
 description:      "CTO @ BarScan Developer @ Tandlr"
-url:              https://chrishernandez.io
-baseurl:          /
+url:              /
+baseurl:          http://chrishernandez.io
 
 author:
   name:           'Christopher Hernandez'
