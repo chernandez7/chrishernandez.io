@@ -33,9 +33,44 @@ Table of Contents
 
 ## Own The Spot
 
+Technology Used
+*  React Native
+*  Expo
+*  GraphQL
+*  Apollo
+
+[Repository](https://github.com/BWillis98/Own-The-Spot)
+
+Own The Spot is the most recent addition to the list of projects that i'm working on. The aim of the Own The Spot startup is to create a platform and social media for skateboarders. From our research this seems to be an un-tapped market and the concept comes from a skateboarding video game that uses a similar idea.
+
+The fact that no one has done it yet is surprising to me, but I may be biased being a skateboarder myself.
+
+The project is VERY early in the development phase and currently working on an MVP, but i'm quite excited to see this project to completion.
+
 ---
 
 ## Tandlr
+
+Technology Used
+*  AngularJS
+*  Django
+
+Repository: __Private__
+
+[Website](http://www.tandlr.com/)
+
+[Apple Store](https://itunes.apple.com/us/app/tandlr-tutoring/id1074984935?mt=8)
+
+Google Play Store: __TBD__
+
+<img src="./public/images/Tandlr1.jpg" style="width: 160px;"/>
+<img src="./public/images/Tandlr2.jpg" style="width: 160px;"/>
+<img src="./public/images/Tandlr3.jpg" style="width: 160px;"/>
+<img src="./public/images/Tandlr4.jpg" style="width: 160px;"/>
+
+I've joined the startup Tandlr quite recently and been a fun ride so far. Tandlr's aim is to create a platform that allows for students to connect with tutors and mentors to increase their grades.
+
+Been developing there for about 4 months now and it's interesting working on a tech stack that's already existing and production ready. All of my work has been on the webapp and i've had to completely rework the previous system to meet the new requirments of management.
 
 ---
 
