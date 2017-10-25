@@ -12,4 +12,4 @@ Modification of [BlackDoc theme](https://github.com/karloespiritu/BlackDoc).
 
 ## License
 
-Open sourced under the [MIT license](LICENSE.md)..
+Open sourced under the [MIT license](LICENSE.md).
