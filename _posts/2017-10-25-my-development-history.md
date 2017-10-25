@@ -3,7 +3,7 @@ layout: page
 title: My Development History
 ---
 
-Table of Contents - *(Ordered from most recent to oldest)*
+Table of Contents - *(Ordered from most to least recent)*
 
 ---
 
