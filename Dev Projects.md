@@ -3,19 +3,19 @@ layout: page
 title: Dev Projects
 ---
 
+# My Development History
+
+Table of Contents - *(Ordered from most recent to oldest)*
+
 ---
 
-Table of Contents
+*  [Own The Spot (Startup)](#Own-The-Spot)
 
----
-
-*  [Own The Spot](#Own-The-Spot)
-
-*  [Tandlr](#Tandlr)
+*  [Tandlr (Startup)](#Tandlr)
 
 *  [NGHT / Barscan](#NGHT-Barscan)
-    *  [NGHT](#NGHT)
-    *  [BarScan](#BarScan)
+    *  [NGHT (Startup)](#NGHT)
+    *  [BarScan (Startup)](#BarScan)
 
 *  [Aesthetic Kanji](#Aesthetic-Kanji)
 
