@@ -10,6 +10,7 @@
       <p class="lead">{{ site.description }}</p>
     </div>
 
+    <!--
     <nav class="sidebar-nav">
       <a class="sidebar-nav-item{% if page.url == site.baseurl %} active{% endif %}" href="{{ site.baseurl }}">Home</a>
 
@@ -26,13 +27,17 @@
           {% endif %}
         {% endif %}
       {% endfor %}
-
-      <!--<a class="sidebar-nav-item" href="{{ site.github.repo }}/archive/master.zip">Download</a>
+      
+      <a class="sidebar-nav-item" href="{{ site.github.repo }}/archive/master.zip">Download</a>
       <hr>
       <a class="sidebar-nav-item" href="{{ site.github.repo }}">GitHub project</a>
       <span class="sidebar-nav-item">Currently v{{ site.version }}</span>-->
     </nav>
+    <img src="../../public/images/github.png" style="width: 225px;"/>
+    <br/ >
 
-    <p>&copy; Christopher Hernandez {{ site.time | date: '%Y' }}</p>
+    <p style="position: fixed; bottom: 0; width:100%;">
+      &copy; Christopher Hernandez {{ site.time | date: '%Y' }}
+    </p>
   </div>
 </div>
