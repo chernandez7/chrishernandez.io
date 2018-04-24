@@ -35,13 +35,15 @@ Technology Used
 
 *  React Native
 
-*  Expo
+*  Apollo Client
 
-*  GraphQL
+*  GraphQL (Node.js)
 
-*  Apollo
+*  PostgreSQL
 
-[Repository Link](https://github.com/BWillis98/Own-The-Spot)
+*  AWS
+
+Repository: PRIVATE
 
 Own The Spot is the most recent addition to the list of projects that i'm working on. The aim of the Own The Spot startup is to create a platform and social media for skateboarders. From our research this seems to be an un-tapped market and the concept comes from a skateboarding video game that uses a similar idea.
 
