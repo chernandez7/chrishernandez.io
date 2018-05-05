@@ -45,11 +45,16 @@ Technology Used
 
 Repository: PRIVATE
 
+<a href="https://play.google.com/store/apps/details?id=com.ownthespot"><img src="../../public/images/google-play-badge.png" title="Google Play Badge" alt="Download"></a>
+
+<img src="../../public/images/OTS1.png" style="width: 160px; display: inline;"/>
+<img src="../../public/images/OTS2.png" style="width: 160px; display: inline;"/>
+<img src="../../public/images/OTS3.png" style="width: 160px; display: inline;"/>
+<img src="../../public/images/OTS4.png" style="width: 160px; display: inline;"/>
+
 Own The Spot is the most recent addition to the list of projects that i'm working on. The aim of the Own The Spot startup is to create a platform and social media for skateboarders. From our research this seems to be an un-tapped market and the concept comes from a skateboarding video game that uses a similar idea.
 
-The fact that no one has done it yet is surprising to me, but I may be biased being a skateboarder myself.
-
-The project is VERY early in the development phase and currently working on an MVP, but i'm quite excited to see this project to completion.
+We've recently hit our MVP goals and are live on the play store. Our next plan is to improve the current platform with feedback from user feedback as well as set up our continuous deployment system. As well as continue to add new features.
 
 ---
 
