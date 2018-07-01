@@ -45,7 +45,20 @@ Technology Used
 
 Repository: PRIVATE
 
-<a href="https://play.google.com/store/apps/details?id=com.ownthespot"><img src="../../public/images/google-play-badge.png" title="Google Play Badge" alt="Download"></a>
+<div style="width:100%;align-content:space-between">
+  <a 
+        href="https://play.google.com/store/apps/details?id=com.ownthespot" 
+        style="display:inline-block;width:40%;padding:2%;border-style:none"
+    >
+        <img style="width: 100%" src="../../public/images/playstore-badge.png" title="Google Play Badge" alt="Download">
+    </a>
+    <a 
+        href="https://itunes.apple.com/us/app/own-the-spot/id1403095767?ls=1&mt=8" 
+        style="display:inline-block;width: 40%;padding:2%;border-style:none"
+    >
+        <img style="width: 100%" src="../../public/images/itunes-badge.png" title="App Store Badge" alt="Download">
+    </a>
+</div> 
 
 <img src="../../public/images/OTS1.png" style="width: 160px; display: inline;"/>
 <img src="../../public/images/OTS2.png" style="width: 160px; display: inline;"/>
