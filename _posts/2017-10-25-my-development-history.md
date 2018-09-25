@@ -7,6 +7,8 @@ Table of Contents - *(Ordered from most to least recent)*
 
 ---
 
+*  [Alluxo (Startup)](#alluxo)
+
 *  [Own The Spot (Startup)](#own-the-spot)
 
 *  [Tandlr (Startup)](#tandlr)
@@ -29,6 +31,27 @@ Table of Contents - *(Ordered from most to least recent)*
 
 ---
 
+## Alluxo
+
+Technology Used
+
+*  React
+
+*  React Native
+
+*  Axios
+
+*  Invision
+
+
+Repository: PRIVATE
+
+[Website](https://alluxo.com/)
+
+At Alluxo I've been building all of the front-end. The webapp which will be a SaaS that will provide companies with dashboards in a couple clicks. The mobile app which will also have the same functionality. Still in the early stages.
+
+---
+
 ## Own The Spot
 
 Technology Used
@@ -44,6 +67,8 @@ Technology Used
 *  AWS
 
 Repository: PRIVATE
+
+[Website](https://own-the-spot.com/)
 
 <div style="width:100%;align-content:space-between">
   <a 
