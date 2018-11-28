@@ -9,12 +9,21 @@
 
 Personal site powered by Gatsby, Netlify, React, GraphQL, and Emotion.
 
+## Setup
 
-```sh
-  cd chernandez7.github.io/
-  gatsby develop
-```
+`cd chernandez7.github.io/`
 
+`yarn`
+
+`gatsby develop`
+
+## Todo
+
+- Unit Testing https://www.gatsbyjs.org/docs/unit-testing/
+- Offline Support https://gatsby.app/offline
+
+<!---
 ## 💫 Deploy
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-default)
+---!>
