@@ -6,3 +6,12 @@ cache:
 dist: trusty
 sudo: false
 
+before_install:
+  - npm i -g yarn
+
+install:
+  - yarn
+
+script: 
+  - yarn test
+
