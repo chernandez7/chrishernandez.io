@@ -9,6 +9,8 @@
 
 Personal site powered by Gatsby, Netlify, React, GraphQL, and Emotion.
 
+[![Build Status](https://travis-ci.org/chernandez7/chernandez7.github.io.svg?branch=master)](https://travis-ci.org/chernandez7/chernandez7.github.io)
+
 ## Setup
 
 `cd chernandez7.github.io/`
@@ -20,6 +22,7 @@ Personal site powered by Gatsby, Netlify, React, GraphQL, and Emotion.
 ## Todo
 
 - Unit Testing https://www.gatsbyjs.org/docs/unit-testing/
+- Netlify Deployments
 - Offline Support https://gatsby.app/offline
 
 <!---

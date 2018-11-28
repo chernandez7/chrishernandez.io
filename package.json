@@ -16,7 +16,7 @@
     "develop": "gatsby develop",
     "start": "npm run develop",
     "format": "prettier --write \"src/**/*.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo 'Run your tests here'"
   },
   "devDependencies": {
     "husky": "^1.1.4",
