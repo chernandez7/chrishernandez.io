@@ -8,6 +8,9 @@ const HeadingContainer = styled.div`
   width: 500px;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  top: 40%;
+  transform: translateY(-40%);
 `;
 
 const Name = styled.h1`
@@ -28,7 +31,7 @@ const Subtitle = styled.p`
 `;
 
 const StyledAnchor = styled.a`
-  color: #72777f;
+  color: #937341;
   font-size: 1.4rem;
   text-decoration: none;
   :hover {
@@ -50,6 +53,11 @@ const Heading = () => (
     <Subtitle>
       {`Engineer @ `}
       <StyledAnchor href="https://alluxo.com">Alluxo, Inc.</StyledAnchor>
+    </Subtitle>
+    <br />
+    <Subtitle>
+      {`Under Construction... Being rebuilt with `}
+      <StyledAnchor href="https://www.gatsbyjs.org">GatsbyJS</StyledAnchor>
     </Subtitle>
   </HeadingContainer>
 );
