@@ -2,6 +2,7 @@ import React from "react";
 import Link from "gatsby-link";
 import Layout from "../components/layout";
 import styled from "styled-components";
+import "./index.css";
 
 const HeadingContainer = styled.div`
   width: 500px;

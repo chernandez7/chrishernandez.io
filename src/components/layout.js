@@ -5,12 +5,9 @@ import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
 
 const Container = styled.div`
-  background-color: #001100;
-  display: block;
-  overflow: hidden;
-  width: vw;
-  height: 100%;
-  margin: -8px;
+  background-color: #222;
+  height: 100vh;
+  width: 100vw;
 `;
 
 const Layout = ({ children }) => (

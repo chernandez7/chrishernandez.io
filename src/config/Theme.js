@@ -1,5 +1,5 @@
 const Theme = {
-  primaryDark: "rgba(15,15,16,.99)",
+  primaryDark: "#222",
   accent: "#a3997e",
   text: "#72777f",
   textAccent: "#937341"
