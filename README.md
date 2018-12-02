@@ -22,11 +22,4 @@ Personal site powered by Gatsby, Netlify, React, and GraphQL.
 ## Todo
 
 - Unit Testing https://www.gatsbyjs.org/docs/unit-testing/
-- Netlify Deployments
 - Offline Support https://gatsby.app/offline
-
-<!---
-## 💫 Deploy
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-default)
----!>
