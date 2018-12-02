@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - '10.0'
+cache:
+  yarn: true
+dist: trusty
+sudo: false
+
+before_install:
+  - npm i -g yarn
+
+install:
+  - yarn
+
+script: 
+  - yarn test
+
