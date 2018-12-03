@@ -18,8 +18,3 @@ Personal site powered by Gatsby, Netlify, React, and GraphQL.
 `yarn`
 
 `gatsby develop`
-
-## Todo
-
-- Unit Testing https://www.gatsbyjs.org/docs/unit-testing/
-- Offline Support https://gatsby.app/offline
