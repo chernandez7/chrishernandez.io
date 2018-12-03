@@ -9,7 +9,7 @@
 
 Personal site powered by Gatsby, Netlify, React, and GraphQL.
 
-[![Build Status](https://travis-ci.org/chernandez7/chernandez7.github.io.svg?branch=master)](https://travis-ci.org/chernandez7/chernandez7.github.io)
+[![Build Status](https://travis-ci.org/chernandez7/chrishernandez.io.svg?branch=master)](https://travis-ci.org/chernandez7/chrishernandez.io)
 
 ## Setup
 
