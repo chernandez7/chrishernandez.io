@@ -17,8 +17,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: "gatsby-starter-default",
-        short_name: "starter",
+        name: "chrishernandez.io",
+        short_name: "chrishernandez",
         start_url: "/",
         background_color: "#222",
         theme_color: "#937341",
