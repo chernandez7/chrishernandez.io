@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home Component renders correctly 1`] = `
+<div
+  className="sc-bdVaJa krPwLp"
+>
+  <a
+    aria-current="page"
+    className="sc-htpNat jZGOfu"
+    href="/"
+    onClick={[Function]}
+    onMouseEnter={[Function]}
+    style={Object {}}
+  >
+    <h1
+      className="sc-bwzfXH gYUNMz"
+    >
+      Christopher Hernandez
+    </h1>
+  </a>
+  <p
+    className="sc-bxivhb cwfMbx"
+  >
+    Co-Founder, CTO @ 
+    <a
+      className="sc-ifAKCX cGKvbl"
+      href="https://own-the-spot.com"
+    >
+      Own It Technologies, Inc.
+    </a>
+  </p>
+  <p
+    className="sc-bxivhb cwfMbx"
+  >
+    Engineer @ 
+    <a
+      className="sc-ifAKCX cGKvbl"
+      href="https://alluxo.com"
+    >
+      Alluxo, Inc.
+    </a>
+  </p>
+  <br />
+  <p
+    className="sc-bxivhb cwfMbx"
+  >
+    Under Construction... Being rebuilt with 
+    <a
+      className="sc-ifAKCX cGKvbl"
+      href="https://www.gatsbyjs.org"
+    >
+      GatsbyJS
+    </a>
+  </p>
+</div>
+`;

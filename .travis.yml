@@ -13,5 +13,5 @@ install:
   - yarn
 
 script: 
-  - yarn test
+  - yarn test --ci
 
