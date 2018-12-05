@@ -4,7 +4,7 @@ node_js:
 cache:
   yarn: true
 dist: trusty
-sudo: true
+sudo: required
 
 before_install:
   - npm i -g yarn
