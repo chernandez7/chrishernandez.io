@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "gatsby-link";
 import styled from "styled-components";
+import { SimpleIcon } from "../components";
 
 const HeadingContainer = styled.div`
   width: 500px;
@@ -37,6 +38,14 @@ const StyledAnchor = styled.a`
   }
 `;
 
+const IconContainer = styled.div`
+  margin-top: 48px;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+`;
+
 const Heading = () => (
   <HeadingContainer>
     <StyledLink to="/">
@@ -49,14 +58,18 @@ const Heading = () => (
       </StyledAnchor>
     </Subtitle>
     <Subtitle>
-      {`Engineer @ `}
+      {`Front-End Developer @ `}
       <StyledAnchor href="https://alluxo.com">Alluxo, Inc.</StyledAnchor>
     </Subtitle>
-    <br />
-    <Subtitle>
-      {`Under Construction... Being rebuilt with `}
-      <StyledAnchor href="https://www.gatsbyjs.org">GatsbyJS</StyledAnchor>
-    </Subtitle>
+    <IconContainer>
+      <SimpleIcon icon={"github"} href={"https://github.com/chernandez7"} />
+      {/* <SimpleIcon icon={"gitlab"} href={"https://gitlab.com/chernandez7"} /> */}
+      <SimpleIcon icon={"twitter"} href={"https://twitter.com/_chernandez7"} />
+      <SimpleIcon
+        icon={"linkedin"}
+        href={"https://www.linkedin.com/in/chernandez0/"}
+      />
+    </IconContainer>
   </HeadingContainer>
 );
 
