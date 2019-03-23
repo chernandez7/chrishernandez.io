@@ -5,6 +5,7 @@ import Chart from "react-simple-chartjs";
 import Switch from "react-toggle-switch";
 import ColorPicker from "rc-color-picker";
 
+import CodeModal from "./CodeModal";
 import SimpleIcon from "./SimpleIcon";
 import Theme from "../config/Theme";
 
@@ -61,7 +62,24 @@ class ChartGen extends React.Component {
       "March",
       "April"
     ],
-    data: [1, 5, 8, 14, 7, 5, 8, 14, 7, 5, 8, 14, 7, 5, 8, 14, 7, 8, 14, 7]
+    data: [1, 5, 8, 14, 7, 5, 8, 14, 7, 5, 8, 14, 7, 5, 8, 14, 7, 8, 14, 7],
+    code: "",
+    showModal: false,
+    codeCopied: false
+  };
+
+  copyToClipboard = () => {
+    const { code } = this.state;
+    const el = document.createElement("textarea");
+    el.value = code;
+    el.setAttribute("readonly", "");
+    el.style.position = "absolute";
+    el.style.left = "-9999px";
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    this.setState({ codeCopied: true });
   };
 
   randomColor = () => {
@@ -83,7 +101,72 @@ class ChartGen extends React.Component {
     return !!n;
   };
 
-  generateCode = () => {};
+  generateCode = () => {
+    const {
+      title,
+      chartType,
+      backgroundColor,
+      fill,
+      borderColor,
+      responsive,
+      shouldMaintainAspectRatio,
+      shouldShowLegend,
+      shouldShowTitle,
+      titleFontSize,
+      showTooltips,
+      tooltipBackgroundColor,
+      tooltipTitleFontSize,
+      tooltipTitleFontColor,
+      tooltipBodyFontSize,
+      tooltipBodyFontColor,
+      displayXAxis,
+      displayXAxisGridlines,
+      displayXAxisTicks,
+      beginXAxisAtZero,
+      displayYAxis,
+      displayYAxisGridlines,
+      displayYAxisTicks,
+      beginYAxisAtZero,
+      width,
+      height
+    } = this.state;
+
+    let code = `import Chart from "react-simple-chartjs";
+
+<Chart
+  chartType={${chartType}}
+  labels={ENTER_YOUR_LABELS_HERE}
+  data={ENTER_YOUR_DATA_HERE}
+  title={${title}}
+  options={{
+    backgroundColor: ${backgroundColor}
+    fill: ${fill}
+    borderColor: ${borderColor}
+    responsive: ${responsive}
+    shouldMaintainAspectRatio: ${shouldMaintainAspectRatio}
+    shouldShowLegend: ${shouldShowLegend}
+    shouldShowTitle: ${shouldShowTitle}
+    titleFontSize: ${titleFontSize}
+    showTooltips: ${showTooltips}
+    tooltipBackgroundColor: ${tooltipBackgroundColor}
+    tooltipTitleFontSize: ${tooltipTitleFontSize}
+    tooltipTitleFontColor: ${tooltipTitleFontColor}
+    tooltipBodyFontSize: ${tooltipBodyFontSize}
+    tooltipBodyFontColor: ${tooltipBodyFontColor}
+    displayXAxis: ${displayXAxis}
+    displayXAxisGridlines: ${displayXAxisGridlines}
+    displayXAxisTicks: ${displayXAxisTicks}
+    beginXAxisAtZero: ${beginXAxisAtZero}
+    displayYAxis: ${displayYAxis}
+    displayYAxisGridlines: ${displayYAxisGridlines}
+    displayYAxisTicks: ${displayYAxisTicks}
+    beginYAxisAtZero: ${beginYAxisAtZero}
+    width: ${width}
+    height: ${height}
+  }}
+/>;`;
+    this.setState({ showModal: true, code });
+  };
 
   randomize = () => {
     // Chart Type
@@ -160,7 +243,8 @@ class ChartGen extends React.Component {
       displayYAxis,
       displayYAxisGridlines,
       displayYAxisTicks,
-      beginYAxisAtZero
+      beginYAxisAtZero,
+      codeCopied: false
     });
   };
 
@@ -193,328 +277,344 @@ class ChartGen extends React.Component {
       displayYAxisTicks,
       beginYAxisAtZero,
       width,
-      height
+      height,
+      showModal,
+      code,
+      codeCopied
     } = this.state;
     return (
-      <Container>
-        <Link to="/">
-          <DontClickThis>
-            <Dont>{`back home`}</Dont>
-          </DontClickThis>
-        </Link>
-        <FormContainer>
-          <SelectContainer>
-            <Label>Chart Type</Label>
-            <Select
-              value={chartType}
-              onChange={e =>
-                this.setState({
-                  chartType: e.target.value
-                })
-              }
-            >
-              <option value="" selected>
-                Select a Chart Type...
-              </option>
-              <option value={"Vertical Bar"}>Vertical Bar</option>
-              <option value={"Horizontal Bar"}>Horizontal Bar</option>
-              <option value={"Simple Line"}>Simple Line</option>
-              <option value={"Area Chart"}>Area Chart</option>
-            </Select>
-          </SelectContainer>
-          <ColorPickerContainer>
-            <Label>Background Color</Label>
-            <ColorPicker
-              animation="slide-up"
-              color={backgroundColor}
-              onChange={color =>
-                this.setState({ backgroundColor: color.color })
-              }
-            />
-            <Color>{backgroundColor}</Color>
-          </ColorPickerContainer>
-          <ColorPickerContainer>
-            <Label>Border Color</Label>
-            <ColorPicker
-              animation="slide-up"
-              color={borderColor}
-              onChange={color => this.setState({ borderColor: color.color })}
-            />
-            <Color>{borderColor}</Color>
-          </ColorPickerContainer>
-          <ColorPickerContainer>
-            <Label>Tooltip Background Color</Label>
-            <ColorPicker
-              animation="slide-up"
-              color={tooltipBackgroundColor}
-              onChange={color =>
-                this.setState({ tooltipBackgroundColor: color.color })
-              }
-            />
-            <Color>{tooltipBackgroundColor}</Color>
-          </ColorPickerContainer>
-          <ColorPickerContainer>
-            <Label>Tooltip Title Color</Label>
-            <ColorPicker
-              animation="slide-up"
-              color={tooltipTitleFontColor}
-              onChange={color =>
-                this.setState({ tooltipTitleFontColor: color.color })
-              }
-            />
-            <Color>{tooltipTitleFontColor}</Color>
-          </ColorPickerContainer>
-          <ColorPickerContainer>
-            <Label>Tooltip Body Color</Label>
-            <ColorPicker
-              animation="slide-up"
-              color={tooltipBodyFontColor}
-              onChange={color =>
-                this.setState({ tooltipBodyFontColor: color.color })
-              }
-            />
-            <Color>{tooltipBodyFontColor}</Color>
-          </ColorPickerContainer>
-          <InputContainer>
-            <Label>Title</Label>
-            <TextInput
-              type="text"
-              placeholder="Enter a Title..."
-              value={title}
-              onChange={e => this.setState({ title: e.target.value })}
-            />
-          </InputContainer>
-          <InputContainer>
-            <Label>Title Size</Label>
-            <TextInput
-              type="number"
-              placeholder="Enter a Title Font Size..."
-              value={titleFontSize}
-              onChange={e => this.setState({ titleFontSize: e.target.value })}
-            />
-          </InputContainer>
-          <InputContainer>
-            <Label>Tooltip Title Size</Label>
-            <TextInput
-              type="number"
-              placeholder="Enter a Tooltip Title Font Size..."
-              value={tooltipTitleFontSize}
-              onChange={e =>
-                this.setState({ tooltipTitleFontSize: e.target.value })
-              }
-            />
-          </InputContainer>
-          <InputContainer>
-            <Label>Tooltip Body Size</Label>
-            <TextInput
-              type="number"
-              placeholder="Enter a Tooltip Body Font Size..."
-              value={tooltipBodyFontSize}
-              onChange={e =>
-                this.setState({ tooltipBodyFontSize: e.target.value })
-              }
-            />
-          </InputContainer>
-          <InputContainer>
-            <Label>Width</Label>
-            <TextInput
-              type="number"
-              placeholder="Enter Width..."
-              value={width}
-              onChange={e => this.setState({ width: e.target.value })}
-            />
-          </InputContainer>
-          <InputContainer>
-            <Label>Height</Label>
-            <TextInput
-              type="number"
-              placeholder="Enter Height..."
-              value={height}
-              onChange={e => this.setState({ height: e.target.value })}
-            />
-          </InputContainer>
-          <SwitchContainer>
-            <Label>Fill Chart?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  fill: !fill
-                })
-              }
-              on={fill}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Responsive?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  responsive: !responsive
-                })
-              }
-              on={responsive}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Maintain Aspect Ratio?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  shouldMaintainAspectRatio: !shouldMaintainAspectRatio
-                })
-              }
-              on={shouldMaintainAspectRatio}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Show Legend?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  shouldShowLegend: !shouldShowLegend
-                })
-              }
-              on={shouldShowLegend}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Show Title?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  shouldShowTitle: !shouldShowTitle
-                })
-              }
-              on={shouldShowTitle}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Show Tooltips?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  showTooltips: !showTooltips
-                })
-              }
-              on={showTooltips}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Show X-Axis?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  displayXAxis: !displayXAxis
-                })
-              }
-              on={displayXAxis}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Show X-Axis Gridlines?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  displayXAxisGridlines: !displayXAxisGridlines
-                })
-              }
-              on={displayXAxisGridlines}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Show X-Axis Ticks?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  displayXAxisTicks: !displayXAxisTicks
-                })
-              }
-              on={displayXAxisTicks}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Begin X-Axis At 0?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  beginXAxisAtZero: !beginXAxisAtZero
-                })
-              }
-              on={beginXAxisAtZero}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Show Y-Axis?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  displayYAxis: !displayYAxis
-                })
-              }
-              on={displayYAxis}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Show Y-Axis Gridlines?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  displayYAxisGridlines: !displayYAxisGridlines
-                })
-              }
-              on={displayYAxisGridlines}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Show Y-Axis Ticks?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  displayYAxisTicks: !displayYAxisTicks
-                })
-              }
-              on={displayYAxisTicks}
-            />
-          </SwitchContainer>
-          <SwitchContainer>
-            <Label>Begin Y-Axis At 0?</Label>
-            <Switch
-              onClick={() =>
-                this.setState({
-                  beginYAxisAtZero: !beginYAxisAtZero
-                })
-              }
-              on={beginYAxisAtZero}
-            />
-          </SwitchContainer>
-        </FormContainer>
-        <MainContent>
-          <ButtonsContainer>
-            <ButtonContainer onClick={this.randomize}>
-              <Button>{`Random Chart`}</Button>
-            </ButtonContainer>
-            <IconContainer>
-              <SimpleIcon
-                size={60}
-                icon={"github"}
-                href={"https://github.com/chernandez7/react-simple-chartjs"}
+      <React.Fragment>
+        <CodeModal
+          close={() =>
+            this.setState({
+              showModal: false
+            })
+          }
+          show={showModal}
+          code={code}
+          copyToClipboard={() => this.copyToClipboard()}
+          codeCopied={codeCopied}
+        />
+        <Container>
+          <Link to="/">
+            <DontClickThis>
+              <Dont>{`back home`}</Dont>
+            </DontClickThis>
+          </Link>
+          <FormContainer>
+            <SelectContainer>
+              <Label>Chart Type</Label>
+              <Select
+                value={chartType}
+                onChange={e =>
+                  this.setState({
+                    chartType: e.target.value
+                  })
+                }
+              >
+                <option value="" selected>
+                  Select a Chart Type...
+                </option>
+                <option value={"Vertical Bar"}>Vertical Bar</option>
+                <option value={"Horizontal Bar"}>Horizontal Bar</option>
+                <option value={"Simple Line"}>Simple Line</option>
+                <option value={"Area Chart"}>Area Chart</option>
+              </Select>
+            </SelectContainer>
+            <ColorPickerContainer>
+              <Label>Background Color</Label>
+              <ColorPicker
+                animation="slide-up"
+                color={backgroundColor}
+                onChange={color =>
+                  this.setState({ backgroundColor: color.color })
+                }
               />
-            </IconContainer>
-            <ButtonContainer>
-              <Button onClick={this.generateCode}>{`Generate Code`}</Button>
-            </ButtonContainer>
-          </ButtonsContainer>
-          <ChartContainer>
-            <Chart
-              chartType={chartType}
-              labels={labels}
-              data={data}
-              title={title}
-              options={this.state}
-            />
-          </ChartContainer>
-        </MainContent>
-      </Container>
+              <Color>{backgroundColor}</Color>
+            </ColorPickerContainer>
+            <ColorPickerContainer>
+              <Label>Border Color</Label>
+              <ColorPicker
+                animation="slide-up"
+                color={borderColor}
+                onChange={color => this.setState({ borderColor: color.color })}
+              />
+              <Color>{borderColor}</Color>
+            </ColorPickerContainer>
+            <ColorPickerContainer>
+              <Label>Tooltip Background Color</Label>
+              <ColorPicker
+                animation="slide-up"
+                color={tooltipBackgroundColor}
+                onChange={color =>
+                  this.setState({ tooltipBackgroundColor: color.color })
+                }
+              />
+              <Color>{tooltipBackgroundColor}</Color>
+            </ColorPickerContainer>
+            <ColorPickerContainer>
+              <Label>Tooltip Title Color</Label>
+              <ColorPicker
+                animation="slide-up"
+                color={tooltipTitleFontColor}
+                onChange={color =>
+                  this.setState({ tooltipTitleFontColor: color.color })
+                }
+              />
+              <Color>{tooltipTitleFontColor}</Color>
+            </ColorPickerContainer>
+            <ColorPickerContainer>
+              <Label>Tooltip Body Color</Label>
+              <ColorPicker
+                animation="slide-up"
+                color={tooltipBodyFontColor}
+                onChange={color =>
+                  this.setState({ tooltipBodyFontColor: color.color })
+                }
+              />
+              <Color>{tooltipBodyFontColor}</Color>
+            </ColorPickerContainer>
+            <InputContainer>
+              <Label>Title</Label>
+              <TextInput
+                type="text"
+                placeholder="Enter a Title..."
+                value={title}
+                onChange={e => this.setState({ title: e.target.value })}
+              />
+            </InputContainer>
+            <InputContainer>
+              <Label>Title Size</Label>
+              <TextInput
+                type="number"
+                placeholder="Enter a Title Font Size..."
+                value={titleFontSize}
+                onChange={e => this.setState({ titleFontSize: e.target.value })}
+              />
+            </InputContainer>
+            <InputContainer>
+              <Label>Tooltip Title Size</Label>
+              <TextInput
+                type="number"
+                placeholder="Enter a Tooltip Title Font Size..."
+                value={tooltipTitleFontSize}
+                onChange={e =>
+                  this.setState({ tooltipTitleFontSize: e.target.value })
+                }
+              />
+            </InputContainer>
+            <InputContainer>
+              <Label>Tooltip Body Size</Label>
+              <TextInput
+                type="number"
+                placeholder="Enter a Tooltip Body Font Size..."
+                value={tooltipBodyFontSize}
+                onChange={e =>
+                  this.setState({ tooltipBodyFontSize: e.target.value })
+                }
+              />
+            </InputContainer>
+            <InputContainer>
+              <Label>Width</Label>
+              <TextInput
+                type="number"
+                placeholder="Enter Width..."
+                value={width}
+                onChange={e => this.setState({ width: e.target.value })}
+              />
+            </InputContainer>
+            <InputContainer>
+              <Label>Height</Label>
+              <TextInput
+                type="number"
+                placeholder="Enter Height..."
+                value={height}
+                onChange={e => this.setState({ height: e.target.value })}
+              />
+            </InputContainer>
+            <SwitchContainer>
+              <Label>Fill Chart?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    fill: !fill
+                  })
+                }
+                on={fill}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Responsive?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    responsive: !responsive
+                  })
+                }
+                on={responsive}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Maintain Aspect Ratio?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    shouldMaintainAspectRatio: !shouldMaintainAspectRatio
+                  })
+                }
+                on={shouldMaintainAspectRatio}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Show Legend?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    shouldShowLegend: !shouldShowLegend
+                  })
+                }
+                on={shouldShowLegend}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Show Title?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    shouldShowTitle: !shouldShowTitle
+                  })
+                }
+                on={shouldShowTitle}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Show Tooltips?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    showTooltips: !showTooltips
+                  })
+                }
+                on={showTooltips}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Show X-Axis?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    displayXAxis: !displayXAxis
+                  })
+                }
+                on={displayXAxis}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Show X-Axis Gridlines?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    displayXAxisGridlines: !displayXAxisGridlines
+                  })
+                }
+                on={displayXAxisGridlines}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Show X-Axis Ticks?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    displayXAxisTicks: !displayXAxisTicks
+                  })
+                }
+                on={displayXAxisTicks}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Begin X-Axis At 0?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    beginXAxisAtZero: !beginXAxisAtZero
+                  })
+                }
+                on={beginXAxisAtZero}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Show Y-Axis?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    displayYAxis: !displayYAxis
+                  })
+                }
+                on={displayYAxis}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Show Y-Axis Gridlines?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    displayYAxisGridlines: !displayYAxisGridlines
+                  })
+                }
+                on={displayYAxisGridlines}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Show Y-Axis Ticks?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    displayYAxisTicks: !displayYAxisTicks
+                  })
+                }
+                on={displayYAxisTicks}
+              />
+            </SwitchContainer>
+            <SwitchContainer>
+              <Label>Begin Y-Axis At 0?</Label>
+              <Switch
+                onClick={() =>
+                  this.setState({
+                    beginYAxisAtZero: !beginYAxisAtZero
+                  })
+                }
+                on={beginYAxisAtZero}
+              />
+            </SwitchContainer>
+          </FormContainer>
+          <MainContent>
+            <ButtonsContainer>
+              <ButtonContainer onClick={this.randomize}>
+                <Button>{`Random Chart`}</Button>
+              </ButtonContainer>
+              <IconContainer>
+                <SimpleIcon
+                  size={60}
+                  icon={"github"}
+                  href={"https://github.com/chernandez7/react-simple-chartjs"}
+                />
+              </IconContainer>
+              <ButtonContainer>
+                <Button onClick={this.generateCode}>{`Generate Code`}</Button>
+              </ButtonContainer>
+            </ButtonsContainer>
+            <ChartContainer>
+              <Chart
+                chartType={chartType}
+                labels={labels}
+                data={data}
+                title={title}
+                options={this.state}
+              />
+            </ChartContainer>
+          </MainContent>
+        </Container>
+      </React.Fragment>
     );
   }
 }
@@ -564,7 +664,7 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 15px;
 
   :hover {
     cursor: pointer;
@@ -572,7 +672,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Button = styled.h1`
-  padding-top: 15px;
+  padding-top: 5px;
   margin: 0px;
 `;
 

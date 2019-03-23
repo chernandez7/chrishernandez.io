@@ -7,13 +7,13 @@
   chrishernandez.io
 </h1>
 
-Personal site powered by Gatsby, Netlify, React, and GraphQL.
+[![Build Status](https://travis-ci.org/chernandez7/chrishernandez.io.svg?branch=master)](https://travis-ci.org/chernandez7/chrishernandez.io) [![Netlify Status](https://api.netlify.com/api/v1/badges/043e16bd-e73b-459c-9b4a-5df9d8b41f0e/deploy-status)](https://app.netlify.com/sites/chrishernandez/deploys)
 
-[![Build Status](https://travis-ci.org/chernandez7/chrishernandez.io.svg?branch=master)](https://travis-ci.org/chernandez7/chrishernandez.io)
+Personal site powered by Gatsby, Netlify, React, and GraphQL.
 
 ## Setup
 
-`cd chernandez7.github.io/`
+`cd chrishernandez.io/`
 
 `yarn`
 
