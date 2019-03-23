@@ -134,10 +134,6 @@ class ChartGen extends React.Component {
     let displayYAxisTicks = this.randomBool();
     // Begin Y-Axis at 0
     let beginYAxisAtZero = this.randomBool();
-    // Width
-    let width = this.randomFromRange(1, window.width);
-    // Height
-    let height = this.randomFromRange(1, window.height);
 
     this.setState({
       chartType,
@@ -160,9 +156,7 @@ class ChartGen extends React.Component {
       displayYAxis,
       displayYAxisGridlines,
       displayYAxisTicks,
-      beginYAxisAtZero,
-      width,
-      height
+      beginYAxisAtZero
     });
   };
 
@@ -244,7 +238,7 @@ class ChartGen extends React.Component {
             <Label>Width</Label>
             <TextInput
               type="number"
-              placeholder="Enter a Width..."
+              placeholder="Enter Width..."
               value={width}
               onChange={e => this.setState({ width: e.target.value })}
             />
@@ -253,7 +247,7 @@ class ChartGen extends React.Component {
             <Label>Height</Label>
             <TextInput
               type="number"
-              placeholder="Enter a Height..."
+              placeholder="Enter Height..."
               value={height}
               onChange={e => this.setState({ height: e.target.value })}
             />
@@ -414,7 +408,7 @@ class ChartGen extends React.Component {
           </SwitchContainer>
           <SelectContainer>
             <Label>Chart Type</Label>
-            <select
+            <Select
               value={chartType}
               onChange={e =>
                 this.setState({
@@ -429,7 +423,7 @@ class ChartGen extends React.Component {
               <option value={"Horizontal Bar"}>Horizontal Bar</option>
               <option value={"Simple Line"}>Simple Line</option>
               <option value={"Area Chart"}>Area Chart</option>
-            </select>
+            </Select>
           </SelectContainer>
           <ColorPickerContainer>
             <Label>Background Color</Label>
@@ -440,7 +434,7 @@ class ChartGen extends React.Component {
                 this.setState({ backgroundColor: color.color })
               }
             />
-            <span>{backgroundColor}</span>
+            <Color>{backgroundColor}</Color>
           </ColorPickerContainer>
           <ColorPickerContainer>
             <Label>Border Color</Label>
@@ -449,7 +443,7 @@ class ChartGen extends React.Component {
               color={borderColor}
               onChange={color => this.setState({ borderColor: color.color })}
             />
-            <span>{borderColor}</span>
+            <Color>{borderColor}</Color>
           </ColorPickerContainer>
           <ColorPickerContainer>
             <Label>Tooltip Background Color</Label>
@@ -460,7 +454,7 @@ class ChartGen extends React.Component {
                 this.setState({ tooltipBackgroundColor: color.color })
               }
             />
-            <span>{tooltipBackgroundColor}</span>
+            <Color>{tooltipBackgroundColor}</Color>
           </ColorPickerContainer>
           <ColorPickerContainer>
             <Label>Tooltip Title Color</Label>
@@ -471,7 +465,7 @@ class ChartGen extends React.Component {
                 this.setState({ tooltipTitleFontColor: color.color })
               }
             />
-            <span>{tooltipTitleFontColor}</span>
+            <Color>{tooltipTitleFontColor}</Color>
           </ColorPickerContainer>
           <ColorPickerContainer>
             <Label>Tooltip Body Color</Label>
@@ -482,28 +476,28 @@ class ChartGen extends React.Component {
                 this.setState({ tooltipBodyFontColor: color.color })
               }
             />
-            <span>{tooltipBodyFontColor}</span>
+            <Color>{tooltipBodyFontColor}</Color>
           </ColorPickerContainer>
-          <ButtonsContainer>
-            <GenerateCodeContainer>
-              <GenerateCode
-                onClick={this.generateCode}
-              >{`Generate Code`}</GenerateCode>
-            </GenerateCodeContainer>
-            <GenerateRandomContainer onClick={this.randomize}>
-              <GenerateRandom>{`Random Chart`}</GenerateRandom>
-            </GenerateRandomContainer>
-          </ButtonsContainer>
         </FormContainer>
-        <ChartContainer>
-          <Chart
-            chartType={chartType}
-            labels={labels}
-            data={data}
-            title={title}
-            options={this.state}
-          />
-        </ChartContainer>
+        <MainContent>
+          <ButtonsContainer>
+            <ButtonContainer onClick={this.randomize}>
+              <Button>{`Random Chart`}</Button>
+            </ButtonContainer>
+            <ButtonContainer>
+              <Button onClick={this.generateCode}>{`Generate Code`}</Button>
+            </ButtonContainer>
+          </ButtonsContainer>
+          <ChartContainer>
+            <Chart
+              chartType={chartType}
+              labels={labels}
+              data={data}
+              title={title}
+              options={this.state}
+            />
+          </ChartContainer>
+        </MainContent>
       </Container>
     );
   }
@@ -515,62 +509,96 @@ const Container = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
+  flex-direction: row;
+  color: #222;
+`;
+
+const MainContent = styled.div`
+  width: 80%;
+  height: 100%;
+  background-color: #d8d5cf;
+`;
+
+const ButtonsContainer = styled.div`
+  width: 100%;
+  height: 5%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-left: 5%;
+  margin-right: 5%;
+`;
+
+const ButtonContainer = styled.div`
+  width: 250px;
+  height: 100%;
+  border-color: #000;
+  border-width: 1px;
+  background-color: #a3997e;
+  display: flex;
   flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+
+  :hover {
+    cursor: pointer;
+  }
+`;
+
+const Button = styled.h1`
+  padding-top: 15px;
+  margin: 0px;
+`;
+
+const ChartContainer = styled.div`
+  width: 100%;
+  height: 95%;
 `;
 
 const FormContainer = styled.div`
-  width: calc(100% - 100px);
-  height: calc(50% - 100px);
-  margin: 50px;
-  background-color: #72777f;
+  width: 20%;
+  height: 100%;
+  background-color: #a3997e;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  overflow-y: scroll;
 `;
 
-const InputContainer = styled.div``;
-
 const Label = styled.h1`
-  margin: 20px;
+  margin: 5px;
 `;
 
 const TextInput = styled.input`
-  margin: 20px;
+  padding: 10px;
+  font-size: 16px;
+  margin: 5px;
+`;
+
+const InputContainer = styled.div`
+  margin: 5px;
 `;
 
 const SwitchContainer = styled.div`
-  margin: 20px;
+  margin: 5px;
+  padding: 5px;
 `;
 
-const ButtonsContainer = styled.div``;
-
-const GenerateCodeContainer = styled.div`
-  border-color: #937341;
-  border-width: 1px;
-  :hover {
-    cursor: pointer;
-  }
+const SelectContainer = styled.div`
+  margin: 5px;
 `;
 
-const GenerateCode = styled.h1``;
-
-const GenerateRandomContainer = styled.div`
-  border-color: #937341;
-  border-width: 1px;
-  :hover {
-    cursor: pointer;
-  }
+const Select = styled.select`
+  padding: 10px;
+  font-size: 16px;
+  margin: 5px;
 `;
 
-const SelectContainer = styled.div``;
+const ColorPickerContainer = styled.div`
+  margin: 5px;
+`;
 
-const ColorPickerContainer = styled.div``;
-
-const GenerateRandom = styled.h1``;
-
-const ChartContainer = styled.div`
-  width: calc(100% - 100px);
-  height: calc(50% - 100px);
-  margin: 50px;
-  background-color: #937341;
+const Color = styled.span`
+  margin: 5px;
 `;
