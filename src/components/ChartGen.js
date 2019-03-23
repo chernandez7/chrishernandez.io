@@ -94,8 +94,8 @@ class ChartGen extends React.Component {
         : "Area Chart";
     // Fill
     let fill = this.randomBool();
-    if (chartType === "Area Chart") fill = 1;
-    if (chartType === "Simple Line") fill = 0;
+    if (chartType === "Area Chart") fill = true;
+    if (chartType === "Simple Line") fill = false;
     // Background Color
     let backgroundColor = this.randomColor();
     // Border Color
@@ -194,6 +194,78 @@ class ChartGen extends React.Component {
     return (
       <Container>
         <FormContainer>
+          <SelectContainer>
+            <Label>Chart Type</Label>
+            <Select
+              value={chartType}
+              onChange={e =>
+                this.setState({
+                  chartType: e.target.value
+                })
+              }
+            >
+              <option value="" selected>
+                Select a Chart Type...
+              </option>
+              <option value={"Vertical Bar"}>Vertical Bar</option>
+              <option value={"Horizontal Bar"}>Horizontal Bar</option>
+              <option value={"Simple Line"}>Simple Line</option>
+              <option value={"Area Chart"}>Area Chart</option>
+            </Select>
+          </SelectContainer>
+          <ColorPickerContainer>
+            <Label>Background Color</Label>
+            <ColorPicker
+              animation="slide-up"
+              color={backgroundColor}
+              onChange={color =>
+                this.setState({ backgroundColor: color.color })
+              }
+            />
+            <Color>{backgroundColor}</Color>
+          </ColorPickerContainer>
+          <ColorPickerContainer>
+            <Label>Border Color</Label>
+            <ColorPicker
+              animation="slide-up"
+              color={borderColor}
+              onChange={color => this.setState({ borderColor: color.color })}
+            />
+            <Color>{borderColor}</Color>
+          </ColorPickerContainer>
+          <ColorPickerContainer>
+            <Label>Tooltip Background Color</Label>
+            <ColorPicker
+              animation="slide-up"
+              color={tooltipBackgroundColor}
+              onChange={color =>
+                this.setState({ tooltipBackgroundColor: color.color })
+              }
+            />
+            <Color>{tooltipBackgroundColor}</Color>
+          </ColorPickerContainer>
+          <ColorPickerContainer>
+            <Label>Tooltip Title Color</Label>
+            <ColorPicker
+              animation="slide-up"
+              color={tooltipTitleFontColor}
+              onChange={color =>
+                this.setState({ tooltipTitleFontColor: color.color })
+              }
+            />
+            <Color>{tooltipTitleFontColor}</Color>
+          </ColorPickerContainer>
+          <ColorPickerContainer>
+            <Label>Tooltip Body Color</Label>
+            <ColorPicker
+              animation="slide-up"
+              color={tooltipBodyFontColor}
+              onChange={color =>
+                this.setState({ tooltipBodyFontColor: color.color })
+              }
+            />
+            <Color>{tooltipBodyFontColor}</Color>
+          </ColorPickerContainer>
           <InputContainer>
             <Label>Title</Label>
             <TextInput
@@ -406,78 +478,6 @@ class ChartGen extends React.Component {
               on={beginYAxisAtZero}
             />
           </SwitchContainer>
-          <SelectContainer>
-            <Label>Chart Type</Label>
-            <Select
-              value={chartType}
-              onChange={e =>
-                this.setState({
-                  chartType: e.target.value
-                })
-              }
-            >
-              <option value="" selected>
-                Select a Chart Type...
-              </option>
-              <option value={"Vertical Bar"}>Vertical Bar</option>
-              <option value={"Horizontal Bar"}>Horizontal Bar</option>
-              <option value={"Simple Line"}>Simple Line</option>
-              <option value={"Area Chart"}>Area Chart</option>
-            </Select>
-          </SelectContainer>
-          <ColorPickerContainer>
-            <Label>Background Color</Label>
-            <ColorPicker
-              animation="slide-up"
-              color={backgroundColor}
-              onChange={color =>
-                this.setState({ backgroundColor: color.color })
-              }
-            />
-            <Color>{backgroundColor}</Color>
-          </ColorPickerContainer>
-          <ColorPickerContainer>
-            <Label>Border Color</Label>
-            <ColorPicker
-              animation="slide-up"
-              color={borderColor}
-              onChange={color => this.setState({ borderColor: color.color })}
-            />
-            <Color>{borderColor}</Color>
-          </ColorPickerContainer>
-          <ColorPickerContainer>
-            <Label>Tooltip Background Color</Label>
-            <ColorPicker
-              animation="slide-up"
-              color={tooltipBackgroundColor}
-              onChange={color =>
-                this.setState({ tooltipBackgroundColor: color.color })
-              }
-            />
-            <Color>{tooltipBackgroundColor}</Color>
-          </ColorPickerContainer>
-          <ColorPickerContainer>
-            <Label>Tooltip Title Color</Label>
-            <ColorPicker
-              animation="slide-up"
-              color={tooltipTitleFontColor}
-              onChange={color =>
-                this.setState({ tooltipTitleFontColor: color.color })
-              }
-            />
-            <Color>{tooltipTitleFontColor}</Color>
-          </ColorPickerContainer>
-          <ColorPickerContainer>
-            <Label>Tooltip Body Color</Label>
-            <ColorPicker
-              animation="slide-up"
-              color={tooltipBodyFontColor}
-              onChange={color =>
-                this.setState({ tooltipBodyFontColor: color.color })
-              }
-            />
-            <Color>{tooltipBodyFontColor}</Color>
-          </ColorPickerContainer>
         </FormContainer>
         <MainContent>
           <ButtonsContainer>
@@ -599,6 +599,8 @@ const ColorPickerContainer = styled.div`
   margin: 5px;
 `;
 
-const Color = styled.span`
+const Color = styled.h1`
+  padding: 10px;
+  font-size: 18px;
   margin: 5px;
 `;
