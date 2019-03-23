@@ -3,6 +3,7 @@ import Link from "gatsby-link";
 import styled from "styled-components";
 import { SimpleIcon } from "../components";
 
+import Gitlab from "../images/gitlab.svg";
 import Me from "../images/me.png";
 
 const Heading = () => (
@@ -13,7 +14,9 @@ const Heading = () => (
       </DontClickThis>
     </Link>
     <HeadingContainer>
-      <Myself src={Me} alt="Chris" />
+      <ImageContainer>
+        <Myself src={Me} alt="Chris" />
+      </ImageContainer>
       <StyledLink to="/">
         <Name>{`Christopher Hernandez`}</Name>
       </StyledLink>
@@ -35,7 +38,9 @@ const Heading = () => (
       </Subtitle>
       <IconContainer>
         <SimpleIcon icon={"github"} href={"https://github.com/chernandez7"} />
-        {/* <SimpleIcon icon={"gitlab"} href={"https://gitlab.com/chernandez7"} /> */}
+        <a href={"https://gitlab.com/chernandez7"}>
+          <GitlabIcon src={Gitlab} alt="gitlab" />
+        </a>
         <SimpleIcon
           icon={"twitter"}
           href={"https://twitter.com/_chernandez7"}
@@ -52,12 +57,11 @@ const Heading = () => (
 export default Heading;
 
 const HeadingContainer = styled.div`
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  top: 40%;
-  transform: translateY(-40%);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px;
 `;
 
 const Name = styled.h1`
@@ -87,11 +91,19 @@ const StyledAnchor = styled.a`
 `;
 
 const IconContainer = styled.div`
-  margin-top: 48px;
+  margin-top: 20px;
   width: 500px;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+`;
+
+const GitlabIcon = styled.img`
+  width: 36px;
+  height: 36px;
+  padding-left: 28px;
+  padding-right: 28px;
+  margin: 0px;
 `;
 
 const DontClickThis = styled.div`
@@ -111,8 +123,15 @@ const Dont = styled.h1`
   }
 `;
 
+const ImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Myself = styled.img`
-  width: 500px;
+  width: 400px;
   opacity: 0.05;
-  margin-bottom: 80px;
+  margin-top: 30px;
+  margin-bottom: 50px;
 `;
