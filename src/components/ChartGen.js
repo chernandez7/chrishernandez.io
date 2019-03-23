@@ -2,7 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import Chart from "react-simple-chartjs";
 import Switch from "react-toggle-switch";
+import ColorPicker from "rc-color-picker";
 import Theme from "../config/Theme";
+import "rc-color-picker/assets/index.css";
 import "react-toggle-switch/dist/css/switch.min.css";
 import "./ChartGen.css";
 
@@ -58,10 +60,23 @@ class ChartGen extends React.Component {
     data: [1, 5, 8, 14, 7, 5, 8, 14, 7, 5, 8, 14, 7, 5, 8, 14, 7, 8, 14, 7]
   };
 
+  randomColor = () => {
+    let r = this.randomFromRange(0, 255);
+    let g = this.randomFromRange(0, 255);
+    let b = this.randomFromRange(0, 255);
+    let a = this.randomFromRange(0, 9);
+    return `rgba(${r},${g},${b},${a / 10})`;
+  };
+
   randomFromRange = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  randomBool = () => {
+    let n = this.randomFromRange(0, 1);
+    return !!n;
   };
 
   generateCode = () => {};
@@ -78,16 +93,44 @@ class ChartGen extends React.Component {
         ? "Simple Line"
         : "Area Chart";
     // Fill
-    let fill = this.randomFromRange(0, 1);
+    let fill = this.randomBool();
     if (chartType === "Area Chart") fill = 1;
     if (chartType === "Simple Line") fill = 0;
+    // Background Color
+    let backgroundColor = this.randomColor();
+    // Border Color
+    let borderColor = this.randomColor();
+    // Responsive
+    let responsive = this.randomBool();
+    // Aspect Ration
+    let shouldMaintainAspectRatio = this.randomBool();
+    // Show Legend
+    let shouldShowLegend = this.randomBool();
 
-    this.setState({ chartType, fill: !!fill });
+    this.setState({
+      chartType,
+      fill,
+      backgroundColor,
+      borderColor,
+      responsive,
+      shouldMaintainAspectRatio,
+      shouldShowLegend
+    });
   };
 
   render() {
-    const { title, fill, chartType, labels, data } = this.state;
-    console.log(fill);
+    const {
+      title,
+      fill,
+      chartType,
+      labels,
+      data,
+      backgroundColor,
+      borderColor,
+      responsive,
+      shouldMaintainAspectRatio,
+      shouldShowLegend
+    } = this.state;
     return (
       <Container>
         <FormContainer>
@@ -99,6 +142,7 @@ class ChartGen extends React.Component {
             onChange={e => this.setState({ title: e.target.value })}
           />
           <SwitchContainer>
+            <Label>Fill</Label>
             <Switch
               onClick={() =>
                 this.setState({
@@ -108,7 +152,41 @@ class ChartGen extends React.Component {
               on={fill}
             />
           </SwitchContainer>
+          <SwitchContainer>
+            <Label>Responsive</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  responsive: !responsive
+                })
+              }
+              on={responsive}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <Label>Maintain Aspect Ration</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  shouldMaintainAspectRatio: !shouldMaintainAspectRatio
+                })
+              }
+              on={shouldMaintainAspectRatio}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <Label>Should Show Legend</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  shouldShowLegend: !shouldShowLegend
+                })
+              }
+              on={shouldShowLegend}
+            />
+          </SwitchContainer>
           <SelectContainer>
+            <Label>Chart Type</Label>
             <select
               value={chartType}
               onChange={e =>
@@ -126,6 +204,24 @@ class ChartGen extends React.Component {
               <option value={"Area Chart"}>Area Chart</option>
             </select>
           </SelectContainer>
+          <ColorPickerContainer>
+            <Label>Background Color</Label>
+            <ColorPicker
+              animation="slide-up"
+              color={backgroundColor}
+              onChange={color =>
+                this.setState({ backgroundColor: color.color })
+              }
+            />
+          </ColorPickerContainer>
+          <ColorPickerContainer>
+            <Label>Border Color</Label>
+            <ColorPicker
+              animation="slide-up"
+              color={borderColor}
+              onChange={color => this.setState({ borderColor: color.color })}
+            />
+          </ColorPickerContainer>
           <ButtonsContainer>
             <GenerateCodeContainer>
               <GenerateCode
@@ -202,13 +298,9 @@ const GenerateRandomContainer = styled.div`
   }
 `;
 
-const SelectContainer = styled.div`
-  border-color: #937341;
-  border-width: 1px;
-  :hover {
-    cursor: pointer;
-  }
-`;
+const SelectContainer = styled.div``;
+
+const ColorPickerContainer = styled.div``;
 
 const GenerateRandom = styled.h1``;
 
