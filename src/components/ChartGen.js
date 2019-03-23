@@ -1,9 +1,13 @@
 import React from "react";
+import Link from "gatsby-link";
 import styled from "styled-components";
 import Chart from "react-simple-chartjs";
 import Switch from "react-toggle-switch";
 import ColorPicker from "rc-color-picker";
+
+import SimpleIcon from "./SimpleIcon";
 import Theme from "../config/Theme";
+
 import "rc-color-picker/assets/index.css";
 import "react-toggle-switch/dist/css/switch.min.css";
 import "./ChartGen.css";
@@ -193,6 +197,11 @@ class ChartGen extends React.Component {
     } = this.state;
     return (
       <Container>
+        <Link to="/">
+          <DontClickThis>
+            <Dont>{`back home`}</Dont>
+          </DontClickThis>
+        </Link>
         <FormContainer>
           <SelectContainer>
             <Label>Chart Type</Label>
@@ -484,6 +493,13 @@ class ChartGen extends React.Component {
             <ButtonContainer onClick={this.randomize}>
               <Button>{`Random Chart`}</Button>
             </ButtonContainer>
+            <IconContainer>
+              <SimpleIcon
+                size={60}
+                icon={"github"}
+                href={"https://github.com/chernandez7/react-simple-chartjs"}
+              />
+            </IconContainer>
             <ButtonContainer>
               <Button onClick={this.generateCode}>{`Generate Code`}</Button>
             </ButtonContainer>
@@ -525,8 +541,18 @@ const ButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  margin-left: 5%;
-  margin-right: 5%;
+`;
+
+const IconContainer = styled.div`
+  width: 250px;
+  height: 100%;
+  margin-top: -10px;
+  display: flex;
+  justify-content: center;
+
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -603,4 +629,21 @@ const Color = styled.h1`
   padding: 10px;
   font-size: 18px;
   margin: 5px;
+`;
+
+const DontClickThis = styled.div`
+  position: absolute;
+  padding: 5px;
+  top: 0;
+  right: 0;
+`;
+
+const Dont = styled.h1`
+  color: #937341;
+  font-size: 1rem;
+  text-decoration: none;
+  :hover {
+    color: #a3997e;
+    cursor: pointer;
+  }
 `;
