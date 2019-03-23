@@ -3,6 +3,54 @@ import Link from "gatsby-link";
 import styled from "styled-components";
 import { SimpleIcon } from "../components";
 
+import Me from "../images/me.png";
+
+const Heading = () => (
+  <React.Fragment>
+    <Link to="/chartjs">
+      <DontClickThis>
+        <Dont>{`don't click this`}</Dont>
+      </DontClickThis>
+    </Link>
+    <HeadingContainer>
+      <Myself src={Me} alt="Chris" />
+      <StyledLink to="/">
+        <Name>{`Christopher Hernandez`}</Name>
+      </StyledLink>
+      <Subtitle>
+        {`Co-Founder, CTO   @ `}
+        <StyledAnchor href="https://own-the-spot.com">
+          Own It Technologies, Inc.
+        </StyledAnchor>
+      </Subtitle>
+      <Subtitle>
+        {`Front End Engineer @ `}
+        <StyledAnchor href="https://alluxo.com">Alluxo, Inc.</StyledAnchor>
+      </Subtitle>
+      <Subtitle>
+        {`Front End Engineer  @ `}
+        <StyledAnchor href="https://www.hyfyconcerts.com/">
+          The Authentic Company, Inc.
+        </StyledAnchor>
+      </Subtitle>
+      <IconContainer>
+        <SimpleIcon icon={"github"} href={"https://github.com/chernandez7"} />
+        {/* <SimpleIcon icon={"gitlab"} href={"https://gitlab.com/chernandez7"} /> */}
+        <SimpleIcon
+          icon={"twitter"}
+          href={"https://twitter.com/_chernandez7"}
+        />
+        <SimpleIcon
+          icon={"linkedin"}
+          href={"https://www.linkedin.com/in/chernandez0/"}
+        />
+      </IconContainer>
+    </HeadingContainer>
+  </React.Fragment>
+);
+
+export default Heading;
+
 const HeadingContainer = styled.div`
   width: 500px;
   margin-left: auto;
@@ -46,31 +94,25 @@ const IconContainer = styled.div`
   text-align: center;
 `;
 
-const Heading = () => (
-  <HeadingContainer>
-    <StyledLink to="/">
-      <Name>{`Christopher Hernandez`}</Name>
-    </StyledLink>
-    <Subtitle>
-      {`Co-Founder, CTO @ `}
-      <StyledAnchor href="https://own-the-spot.com">
-        Own It Technologies, Inc.
-      </StyledAnchor>
-    </Subtitle>
-    <Subtitle>
-      {`Front-End Developer @ `}
-      <StyledAnchor href="https://alluxo.com">Alluxo, Inc.</StyledAnchor>
-    </Subtitle>
-    <IconContainer>
-      <SimpleIcon icon={"github"} href={"https://github.com/chernandez7"} />
-      {/* <SimpleIcon icon={"gitlab"} href={"https://gitlab.com/chernandez7"} /> */}
-      <SimpleIcon icon={"twitter"} href={"https://twitter.com/_chernandez7"} />
-      <SimpleIcon
-        icon={"linkedin"}
-        href={"https://www.linkedin.com/in/chernandez0/"}
-      />
-    </IconContainer>
-  </HeadingContainer>
-);
+const DontClickThis = styled.div`
+  position: absolute;
+  padding: 10px;
+  top: 0;
+  right: 0;
+`;
 
-export default Heading;
+const Dont = styled.h1`
+  color: #937341;
+  font-size: 1rem;
+  text-decoration: none;
+  :hover {
+    color: #a3997e;
+    cursor: pointer;
+  }
+`;
+
+const Myself = styled.img`
+  width: 500px;
+  opacity: 0.05;
+  margin-bottom: 80px;
+`;
