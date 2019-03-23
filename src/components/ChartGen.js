@@ -633,7 +633,7 @@ const Color = styled.h1`
 
 const DontClickThis = styled.div`
   position: absolute;
-  padding: 5px;
+  padding: 10px;
   top: 0;
   right: 0;
 `;

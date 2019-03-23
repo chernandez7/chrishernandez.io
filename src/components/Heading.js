@@ -3,6 +3,8 @@ import Link from "gatsby-link";
 import styled from "styled-components";
 import { SimpleIcon } from "../components";
 
+import Me from "../images/me.png";
+
 const Heading = () => (
   <React.Fragment>
     <Link to="/chartjs">
@@ -11,6 +13,7 @@ const Heading = () => (
       </DontClickThis>
     </Link>
     <HeadingContainer>
+      <Myself src={Me} alt="Chris" />
       <StyledLink to="/">
         <Name>{`Christopher Hernandez`}</Name>
       </StyledLink>
@@ -93,7 +96,7 @@ const IconContainer = styled.div`
 
 const DontClickThis = styled.div`
   position: absolute;
-  padding: 5px;
+  padding: 10px;
   top: 0;
   right: 0;
 `;
@@ -106,4 +109,10 @@ const Dont = styled.h1`
     color: #a3997e;
     cursor: pointer;
   }
+`;
+
+const Myself = styled.img`
+  width: 500px;
+  opacity: 0.05;
+  margin-bottom: 80px;
 `;
