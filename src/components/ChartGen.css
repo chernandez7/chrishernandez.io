@@ -1,0 +1,17 @@
+.switch {
+  border: 0px;
+  width: 50px;
+  height: 26px;
+  border-radius: 13px;
+  cursor: pointer;
+  display: inline-block;
+  background: #937341;
+}
+
+.switch.on {
+  background: #a3997e;
+}
+
+.switch-toggle {
+  display: block;
+}
