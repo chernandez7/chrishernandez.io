@@ -15,3 +15,7 @@
 .switch-toggle {
   display: block;
 }
+
+pre {
+  background-color: transparent !important;
+}
