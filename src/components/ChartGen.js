@@ -100,21 +100,69 @@ class ChartGen extends React.Component {
     let backgroundColor = this.randomColor();
     // Border Color
     let borderColor = this.randomColor();
-    // Responsive
-    let responsive = this.randomBool();
-    // Aspect Ration
-    let shouldMaintainAspectRatio = this.randomBool();
     // Show Legend
     let shouldShowLegend = this.randomBool();
+    // Show Title
+    let shouldShowTitle = this.randomBool();
+    // Title Size
+    let titleFontSize = this.randomFromRange(0, 72);
+    // Show Title
+    let showTooltips = this.randomBool();
+    // Border Color
+    let tooltipBackgroundColor = this.randomColor();
+    // Tooltip Title Size
+    let tooltipTitleFontSize = this.randomFromRange(0, 72);
+    // Tooltip Title Color
+    let tooltipTitleFontColor = this.randomColor();
+    // Tooltip Body Size
+    let tooltipBodyFontSize = this.randomFromRange(0, 72);
+    // Tooltip Body Color
+    let tooltipBodyFontColor = this.randomColor();
+    // Show X-Axis
+    let displayXAxis = this.randomBool();
+    // Show X-Axis Gridlines
+    let displayXAxisGridlines = this.randomBool();
+    // Show X-Axis Ticks
+    let displayXAxisTicks = this.randomBool();
+    // Begin X-Axis at 0
+    let beginXAxisAtZero = this.randomBool();
+    // Show Y-Axis
+    let displayYAxis = this.randomBool();
+    // Show Y-Axis Gridlines
+    let displayYAxisGridlines = this.randomBool();
+    // Show Y-Axis Ticks
+    let displayYAxisTicks = this.randomBool();
+    // Begin Y-Axis at 0
+    let beginYAxisAtZero = this.randomBool();
+    // Width
+    let width = this.randomFromRange(1, window.width);
+    // Height
+    let height = this.randomFromRange(1, window.height);
 
     this.setState({
       chartType,
       fill,
       backgroundColor,
       borderColor,
-      responsive,
-      shouldMaintainAspectRatio,
-      shouldShowLegend
+      shouldShowLegend,
+      shouldShowTitle,
+      titleFontSize,
+      showTooltips,
+      tooltipBackgroundColor,
+      tooltipTitleFontSize,
+      tooltipTitleFontColor,
+      tooltipBodyFontSize,
+      tooltipBodyFontColor,
+      displayXAxis,
+      displayXAxisGridlines,
+      displayXAxisTicks,
+      beginXAxisAtZero,
+      displayYAxis,
+      displayYAxisGridlines,
+      displayYAxisTicks,
+      beginYAxisAtZero,
+      width,
+      height
     });
   };
 
@@ -129,20 +177,89 @@ class ChartGen extends React.Component {
       borderColor,
       responsive,
       shouldMaintainAspectRatio,
-      shouldShowLegend
+      shouldShowLegend,
+      shouldShowTitle,
+      titleFontSize,
+      showTooltips,
+      tooltipBackgroundColor,
+      tooltipTitleFontSize,
+      tooltipTitleFontColor,
+      tooltipBodyFontSize,
+      tooltipBodyFontColor,
+      displayXAxis,
+      displayXAxisGridlines,
+      displayXAxisTicks,
+      beginXAxisAtZero,
+      displayYAxis,
+      displayYAxisGridlines,
+      displayYAxisTicks,
+      beginYAxisAtZero,
+      width,
+      height
     } = this.state;
     return (
       <Container>
         <FormContainer>
-          <Label>Title</Label>
-          <TextInput
-            type="text"
-            placeholder="Enter a Title..."
-            value={title}
-            onChange={e => this.setState({ title: e.target.value })}
-          />
+          <InputContainer>
+            <Label>Title</Label>
+            <TextInput
+              type="text"
+              placeholder="Enter a Title..."
+              value={title}
+              onChange={e => this.setState({ title: e.target.value })}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Label>Title Size</Label>
+            <TextInput
+              type="number"
+              placeholder="Enter a Title Font Size..."
+              value={titleFontSize}
+              onChange={e => this.setState({ titleFontSize: e.target.value })}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Label>Tooltip Title Size</Label>
+            <TextInput
+              type="number"
+              placeholder="Enter a Tooltip Title Font Size..."
+              value={tooltipTitleFontSize}
+              onChange={e =>
+                this.setState({ tooltipTitleFontSize: e.target.value })
+              }
+            />
+          </InputContainer>
+          <InputContainer>
+            <Label>Tooltip Body Size</Label>
+            <TextInput
+              type="number"
+              placeholder="Enter a Tooltip Body Font Size..."
+              value={tooltipBodyFontSize}
+              onChange={e =>
+                this.setState({ tooltipBodyFontSize: e.target.value })
+              }
+            />
+          </InputContainer>
+          <InputContainer>
+            <Label>Width</Label>
+            <TextInput
+              type="number"
+              placeholder="Enter a Width..."
+              value={width}
+              onChange={e => this.setState({ width: e.target.value })}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Label>Height</Label>
+            <TextInput
+              type="number"
+              placeholder="Enter a Height..."
+              value={height}
+              onChange={e => this.setState({ height: e.target.value })}
+            />
+          </InputContainer>
           <SwitchContainer>
-            <Label>Fill</Label>
+            <Label>Fill Chart?</Label>
             <Switch
               onClick={() =>
                 this.setState({
@@ -153,7 +270,7 @@ class ChartGen extends React.Component {
             />
           </SwitchContainer>
           <SwitchContainer>
-            <Label>Responsive</Label>
+            <Label>Responsive?</Label>
             <Switch
               onClick={() =>
                 this.setState({
@@ -164,7 +281,7 @@ class ChartGen extends React.Component {
             />
           </SwitchContainer>
           <SwitchContainer>
-            <Label>Maintain Aspect Ration</Label>
+            <Label>Maintain Aspect Ratio?</Label>
             <Switch
               onClick={() =>
                 this.setState({
@@ -175,7 +292,7 @@ class ChartGen extends React.Component {
             />
           </SwitchContainer>
           <SwitchContainer>
-            <Label>Should Show Legend</Label>
+            <Label>Show Legend?</Label>
             <Switch
               onClick={() =>
                 this.setState({
@@ -183,6 +300,116 @@ class ChartGen extends React.Component {
                 })
               }
               on={shouldShowLegend}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <Label>Show Title?</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  shouldShowTitle: !shouldShowTitle
+                })
+              }
+              on={shouldShowTitle}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <Label>Show Tooltips?</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  showTooltips: !showTooltips
+                })
+              }
+              on={showTooltips}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <Label>Show X-Axis?</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  displayXAxis: !displayXAxis
+                })
+              }
+              on={displayXAxis}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <Label>Show X-Axis Gridlines?</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  displayXAxisGridlines: !displayXAxisGridlines
+                })
+              }
+              on={displayXAxisGridlines}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <Label>Show X-Axis Ticks?</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  displayXAxisTicks: !displayXAxisTicks
+                })
+              }
+              on={displayXAxisTicks}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <Label>Begin X-Axis At 0?</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  beginXAxisAtZero: !beginXAxisAtZero
+                })
+              }
+              on={beginXAxisAtZero}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <Label>Show Y-Axis?</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  displayYAxis: !displayYAxis
+                })
+              }
+              on={displayYAxis}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <Label>Show Y-Axis Gridlines?</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  displayYAxisGridlines: !displayYAxisGridlines
+                })
+              }
+              on={displayYAxisGridlines}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <Label>Show Y-Axis Ticks?</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  displayYAxisTicks: !displayYAxisTicks
+                })
+              }
+              on={displayYAxisTicks}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <Label>Begin Y-Axis At 0?</Label>
+            <Switch
+              onClick={() =>
+                this.setState({
+                  beginYAxisAtZero: !beginYAxisAtZero
+                })
+              }
+              on={beginYAxisAtZero}
             />
           </SwitchContainer>
           <SelectContainer>
@@ -213,6 +440,7 @@ class ChartGen extends React.Component {
                 this.setState({ backgroundColor: color.color })
               }
             />
+            <span>{backgroundColor}</span>
           </ColorPickerContainer>
           <ColorPickerContainer>
             <Label>Border Color</Label>
@@ -221,6 +449,40 @@ class ChartGen extends React.Component {
               color={borderColor}
               onChange={color => this.setState({ borderColor: color.color })}
             />
+            <span>{borderColor}</span>
+          </ColorPickerContainer>
+          <ColorPickerContainer>
+            <Label>Tooltip Background Color</Label>
+            <ColorPicker
+              animation="slide-up"
+              color={tooltipBackgroundColor}
+              onChange={color =>
+                this.setState({ tooltipBackgroundColor: color.color })
+              }
+            />
+            <span>{tooltipBackgroundColor}</span>
+          </ColorPickerContainer>
+          <ColorPickerContainer>
+            <Label>Tooltip Title Color</Label>
+            <ColorPicker
+              animation="slide-up"
+              color={tooltipTitleFontColor}
+              onChange={color =>
+                this.setState({ tooltipTitleFontColor: color.color })
+              }
+            />
+            <span>{tooltipTitleFontColor}</span>
+          </ColorPickerContainer>
+          <ColorPickerContainer>
+            <Label>Tooltip Body Color</Label>
+            <ColorPicker
+              animation="slide-up"
+              color={tooltipBodyFontColor}
+              onChange={color =>
+                this.setState({ tooltipBodyFontColor: color.color })
+              }
+            />
+            <span>{tooltipBodyFontColor}</span>
           </ColorPickerContainer>
           <ButtonsContainer>
             <GenerateCodeContainer>
@@ -265,6 +527,8 @@ const FormContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
 `;
+
+const InputContainer = styled.div``;
 
 const Label = styled.h1`
   margin: 20px;
