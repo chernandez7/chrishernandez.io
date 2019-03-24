@@ -20,6 +20,7 @@ class ChartGen extends React.Component {
     fill: false,
     responsive: true,
     shouldMaintainAspectRatio: false,
+    shouldShowLegend: false,
     shouldShowTitle: true,
     titleFontSize: 24,
     showTooltips: true,
@@ -101,6 +102,10 @@ class ChartGen extends React.Component {
     return !!n;
   };
 
+  getQuotedTemplateString = s => {
+    return `"${s}"`;
+  };
+
   generateCode = () => {
     const {
       title,
@@ -134,25 +139,29 @@ class ChartGen extends React.Component {
     let code = `import Chart from "react-simple-chartjs";
 
 <Chart
-  chartType={${chartType}}
+  chartType={${this.getQuotedTemplateString(chartType)}}
+  title={${this.getQuotedTemplateString(title)}}
   labels={ENTER_YOUR_LABELS_HERE}
   data={ENTER_YOUR_DATA_HERE}
-  title={${title}}
   options={{
-    backgroundColor: ${backgroundColor}
+    backgroundColor: ${this.getQuotedTemplateString(backgroundColor)}
     fill: ${fill}
-    borderColor: ${borderColor}
+    borderColor: ${this.getQuotedTemplateString(borderColor)}
     responsive: ${responsive}
     shouldMaintainAspectRatio: ${shouldMaintainAspectRatio}
     shouldShowLegend: ${shouldShowLegend}
     shouldShowTitle: ${shouldShowTitle}
     titleFontSize: ${titleFontSize}
     showTooltips: ${showTooltips}
-    tooltipBackgroundColor: ${tooltipBackgroundColor}
+    tooltipBackgroundColor: ${this.getQuotedTemplateString(
+      tooltipBackgroundColor
+    )}
     tooltipTitleFontSize: ${tooltipTitleFontSize}
-    tooltipTitleFontColor: ${tooltipTitleFontColor}
+    tooltipTitleFontColor: ${this.getQuotedTemplateString(
+      tooltipTitleFontColor
+    )}
     tooltipBodyFontSize: ${tooltipBodyFontSize}
-    tooltipBodyFontColor: ${tooltipBodyFontColor}
+    tooltipBodyFontColor: ${this.getQuotedTemplateString(tooltipBodyFontColor)}
     displayXAxis: ${displayXAxis}
     displayXAxisGridlines: ${displayXAxisGridlines}
     displayXAxisTicks: ${displayXAxisTicks}
