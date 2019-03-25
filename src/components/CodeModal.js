@@ -57,6 +57,11 @@ const ModalBody = styled.div`
   transform: translate(-50%, -50%);
   z-index: 5;
   flex-direction: column;
+
+  @media (max-width: 400px) {
+    width: 90%;
+    height: 90%;
+  }
 `;
 
 const CenteredContainer = styled.div`
@@ -93,6 +98,12 @@ const CodeContainer = styled.div`
   justify-content: center;
   display: flex;
   overflow-y: auto;
+
+  @media (max-width: 400px) {
+    width: 95%;
+    height: 80%;
+    font-size: 12px;
+  }
 `;
 
 const ButtonContainer = styled.div`
