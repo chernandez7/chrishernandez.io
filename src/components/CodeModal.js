@@ -58,7 +58,7 @@ const ModalBody = styled.div`
   z-index: 5;
   flex-direction: column;
 
-  @media (max-width: 400px) {
+  @media (max-width: 1000px) {
     width: 90%;
     height: 90%;
   }
@@ -99,7 +99,7 @@ const CodeContainer = styled.div`
   display: flex;
   overflow-y: auto;
 
-  @media (max-width: 400px) {
+  @media (max-width: 1000px) {
     width: 95%;
     height: 80%;
     font-size: 12px;

@@ -72,7 +72,7 @@ const Name = styled.h1`
     color: #a3997e;
   }
 
-  @media (max-width: 400px) {
+  @media (max-width: 500px) {
     margin: 0rem;
     font-size: 2rem;
   }
@@ -85,7 +85,7 @@ const Subtitle = styled.p`
   color: #72777f;
   font-size: 1.4rem;
 
-  @media (max-width: 400px) {
+  @media (max-width: 500px) {
     font-size: 1rem;
   }
 `;
@@ -98,7 +98,7 @@ const StyledAnchor = styled.a`
     color: #a3997e;
   }
 
-  @media (max-width: 400px) {
+  @media (max-width: 500px) {
     font-size: 1rem;
   }
 `;
@@ -108,7 +108,7 @@ const IconContainer = styled.div`
   width: 500px;
   text-align: center;
 
-  @media (max-width: 400px) {
+  @media (max-width: 500px) {
     width: 100%;
   }
 `;
@@ -150,7 +150,7 @@ const Myself = styled.img`
   margin-top: 30px;
   margin-bottom: 50px;
 
-  @media (max-width: 400px) {
+  @media (max-width: 500px) {
     width: 90%;
     margin-top: 50px;
     margin-bottom: 50px;

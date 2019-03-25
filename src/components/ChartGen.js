@@ -637,19 +637,19 @@ const Container = styled.div`
   flex-direction: row;
   color: #222;
 
-  @media (max-width: 400px) {
+  @media (max-width: 1000px) {
     flex-direction: column;
   }
 `;
 
 const MainContent = styled.div`
-  width: 75%;
+  width: 80%;
   height: 100%;
   background-color: #d8d5cf;
 
-  @media (max-width: 400px) {
+  @media (max-width: 1000px) {
     width: 100%;
-    height: 70%;
+    height: 75%;
   }
 `;
 
@@ -686,7 +686,7 @@ const ButtonContainer = styled.div`
     cursor: pointer;
   }
 
-  @media (max-width: 400px) {
+  @media (max-width: 1000px) {
     margin-left: 15px;
     margin-right: 15px;
     width: 40%;
@@ -697,7 +697,7 @@ const Button = styled.h1`
   padding-top: 5px;
   margin: 0px;
 
-  @media (max-width: 400px) {
+  @media (max-width: 1000px) {
     font-size: 11px;
   }
 `;
@@ -717,7 +717,7 @@ const FormContainer = styled.div`
   align-items: center;
   overflow-y: scroll;
 
-  @media (max-width: 400px) {
+  @media (max-width: 1000px) {
     flex-direction: row;
     width: 100%;
     height: 30%;
