@@ -21,7 +21,7 @@ const Heading = () => (
         <Name>{`Christopher Hernandez`}</Name>
       </StyledLink>
       <Subtitle>
-        {`Co-Founder, CTO   @ `}
+        {`Co-Founder, CTO @ `}
         <StyledAnchor href="https://own-the-spot.com">
           Own It Technologies, Inc.
         </StyledAnchor>
@@ -31,7 +31,7 @@ const Heading = () => (
         <StyledAnchor href="https://alluxo.com">Alluxo, Inc.</StyledAnchor>
       </Subtitle>
       <Subtitle>
-        {`Front End Engineer  @ `}
+        {`Front End Engineer @ `}
         <StyledAnchor href="https://www.hyfyconcerts.com/">
           The Authentic Company, Inc.
         </StyledAnchor>
@@ -71,6 +71,11 @@ const Name = styled.h1`
   :hover {
     color: #a3997e;
   }
+
+  @media (max-width: 500px) {
+    margin: 0rem;
+    font-size: 2rem;
+  }
 `;
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -79,6 +84,10 @@ const StyledLink = styled(Link)`
 const Subtitle = styled.p`
   color: #72777f;
   font-size: 1.4rem;
+
+  @media (max-width: 500px) {
+    font-size: 1rem;
+  }
 `;
 
 const StyledAnchor = styled.a`
@@ -88,14 +97,20 @@ const StyledAnchor = styled.a`
   :hover {
     color: #a3997e;
   }
+
+  @media (max-width: 500px) {
+    font-size: 1rem;
+  }
 `;
 
 const IconContainer = styled.div`
   margin-top: 20px;
   width: 500px;
-  margin-left: auto;
-  margin-right: auto;
   text-align: center;
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 const GitlabIcon = styled.img`
@@ -134,4 +149,10 @@ const Myself = styled.img`
   opacity: 0.05;
   margin-top: 30px;
   margin-bottom: 50px;
+
+  @media (max-width: 500px) {
+    width: 90%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
 `;
