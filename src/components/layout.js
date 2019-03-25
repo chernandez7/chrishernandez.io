@@ -8,6 +8,10 @@ const Container = styled.div`
   background-color: #222;
   height: 100vh;
   width: 100vw;
+
+  @media (max-width: 500px) {
+    overflow-y: auto;
+  }
 `;
 
 const Layout = ({ children }) => (

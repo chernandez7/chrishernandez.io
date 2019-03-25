@@ -119,6 +119,11 @@ const GitlabIcon = styled.img`
   padding-left: 28px;
   padding-right: 28px;
   margin: 0px;
+
+  @media (max-width: 500px) {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
 `;
 
 const DontClickThis = styled.div`
