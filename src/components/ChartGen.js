@@ -636,12 +636,21 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   color: #222;
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+  }
 `;
 
 const MainContent = styled.div`
-  width: 80%;
+  width: 75%;
   height: 100%;
   background-color: #d8d5cf;
+
+  @media (max-width: 400px) {
+    width: 100%;
+    height: 70%;
+  }
 `;
 
 const ButtonsContainer = styled.div`
@@ -667,8 +676,6 @@ const IconContainer = styled.div`
 const ButtonContainer = styled.div`
   width: 250px;
   height: 100%;
-  border-color: #000;
-  border-width: 1px;
   background-color: #a3997e;
   display: flex;
   flex-direction: column;
@@ -678,11 +685,21 @@ const ButtonContainer = styled.div`
   :hover {
     cursor: pointer;
   }
+
+  @media (max-width: 400px) {
+    margin-left: 15px;
+    margin-right: 15px;
+    width: 40%;
+  }
 `;
 
 const Button = styled.h1`
   padding-top: 5px;
   margin: 0px;
+
+  @media (max-width: 400px) {
+    font-size: 11px;
+  }
 `;
 
 const ChartContainer = styled.div`
@@ -699,6 +716,13 @@ const FormContainer = styled.div`
   text-align: center;
   align-items: center;
   overflow-y: scroll;
+
+  @media (max-width: 400px) {
+    flex-direction: row;
+    width: 100%;
+    height: 30%;
+    overflow-x: scroll;
+  }
 `;
 
 const Label = styled.h1`
