@@ -18,3 +18,5 @@ Personal site powered by Gatsby, Netlify, React, and GraphQL.
 `yarn`
 
 `gatsby develop`
+
+[![Image from Gyazo](https://i.gyazo.com/103ad1d43e1319a669af7bdd3a64967f.gif)](https://gyazo.com/103ad1d43e1319a669af7bdd3a64967f)
