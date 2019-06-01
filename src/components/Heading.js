@@ -8,11 +8,14 @@ import Me from "../images/me.png";
 
 const Heading = () => (
   <React.Fragment>
-    <Link to="/chartjs">
-      <DontClickThis>
+    <DontClickThis>
+      <Link to="/chartjs">
         <Dont>{`don't click this`}</Dont>
-      </DontClickThis>
-    </Link>
+      </Link>
+      <Link to="/sp404">
+        <Dont>{`or this`}</Dont>
+      </Link>
+    </DontClickThis>
     <HeadingContainer>
       <ImageContainer>
         <Myself src={Me} alt="Chris" />
