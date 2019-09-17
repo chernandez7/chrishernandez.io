@@ -33,12 +33,6 @@ const Heading = () => (
         {`Front End Engineer @ `}
         <StyledAnchor href="https://alluxo.com">Alluxo, Inc.</StyledAnchor>
       </Subtitle>
-      <Subtitle>
-        {`Front End Engineer @ `}
-        <StyledAnchor href="https://www.hyfyconcerts.com/">
-          The Authentic Company, Inc.
-        </StyledAnchor>
-      </Subtitle>
       <IconContainer>
         <SimpleIcon icon={"github"} href={"https://github.com/chernandez7"} />
         <a href={"https://gitlab.com/chernandez7"}>
