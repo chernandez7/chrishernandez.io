@@ -1,8 +1,13 @@
 import styled from "styled-components";
-import Image from "next/image";
 
 export const Container = styled.div`
 overflow: hidden;
+`;
+
+
+export const ContentContainer = styled.div`
+width: 100%;
+height: calc(100vh - 72px);
 `;
 
 export const Footer = styled.footer`

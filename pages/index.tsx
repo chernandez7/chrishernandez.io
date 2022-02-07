@@ -1,7 +1,9 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import {Container,Footer,NameContainer,Name,Subtitle,SocialIcons,Social} from "../styles/index.style"
+// import {Tree} from "../components/Tree";
+
+import {Container,ContentContainer,Footer,NameContainer,Name,Subtitle,SocialIcons,Social} from "../styles/index.style"
 
 const Home: NextPage = () => {
   return (
@@ -11,8 +13,9 @@ const Home: NextPage = () => {
         <meta name={`description`} content={`Personal site and playground.`} />
         <link rel={`icon`} href={`/favicon.ico`} />
       </Head>
-      <main>
-      </main>
+      <ContentContainer>
+      {/* <Tree/> */}
+      </ContentContainer>
       <Footer>
         <NameContainer>
         <Name>{`Christopher Hernandez`}</Name>
