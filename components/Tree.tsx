@@ -31,7 +31,7 @@ export function Tree() {
     //   bottom: 100,
     //   left: 50,
     // });
-  }, []);
+  }, [addLine]);
 
   function addLine(line: React.ReactNode) {
     const temp = lines.slice();
@@ -92,8 +92,8 @@ export function Tree() {
 
   return (
     <Container>
-      {lines.map((l) => (
-        <React.Fragment>{l}</React.Fragment>
+      {lines.map((l,i) => (
+        <React.Fragment key={i}>{l}</React.Fragment>
       ))}
     </Container>
   );
