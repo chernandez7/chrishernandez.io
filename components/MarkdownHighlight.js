@@ -1,11 +1,10 @@
-import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
   materialDark,
   materialLight,
 } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
-const MarkdownHighlight = ({ darkMode, language, value }) => {
+export default function MarkdownHighlight({ darkMode, language, value }) {
   return (
     <SyntaxHighlighter
       language={language}
@@ -14,6 +13,4 @@ const MarkdownHighlight = ({ darkMode, language, value }) => {
       {value}
     </SyntaxHighlighter>
   );
-};
-
-export default MarkdownHighlight;
+}

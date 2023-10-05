@@ -27,9 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "components/MarkdownHighlight.js",
-    "lib/markdown.js",
-    "pages/blog/[slug].jsx"
+    "pages/_app.js"
   ],
   "exclude": ["node_modules"]
 }

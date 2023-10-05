@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@stylexjs/stylex": "beta",
     "gray-matter": "^4.0.3",
     "next": "13.5.4",
     "react": "^18",
@@ -17,11 +18,15 @@
     "react-syntax-highlighter": "^15.5.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@stylexjs/dev-runtime": "beta",
+    "@stylexjs/eslint-plugin": "beta",
+    "@stylexjs/nextjs-plugin": "beta",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-syntax-highlighter": "15.5.0",
     "eslint": "^8",
-    "eslint-config-next": "13.5.4"
+    "eslint-config-next": "13.5.4",
+    "typescript": "^5"
   }
 }
