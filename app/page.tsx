@@ -539,7 +539,8 @@ export default function Home() {
           href="https://milodges.com/"
           target="_blank"
           rel="noreferrer noopener"
-          aria-label="MILodges — Open from sanctuary"
+          tabIndex={-1}
+          aria-hidden="true"
         />
         <svg
           className="corner-rays"
