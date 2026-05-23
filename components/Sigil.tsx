@@ -77,7 +77,7 @@ export function Sigil({
   const rootClassName = className ? `sigil ${className}` : "sigil";
   const glowId = `${idPrefix}-glow`;
   const glowInnerId = `${idPrefix}-glow-inner`;
-  const strokeId = `${idPrefix}-stroke`;
+  const strokeId = "sigilStroke";
   const ordoPathId = `${idPrefix}-ordo-path`;
   const enochPathId = `${idPrefix}-enoch-path`;
 
