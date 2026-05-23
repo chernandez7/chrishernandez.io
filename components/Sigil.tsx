@@ -1,4 +1,11 @@
 const rays = Array.from({ length: 24 }, (_, index) => index);
+const outerTicks = Array.from({ length: 8 }, (_, index) => index);
+
+// Heptagon (7 vertices), r=318, center (400,400), starting from top
+const heptagonPoints = Array.from({ length: 7 }, (_, i) => {
+  const angle = (Math.PI * (-0.5 + (2 * i) / 7));
+  return `${(400 + 318 * Math.cos(angle)).toFixed(1)},${(400 + 318 * Math.sin(angle)).toFixed(1)}`;
+}).join(" ");
 const flowerCenters = (() => {
   const centers: Array<{ x: number; y: number }> = [];
   const spacing = 64;
@@ -44,6 +51,12 @@ export function Sigil() {
           <stop offset="50%" stopColor="#c8a24e" />
           <stop offset="100%" stopColor="#7c5b17" />
         </linearGradient>
+        {/* circular path for inscription text */}
+        <path
+          id="ordoPath"
+          d="M 400,40 A 360,360 0 0,1 400,760 A 360,360 0 0,1 400,40"
+          fill="none"
+        />
       </defs>
 
       <circle
@@ -75,8 +88,26 @@ export function Sigil() {
             cy={point.y}
             r="64"
             className="sigil__flower-circle"
-            style={{ animationDelay: `${-(index * 1.13).toFixed(2)}s` }}
-          />
+          >
+            <animateTransform
+              attributeName="transform"
+              type="translate"
+              values={`0 0; ${400 - point.x} ${400 - point.y}; 0 0`}
+              dur="12s"
+              repeatCount="indefinite"
+              begin={`${-(index * 0.27).toFixed(2)}s`}
+              keyTimes="0; 0.45; 1"
+              keySplines="0.45 0 0.2 1; 0.3 0 0.2 1"
+              calcMode="spline"
+            />
+            <animate
+              attributeName="opacity"
+              values="0.88; 0.25; 0.92"
+              dur="12s"
+              repeatCount="indefinite"
+              begin={`${-(index * 0.27).toFixed(2)}s`}
+            />
+          </circle>
         ))}
       </g>
 
@@ -158,6 +189,29 @@ export function Sigil() {
       <circle cx="400" cy="400" r="332" fill="url(#sigilGlow)" />
       <circle cx="400" cy="400" r="120" fill="url(#sigilGlowInner)" />
       <circle cx="400" cy="400" r="390" className="sigil__frame" />
+
+      {/* Heptagon — slowly counter-rotates outside the inner layers */}
+      <polygon points={heptagonPoints} className="sigil__heptagon" />
+
+      {/* Outer tick marks at r≈372 — 8 radial ticks beyond the outer orbit */}
+      {outerTicks.map((tick) => (
+        <line
+          key={`outer-tick-${tick}`}
+          x1="400"
+          y1="18"
+          x2="400"
+          y2="34"
+          className="sigil__outer-tick"
+          transform={`rotate(${tick * 45} 400 400)`}
+        />
+      ))}
+
+      {/* Inscription ring — masonic motto follows the outer orbit */}
+      <text className="sigil__inscription">
+        <textPath href="#ordoPath" startOffset="0%">
+          {"  ✦  ORDO AB CHAO  ✦  LVX IN TENEBRIS  ✦  V.I.T.R.I.O.L  ✦  FIAT LVX  ✦  "}
+        </textPath>
+      </text>
     </svg>
   );
 }

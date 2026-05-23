@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/043e16bd-e73b-459c-9b4a-5df9d8b41f0e/deploy-status)](https://app.netlify.com/projects/chrishernandez/deploys)
+
 This is a [Next.js](https://nextjs.org/) static site rebuilt with the App Router.
 
 ## Getting Started

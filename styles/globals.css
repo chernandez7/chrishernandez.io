@@ -40,11 +40,11 @@ body {
   margin: 0;
   min-height: 100svh;
   background:
-    radial-gradient(circle at 8% 5%, rgba(120, 8, 8, 0.48), transparent 40%),
-    radial-gradient(circle at 90% 10%, rgba(110, 44, 8, 0.24), transparent 30%),
-    radial-gradient(circle at 55% 95%, rgba(50, 5, 72, 0.42), transparent 36%),
-    radial-gradient(circle at 48% 50%, rgba(30, 4, 50, 0.18), transparent 52%),
-    linear-gradient(180deg, #0a0312 0%, #010007 100%);
+    radial-gradient(circle at 8% 5%, rgba(48, 2, 4, 0.22), transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(30, 8, 2, 0.14), transparent 30%),
+    radial-gradient(circle at 55% 95%, rgba(22, 2, 48, 0.58), transparent 36%),
+    radial-gradient(circle at 48% 50%, rgba(12, 2, 36, 0.24), transparent 52%),
+    linear-gradient(180deg, #06020f 0%, #010007 100%);
   color: var(--text);
   font-family: var(--serif);
   text-rendering: optimizeLegibility;
@@ -328,38 +328,38 @@ svg {
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(155, 18, 180, 0.06) 48%,
-    rgba(200, 25, 55, 0.05) 52%,
+    rgba(80, 8, 120, 0.06) 48%,
+    rgba(60, 4, 18, 0.04) 52%,
     transparent 100%
   );
   animation: sweepBar 11s ease-in-out infinite;
 }
 
 .page__scanlines {
-  opacity: 0.14;
+  opacity: 0.12;
   background:
     repeating-linear-gradient(
       180deg,
       transparent 0,
       transparent 2px,
-      rgba(255, 255, 255, 0.06) 2px,
-      rgba(255, 255, 255, 0.06) 3px
+      rgba(255, 255, 255, 0.05) 2px,
+      rgba(255, 255, 255, 0.05) 3px
     ),
-    linear-gradient(90deg, rgba(191, 82, 45, 0.06), rgba(80, 8, 30, 0.05));
+    linear-gradient(90deg, rgba(60, 18, 8, 0.03), rgba(30, 2, 14, 0.03));
   mix-blend-mode: screen;
   animation: scanDrift 8s linear infinite;
 }
 
 .page__halo--one {
-  background: radial-gradient(circle at 12% 18%, rgba(110, 8, 14, 0.42), transparent 36%);
+  background: radial-gradient(circle at 12% 18%, rgba(28, 2, 6, 0.32), transparent 36%);
 }
 
 .page__halo--two {
-  background: radial-gradient(circle at 85% 82%, rgba(100, 36, 8, 0.26), transparent 30%);
+  background: radial-gradient(circle at 85% 82%, rgba(18, 4, 2, 0.16), transparent 30%);
 }
 
 .page__halo--three {
-  background: radial-gradient(circle at 50% 50%, rgba(40, 4, 62, 0.22), transparent 55%);
+  background: radial-gradient(circle at 50% 50%, rgba(22, 2, 50, 0.38), transparent 55%);
 }
 
 .hero,
@@ -420,11 +420,13 @@ svg {
 
 .title {
   margin: 0;
-  font-size: clamp(2.4rem, 6.6vw, 5.4rem);
-  line-height: 0.9;
-  letter-spacing: -0.05em;
+  font-size: clamp(1.95rem, 5vw, 4rem);
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   text-wrap: balance;
-  max-width: 10.5ch;
+  max-width: 13ch;
   text-shadow: 0 0 22px rgba(213, 177, 92, 0.1);
 }
 
@@ -436,21 +438,24 @@ svg {
 
 .glitch-title::before,
 .glitch-title::after {
-  content: attr(data-text);
   position: absolute;
   inset: 0;
   pointer-events: none;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .glitch-title::before {
-  color: rgba(255, 56, 126, 0.82);
+  content: "ORDO AB CHAO";
+  color: rgba(110, 8, 28, 0.88);
   transform: translate(-2px, 0);
   clip-path: polygon(0 8%, 100% 0, 100% 40%, 0 52%);
   animation: glitchSliceA 2s steps(2, end) infinite;
 }
 
 .glitch-title::after {
-  color: rgba(120, 0, 210, 0.75);
+  content: "LVX IN TENEBRIS";
+  color: rgba(48, 0, 92, 0.82);
   transform: translate(2px, 0);
   clip-path: polygon(0 50%, 100% 42%, 100% 96%, 0 90%);
   animation: glitchSliceB 2.2s steps(2, end) infinite;
@@ -459,8 +464,8 @@ svg {
 .lede {
   margin: 0;
   max-width: 42rem;
-  font-size: clamp(0.92rem, 1.2vw, 1.02rem);
-  line-height: 1.45;
+  font-size: clamp(1.04rem, 1.45vw, 1.25rem);
+  line-height: 1.52;
   color: var(--muted);
 }
 
@@ -468,7 +473,7 @@ svg {
   margin: 0;
   font-family: var(--serif);
   font-size: clamp(1.5rem, 3.2vw, 3rem);
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   text-align: center;
@@ -597,7 +602,7 @@ svg {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  width: min(100%, 46rem);
+  width: min(100%, 58rem);
   height: 100%;
   max-height: calc(100dvh - 2rem);
   justify-self: end;
@@ -620,7 +625,7 @@ svg {
     drop-shadow(0 0 60px rgba(223, 186, 122, 0.45))
     drop-shadow(0 0 140px rgba(185, 140, 79, 0.28))
     drop-shadow(0 0 280px rgba(140, 90, 30, 0.18));
-  animation: sigilBreathe 9s ease-in-out infinite;
+  animation: sigilBreathe 10.5s ease-in-out infinite;
 }
 
 .sigil__orbit,
@@ -675,15 +680,15 @@ svg {
 }
 
 .sigil__flower-life {
-  animation: flowerPhase 23s ease-in-out infinite;
+  animation: flowerPhase 18s ease-in-out infinite;
 }
 
 .sigil__flower-circle {
   stroke: rgba(241, 214, 140, 0.88) !important;
   stroke-width: 1.5;
-  opacity: 0.82;
+  opacity: 0.9;
   filter: drop-shadow(0 0 6px rgba(223, 186, 122, 0.6));
-  animation: flowerCirclePulse 6s ease-in-out infinite;
+  animation: flowerCirclePulse 12s ease-in-out infinite;
 }
 
 .sigil__metashape {
@@ -932,41 +937,41 @@ svg {
 
 @keyframes glitchSliceA {
   0%,
-  72%,
+  68%,
   100% {
     transform: translate(-2px, 0);
     opacity: 0;
   }
 
-  73%,
-  76% {
-    transform: translate(-7px, -2px);
-    opacity: 0.9;
+  69%,
+  73% {
+    transform: translate(-9px, -3px);
+    opacity: 0.88;
   }
 
-  75% {
-    transform: translate(2px, 2px);
+  71% {
+    transform: translate(3px, 2px);
     opacity: 0.6;
   }
 }
 
 @keyframes glitchSliceB {
   0%,
-  77%,
+  73%,
   100% {
     transform: translate(2px, 0);
     opacity: 0;
   }
 
-  78%,
-  81% {
-    transform: translate(8px, 2px);
-    opacity: 0.85;
+  74%,
+  78% {
+    transform: translate(10px, 3px);
+    opacity: 0.82;
   }
 
-  80% {
-    transform: translate(-2px, -2px);
-    opacity: 0.55;
+  76% {
+    transform: translate(-3px, -2px);
+    opacity: 0.52;
   }
 }
 
@@ -979,8 +984,8 @@ svg {
 
   96% {
     text-shadow:
-      -2px 0 rgba(255, 56, 126, 0.45),
-      2px 0 rgba(120, 0, 210, 0.5),
+      -2px 0 rgba(110, 8, 28, 0.5),
+      2px 0 rgba(48, 0, 92, 0.55),
       0 0 20px rgba(213, 177, 92, 0.18);
   }
 }
@@ -1011,9 +1016,9 @@ svg {
     transform: translateX(-4px) skewX(-0.4deg);
     background: linear-gradient(
       90deg,
-      rgba(255, 0, 85, 0.1) 0%,
+      rgba(60, 0, 28, 0.08) 0%,
       transparent 35%,
-      rgba(140, 0, 200, 0.08) 70%,
+      rgba(40, 0, 80, 0.06) 70%,
       transparent 100%
     );
   }
@@ -1023,9 +1028,9 @@ svg {
     transform: translateX(4px) skewX(0.4deg);
     background: linear-gradient(
       90deg,
-      rgba(140, 0, 200, 0.1) 0%,
+      rgba(40, 0, 80, 0.08) 0%,
       transparent 40%,
-      rgba(255, 0, 85, 0.07) 80%,
+      rgba(60, 0, 28, 0.05) 80%,
       transparent 100%
     );
   }
@@ -1042,8 +1047,8 @@ svg {
       0deg,
       transparent,
       transparent 3px,
-      rgba(255, 56, 126, 0.06) 3px,
-      rgba(255, 56, 126, 0.06) 4px
+      rgba(80, 0, 40, 0.04) 3px,
+      rgba(80, 0, 40, 0.04) 4px
     );
   }
 
@@ -1094,8 +1099,8 @@ svg {
   79% {
     opacity: 0.3;
     text-shadow:
-      2px 0 rgba(255, 56, 126, 0.6),
-      -2px 0 rgba(120, 0, 210, 0.5);
+      2px 0 rgba(110, 8, 28, 0.55),
+      -2px 0 rgba(48, 0, 92, 0.48);
   }
 
   80% {
@@ -1105,12 +1110,12 @@ svg {
 
   81% {
     opacity: 0.6;
-    text-shadow: 4px 0 rgba(255, 56, 126, 0.4);
+    text-shadow: 4px 0 rgba(110, 8, 28, 0.38);
   }
 
   97% {
     opacity: 0.4;
-    text-shadow: -3px 0 rgba(120, 0, 210, 0.5);
+    text-shadow: -3px 0 rgba(48, 0, 92, 0.44);
   }
 
   98% {
@@ -1161,9 +1166,9 @@ svg {
 
   83% {
     box-shadow:
-      0 0 0 1px rgba(255, 56, 126, 0.4),
+      0 0 0 1px rgba(80, 4, 22, 0.45),
       var(--shadow);
-    border-color: rgba(255, 56, 126, 0.5);
+    border-color: rgba(80, 4, 22, 0.5);
   }
 
   84% {
@@ -1173,9 +1178,9 @@ svg {
 
   85% {
     box-shadow:
-      0 0 0 1px rgba(140, 0, 180, 0.35),
+      0 0 0 1px rgba(36, 0, 70, 0.4),
       var(--shadow);
-    border-color: rgba(140, 0, 180, 0.45);
+    border-color: rgba(36, 0, 70, 0.5);
   }
 }
 
@@ -1216,8 +1221,8 @@ svg {
   }
 
   50% {
-    opacity: 0.88;
-    transform: scale(1.025) rotate(4deg);
+    opacity: 0.82;
+    transform: scale(1.08) rotate(28deg);
   }
 }
 
@@ -1320,15 +1325,15 @@ svg {
       drop-shadow(0 0 60px rgba(223, 186, 122, 0.45))
       drop-shadow(0 0 140px rgba(185, 140, 79, 0.28))
       drop-shadow(0 0 280px rgba(140, 90, 30, 0.18));
-    transform: scale(1);
+    transform: scale(1.82);
   }
 
   50% {
     filter:
-      drop-shadow(0 0 100px rgba(241, 214, 140, 0.65))
-      drop-shadow(0 0 220px rgba(213, 177, 92, 0.44))
-      drop-shadow(0 0 400px rgba(185, 140, 79, 0.26));
-    transform: scale(1.03);
+      drop-shadow(0 0 110px rgba(241, 214, 140, 0.72))
+      drop-shadow(0 0 240px rgba(213, 177, 92, 0.52))
+      drop-shadow(0 0 460px rgba(185, 140, 79, 0.3));
+    transform: scale(2.03);
   }
 }
 
@@ -1716,4 +1721,48 @@ svg {
     letter-spacing: 0.2em;
     filter: none;
   }
+}
+
+/* ── Sigil inscription (textPath ring) ───────────────────────── */
+.sigil__inscription {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  fill: rgba(241, 214, 140, 0.78);
+  filter: drop-shadow(0 0 6px rgba(223, 186, 122, 0.46));
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: inscriptionSpin 220s linear infinite;
+  pointer-events: none;
+}
+
+/* ── Sigil heptagon (outer sacred geometry layer) ────────────── */
+.sigil__heptagon {
+  fill: none;
+  stroke: url(#sigilStroke);
+  stroke-width: 0.9;
+  stroke-dasharray: 4 14;
+  opacity: 0.22;
+  transform-origin: 400px 400px;
+  animation: orbitSpinReverse 120s linear infinite;
+}
+
+/* ── Sigil outer tick marks ──────────────────────────────────── */
+.sigil__outer-tick {
+  stroke: url(#sigilStroke);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  opacity: 0.38;
+  animation: rayPulse 6.4s ease-in-out infinite;
+}
+
+.sigil__outer-tick:nth-child(odd) {
+  animation-delay: -3.2s;
+}
+
+@keyframes inscriptionSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }

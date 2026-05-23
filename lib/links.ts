@@ -6,11 +6,6 @@ export type SocialLink = {
 
 export const socialLinks: SocialLink[] = [
   {
-    label: "Tempus AI",
-    meta: "Senior Software Engineer II",
-    href: "https://www.tempus.com/",
-  },
-  {
     label: "GitHub",
     meta: "Code archives",
     href: "https://github.com/chernandez7",

@@ -139,10 +139,6 @@ export default function Home() {
             </p>
           </div>
 
-          <p className="ordo-statement" aria-hidden="true">
-            Ordo ab Chao
-          </p>
-
           <div className="hero__footer">
             <ul className="signal-list" aria-label="Design signals">
               {signals.map((signal) => (

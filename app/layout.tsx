@@ -1,11 +1,11 @@
 import Script from "next/script";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Cormorant_Garamond, IBM_Plex_Mono } from "next/font/google";
+import { Cinzel, IBM_Plex_Mono } from "next/font/google";
 
 import "../styles/globals.css";
 
-const serif = Cormorant_Garamond({
+const serif = Cinzel({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-serif",
