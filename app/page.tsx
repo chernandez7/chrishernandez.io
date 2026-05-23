@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { Sigil } from "../components/Sigil";
 import { socialLinks } from "../lib/links";
 
@@ -74,44 +80,91 @@ const sigilQuotes = [
   },
 ];
 
-const experience = [
+const promotionTracks = [
   {
-    period: "2025 - Present",
     company: "Tempus AI",
-    role: "Senior Software Engineer II",
+    stages: [
+      {
+        period: "2022 - 2025",
+        role: "Senior Software Engineer",
+      },
+      {
+        period: "2025 - Present",
+        role: "Senior Software Engineer II",
+      },
+    ],
   },
   {
-    period: "2022 - 2025",
-    company: "Tempus AI",
-    role: "Senior Software Engineer",
-  },
-  {
-    period: "2020 - 2021",
     company: "Accenture",
-    role: "Advanced App Engineering Senior Analyst / Specialist",
+    stages: [
+      {
+        period: "2019 - 2020",
+        role: "Application Development Analyst",
+      },
+      {
+        period: "2020 - 2021",
+        role: "Advanced App Engineering Senior Analyst / Specialist",
+      },
+    ],
   },
   {
-    period: "2018 - 2021",
     company: "Alluxo",
-    role: "Full Stack Developer -> Head of Engineering",
+    stages: [
+      {
+        period: "2018 - 2020",
+        role: "Full Stack Developer",
+      },
+      {
+        period: "2020 - 2021",
+        role: "Head of Engineering",
+      },
+    ],
   },
   {
-    period: "2017 - 2020",
     company: "Own It Technologies, Inc.",
-    role: "VP of Engineering",
+    stages: [
+      {
+        period: "2017 - 2020",
+        role: "VP of Engineering",
+      },
+    ],
   },
   {
-    period: "2016 - 2019",
     company: "NGHT LLC / Tandlr / The Authentic Company",
-    role: "Co-Founder and Full Stack Engineer (Contract + Startup)",
+    stages: [
+      {
+        period: "2016 - 2019",
+        role: "Co-Founder and Full Stack Engineer (Contract + Startup)",
+      },
+    ],
   },
 ];
 
+const bioInterests = [
+  "Thirty solar turns; I chart inner constellations and return carrying workable light.",
+  "Six strings, four strings, and shutter rites, with sacred geometry as the hidden grammar beneath form.",
+  "Game realms, old pages, and twin laboratories: glass and reagent by one light, racks and packets by another, both practicing transmutation.",
+  "Inner work, meditation, astral searching, manifestation, and operative magic: not all temples are built with hands.",
+  "Lodge currents, hermetic study, and philosophy as true north; body tempered beside mind, ascending toward the unopened door.",
+];
+
+type SectionId = "hero" | "history" | "esoteric";
+const sectionOrder: SectionId[] = ["esoteric", "hero", "history"];
+
 export default function Home() {
+  const sectionStackRef = useRef<HTMLDivElement>(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
+  const historySectionRef = useRef<HTMLElement>(null);
+  const esotericSectionRef = useRef<HTMLElement>(null);
+  const prefersReducedMotionRef = useRef(false);
+  const activeSectionRef = useRef<SectionId>("hero");
+  const navLockRef = useRef(false);
+  const touchStartYRef = useRef<number | null>(null);
   const sanctuaryRef = useRef<HTMLDivElement>(null);
   const [displayName, setDisplayName] = useState(canonicalName);
   const [phaseShiftActive, setPhaseShiftActive] = useState(false);
   const [perfLite, setPerfLite] = useState(false);
+  const [activeSection, setActiveSection] = useState<SectionId>("hero");
   const [sanctuaryInvoked, setSanctuaryInvoked] = useState(false);
   const [sanctuaryCharge, setSanctuaryCharge] = useState(0);
   const [possessedLink, setPossessedLink] = useState<{
@@ -143,6 +196,7 @@ export default function Home() {
     const syncPerfMode = () => {
       const params = new URLSearchParams(window.location.search);
       const manualLite = params.get("perf") === "lite";
+      const mobileWidth = window.matchMedia("(max-width: 860px)").matches;
       const saveData = Boolean(navigatorHints.connection?.saveData);
       const lowCpu =
         navigator.hardwareConcurrency > 0 && navigator.hardwareConcurrency <= 4;
@@ -150,8 +204,11 @@ export default function Home() {
         typeof navigatorHints.deviceMemory === "number" &&
         navigatorHints.deviceMemory <= 4;
 
+      prefersReducedMotionRef.current = reducedMotionQuery.matches;
+
       setPerfLite(
         manualLite ||
+          mobileWidth ||
           reducedMotionQuery.matches ||
           saveData ||
           lowCpu ||
@@ -270,6 +327,19 @@ export default function Home() {
   }, [perfLite]);
 
   useEffect(() => {
+    activeSectionRef.current = activeSection;
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (activeSection !== "hero") {
+      const root = document.documentElement;
+      root.style.setProperty("--mouse-x", "0");
+      root.style.setProperty("--mouse-y", "0");
+      root.style.setProperty("--sanctuary-x", "0");
+      root.style.setProperty("--sanctuary-y", "0");
+      return;
+    }
+
     const invocationHoldMs = 6000;
     const root = document.documentElement;
     let frameId = 0;
@@ -395,117 +465,545 @@ export default function Home() {
       window.removeEventListener("pointerleave", resetMouseState);
       resetMouseState();
     };
-  }, [sanctuaryInvoked]);
+  }, [activeSection, sanctuaryInvoked]);
+
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+
+    return () => {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "auto";
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const root = sectionStackRef.current;
+    const hero = heroSectionRef.current;
+    const history = historySectionRef.current;
+    const esoteric = esotericSectionRef.current;
+
+    if (!root || !hero || !history || !esoteric) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let nextSection: SectionId | null = null;
+        let strongestRatio = 0;
+
+        for (const entry of entries) {
+          if (!entry.isIntersecting) {
+            continue;
+          }
+
+          if (entry.intersectionRatio < strongestRatio) {
+            continue;
+          }
+
+          strongestRatio = entry.intersectionRatio;
+          if (entry.target === historySectionRef.current) {
+            nextSection = "history";
+          } else if (entry.target === esotericSectionRef.current) {
+            nextSection = "esoteric";
+          } else {
+            nextSection = "hero";
+          }
+        }
+
+        if (nextSection) {
+          setActiveSection(nextSection);
+        }
+      },
+      {
+        root,
+        threshold: [0.35, 0.6, 0.85],
+      },
+    );
+
+    observer.observe(hero);
+    observer.observe(history);
+    observer.observe(esoteric);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const stack = sectionStackRef.current;
+    const hero = heroSectionRef.current;
+    if (!stack || !hero) {
+      return;
+    }
+
+    const previousBehavior = stack.style.scrollBehavior;
+    stack.style.scrollBehavior = "auto";
+    stack.scrollTop = hero.offsetTop;
+    stack.style.scrollBehavior = previousBehavior;
+    setActiveSection("hero");
+  }, []);
+
+  const scrollToSection = (section: SectionId) => {
+    if (navLockRef.current) {
+      return;
+    }
+
+    const target =
+      section === "history"
+        ? historySectionRef.current
+        : section === "esoteric"
+          ? esotericSectionRef.current
+          : heroSectionRef.current;
+
+    if (!target) {
+      return;
+    }
+
+    navLockRef.current = true;
+    target?.scrollIntoView({
+      behavior: prefersReducedMotionRef.current ? "auto" : "smooth",
+      block: "start",
+    });
+
+    const releaseDelay = prefersReducedMotionRef.current ? 120 : 760;
+    window.setTimeout(() => {
+      navLockRef.current = false;
+    }, releaseDelay);
+  };
+
+  useEffect(() => {
+    const stack = sectionStackRef.current;
+    if (!stack) {
+      return;
+    }
+
+    const goByDelta = (delta: number) => {
+      if (Math.abs(delta) < 24) {
+        return;
+      }
+
+      const current = activeSectionRef.current;
+      const currentIndex = sectionOrder.indexOf(current);
+      const nextIndex =
+        delta > 0
+          ? currentIndex + 1
+          : delta < 0
+            ? currentIndex - 1
+            : currentIndex;
+
+      const boundedIndex = Math.max(
+        0,
+        Math.min(sectionOrder.length - 1, nextIndex),
+      );
+      if (boundedIndex !== currentIndex) {
+        scrollToSection(sectionOrder[boundedIndex]);
+      }
+    };
+
+    const onWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      if (navLockRef.current) {
+        return;
+      }
+      goByDelta(event.deltaY);
+    };
+
+    const onTouchStart = (event: TouchEvent) => {
+      if (event.touches.length !== 1) {
+        return;
+      }
+      touchStartYRef.current = event.touches[0].clientY;
+    };
+
+    const onTouchMove = (event: TouchEvent) => {
+      event.preventDefault();
+    };
+
+    const onTouchEnd = (event: TouchEvent) => {
+      if (navLockRef.current || touchStartYRef.current === null) {
+        touchStartYRef.current = null;
+        return;
+      }
+
+      const endY = event.changedTouches[0]?.clientY;
+      if (typeof endY !== "number") {
+        touchStartYRef.current = null;
+        return;
+      }
+
+      const delta = touchStartYRef.current - endY;
+      touchStartYRef.current = null;
+      goByDelta(delta);
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (navLockRef.current) {
+        return;
+      }
+
+      if (
+        event.key === "ArrowDown" ||
+        event.key === "PageDown" ||
+        event.key === " "
+      ) {
+        event.preventDefault();
+        goByDelta(120);
+      }
+
+      if (event.key === "ArrowUp" || event.key === "PageUp") {
+        event.preventDefault();
+        goByDelta(-120);
+      }
+    };
+
+    stack.addEventListener("wheel", onWheel, { passive: false });
+    stack.addEventListener("touchstart", onTouchStart, { passive: true });
+    stack.addEventListener("touchmove", onTouchMove, { passive: false });
+    stack.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      stack.removeEventListener("wheel", onWheel);
+      stack.removeEventListener("touchstart", onTouchStart);
+      stack.removeEventListener("touchmove", onTouchMove);
+      stack.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
 
   return (
     <>
-      <main
-        className={`page${phaseShiftActive ? " page--phase-shift" : ""}${perfLite ? " page--perf-lite" : ""}`}
+      <div
+        className={`page-stack page-stack--active-${activeSection}${perfLite ? " page-stack--perf-lite" : ""}`}
+        ref={sectionStackRef}
       >
-        <div className="page__grain" aria-hidden="true" />
-        <div className="page__scanlines" aria-hidden="true" />
-        <div className="page__glitch" aria-hidden="true" />
-        <div className="page__sweep" aria-hidden="true" />
-        <div className="page__halo page__halo--one" aria-hidden="true" />
-        <div className="page__halo page__halo--two" aria-hidden="true" />
-        <div className="page__halo page__halo--three" aria-hidden="true" />
+        <svg
+          className="page__acacia"
+          viewBox="0 0 1600 320"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g className="acacia__fractal acacia__fractal--left">
+            <path className="acacia__branch acacia__branch--trunk" d="M700 320 C694 292 686 268 674 244" />
+            <path className="acacia__branch" d="M674 244 C656 228 638 214 617 201" />
+            <path className="acacia__branch" d="M674 244 C692 227 709 212 726 197" />
+            <path className="acacia__branch acacia__branch--minor" d="M617 201 C601 189 586 180 570 171" />
+            <path className="acacia__branch acacia__branch--minor" d="M617 201 C603 204 588 209 574 216" />
+            <path className="acacia__branch acacia__branch--minor" d="M726 197 C742 186 756 176 771 166" />
+            <path className="acacia__branch acacia__branch--minor" d="M726 197 C740 204 755 211 770 222" />
+            <path className="acacia__branch acacia__branch--twig" d="M570 171 C560 164 551 159 542 154" />
+            <path className="acacia__branch acacia__branch--twig" d="M574 216 C563 219 552 223 542 228" />
+            <path className="acacia__branch acacia__branch--twig" d="M771 166 C781 159 790 153 800 146" />
+            <path className="acacia__branch acacia__branch--twig" d="M770 222 C781 227 792 234 803 241" />
+            <path className="acacia__leaflet" d="M550 160 l10 -4" />
+            <path className="acacia__leaflet" d="M560 171 l10 -2" />
+            <path className="acacia__leaflet" d="M570 182 l10 1" />
+            <path className="acacia__leaflet" d="M579 192 l9 3" />
+            <path className="acacia__leaflet" d="M588 188 l10 -4" />
+            <path className="acacia__leaflet" d="M598 198 l11 -2" />
+            <path className="acacia__leaflet" d="M607 208 l10 2" />
+            <path className="acacia__leaflet" d="M620 214 l9 4" />
+            <path className="acacia__leaflet" d="M734 187 l11 -4" />
+            <path className="acacia__leaflet" d="M744 197 l11 -1" />
+            <path className="acacia__leaflet" d="M753 207 l10 2" />
+            <path className="acacia__leaflet" d="M762 217 l9 5" />
+            <path className="acacia__leaflet" d="M778 203 l9 -4" />
+            <path className="acacia__leaflet" d="M788 213 l10 -2" />
+            <path className="acacia__leaflet" d="M798 224 l9 2" />
+            <path className="acacia__leaflet" d="M807 236 l8 5" />
+          </g>
+          <g className="acacia__fractal acacia__fractal--center">
+            <path className="acacia__branch acacia__branch--trunk" d="M960 320 C954 292 946 266 934 242" />
+            <path className="acacia__branch" d="M934 242 C916 225 898 210 878 196" />
+            <path className="acacia__branch" d="M934 242 C952 224 969 209 986 194" />
+            <path className="acacia__branch acacia__branch--minor" d="M878 196 C862 184 847 175 832 166" />
+            <path className="acacia__branch acacia__branch--minor" d="M878 196 C863 200 848 206 834 213" />
+            <path className="acacia__branch acacia__branch--minor" d="M986 194 C1002 182 1018 172 1033 162" />
+            <path className="acacia__branch acacia__branch--minor" d="M986 194 C1001 202 1016 210 1030 220" />
+            <path className="acacia__branch acacia__branch--twig" d="M832 166 C822 160 812 154 802 149" />
+            <path className="acacia__branch acacia__branch--twig" d="M834 213 C823 217 813 221 802 226" />
+            <path className="acacia__branch acacia__branch--twig" d="M1033 162 C1043 156 1054 149 1064 142" />
+            <path className="acacia__branch acacia__branch--twig" d="M1030 220 C1041 225 1052 232 1063 239" />
+            <path className="acacia__leaflet" d="M812 154 l10 -4" />
+            <path className="acacia__leaflet" d="M822 165 l10 -2" />
+            <path className="acacia__leaflet" d="M832 176 l10 1" />
+            <path className="acacia__leaflet" d="M841 186 l9 3" />
+            <path className="acacia__leaflet" d="M850 182 l10 -4" />
+            <path className="acacia__leaflet" d="M861 192 l11 -2" />
+            <path className="acacia__leaflet" d="M870 203 l10 2" />
+            <path className="acacia__leaflet" d="M882 210 l9 4" />
+            <path className="acacia__leaflet" d="M997 183 l11 -4" />
+            <path className="acacia__leaflet" d="M1007 194 l11 -1" />
+            <path className="acacia__leaflet" d="M1016 204 l10 3" />
+            <path className="acacia__leaflet" d="M1025 214 l9 5" />
+            <path className="acacia__leaflet" d="M1042 199 l9 -4" />
+            <path className="acacia__leaflet" d="M1052 210 l10 -2" />
+            <path className="acacia__leaflet" d="M1062 221 l9 2" />
+            <path className="acacia__leaflet" d="M1071 233 l8 5" />
+          </g>
+          <g className="acacia__fractal acacia__fractal--right">
+            <path className="acacia__branch acacia__branch--trunk" d="M1220 320 C1214 292 1206 268 1194 244" />
+            <path className="acacia__branch" d="M1194 244 C1176 228 1158 214 1137 201" />
+            <path className="acacia__branch" d="M1194 244 C1212 227 1229 212 1246 197" />
+            <path className="acacia__branch acacia__branch--minor" d="M1137 201 C1121 189 1106 180 1090 171" />
+            <path className="acacia__branch acacia__branch--minor" d="M1137 201 C1122 205 1107 210 1092 217" />
+            <path className="acacia__branch acacia__branch--minor" d="M1246 197 C1262 186 1277 176 1292 166" />
+            <path className="acacia__branch acacia__branch--minor" d="M1246 197 C1261 204 1276 212 1290 222" />
+            <path className="acacia__branch acacia__branch--twig" d="M1090 171 C1080 164 1071 159 1062 154" />
+            <path className="acacia__branch acacia__branch--twig" d="M1092 217 C1081 220 1071 224 1060 229" />
+            <path className="acacia__branch acacia__branch--twig" d="M1292 166 C1302 160 1311 154 1321 147" />
+            <path className="acacia__branch acacia__branch--twig" d="M1290 222 C1301 227 1312 234 1323 241" />
+            <path className="acacia__leaflet" d="M1070 160 l10 -4" />
+            <path className="acacia__leaflet" d="M1080 171 l10 -2" />
+            <path className="acacia__leaflet" d="M1090 182 l10 1" />
+            <path className="acacia__leaflet" d="M1099 192 l9 3" />
+            <path className="acacia__leaflet" d="M1110 188 l10 -4" />
+            <path className="acacia__leaflet" d="M1121 198 l11 -2" />
+            <path className="acacia__leaflet" d="M1130 208 l10 2" />
+            <path className="acacia__leaflet" d="M1142 215 l9 4" />
+            <path className="acacia__leaflet" d="M1257 187 l11 -4" />
+            <path className="acacia__leaflet" d="M1267 197 l11 -1" />
+            <path className="acacia__leaflet" d="M1276 207 l10 2" />
+            <path className="acacia__leaflet" d="M1285 217 l9 5" />
+            <path className="acacia__leaflet" d="M1300 203 l9 -4" />
+            <path className="acacia__leaflet" d="M1310 213 l10 -2" />
+            <path className="acacia__leaflet" d="M1320 224 l9 2" />
+            <path className="acacia__leaflet" d="M1329 236 l8 5" />
+          </g>
+        </svg>
+        <section
+          ref={heroSectionRef}
+          className="page-section page-section--hero"
+          aria-label="Landing section"
+        >
+          <main
+            className={`page${phaseShiftActive ? " page--phase-shift" : ""}${perfLite ? " page--perf-lite" : ""}`}
+          >
+            <div className="page__grain" aria-hidden="true" />
+            <div className="page__cadence" aria-hidden="true" />
+            <div className="page__scanlines" aria-hidden="true" />
+            <div className="page__glitch" aria-hidden="true" />
+            <div className="page__sweep" aria-hidden="true" />
+            <div className="page__ashlar" aria-hidden="true" />
+            <div className="page__halo page__halo--one" aria-hidden="true" />
+            <div className="page__halo page__halo--two" aria-hidden="true" />
+            <div className="page__halo page__halo--three" aria-hidden="true" />
 
-        <section className="hero">
-          <div className="hero__mast">
-            <h1
-              className="title glitch-title"
-              data-text={displayName}
-              aria-label={canonicalName}
-            >
-              {displayName}
-            </h1>
-            <a
-              className="role-link"
-              href="https://www.tempus.com/"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              Senior Software Engineer II @ Tempus AI
-            </a>
-            <p className="lede">
-              I solve hard problems and build the systems around them.
-            </p>
-          </div>
-
-          <div className="hero__footer">
-            <ul className="signal-list" aria-label="Design signals">
-              {signals.map((signal) => (
-                <li key={signal} className="signal-glitch">
-                  {signal}
-                </li>
-              ))}
-            </ul>
-
-            <ul className="occult-pulse" aria-label="Occult frame signals">
-              {occultPulse.map((line) => (
-                <li key={line}>{line}</li>
-              ))}
-            </ul>
-
-            <nav className="link-grid" aria-label="Social links">
-              {socialLinks.map((link, index) => (
+            <section className="hero">
+              <div className="hero__mast">
+                <h1
+                  className="title glitch-title"
+                  data-text={displayName}
+                  aria-label={canonicalName}
+                >
+                  {displayName}
+                </h1>
                 <a
-                  key={link.label}
-                  className={`link-card${
-                    possessedLink?.index === index
-                      ? " link-card--possessed"
-                      : ""
-                  }`}
-                  href={link.href}
+                  className="role-link"
+                  href="https://www.tempus.com/"
                   target="_blank"
                   rel="noreferrer noopener"
                 >
-                  <span className="link-card__label">
-                    {possessedLink?.index === index
-                      ? possessedLink.text
-                      : link.label}
-                  </span>
-                  <span className="link-card__meta">
-                    {possessedLink?.index === index
-                      ? "ritual-channel"
-                      : link.meta}
-                  </span>
+                  Senior Software Engineer II @ Tempus AI
                 </a>
-              ))}
-            </nav>
-          </div>
+                <p className="lede">
+                  I solve hard problems and build the systems around them.
+                </p>
+              </div>
+
+              <div className="hero__footer">
+                <ul className="signal-list" aria-label="Design signals">
+                  {signals.map((signal) => (
+                    <li key={signal} className="signal-glitch">
+                      {signal}
+                    </li>
+                  ))}
+                </ul>
+
+                <ul className="occult-pulse" aria-label="Occult frame signals">
+                  {occultPulse.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+
+                <nav className="link-grid" aria-label="Social links">
+                  {socialLinks.map((link, index) => (
+                    <a
+                      key={link.label}
+                      className={`link-card${
+                        possessedLink?.index === index
+                          ? " link-card--possessed"
+                          : ""
+                      }`}
+                      href={link.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
+                      <span className="link-card__label">
+                        {possessedLink?.index === index
+                          ? possessedLink.text
+                          : link.label}
+                      </span>
+                      <span className="link-card__meta">
+                        {possessedLink?.index === index
+                          ? "ritual-channel"
+                          : link.meta}
+                      </span>
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            </section>
+
+            <aside
+              className="sigil-panel"
+              aria-label="Sacred geometry illustration"
+            >
+              <ul className="sigil-quotes" aria-label="Occult inscriptions">
+                {sigilQuotes.map((quote) => (
+                  <li key={quote.text} className={quote.position}>
+                    {quote.text}
+                  </li>
+                ))}
+              </ul>
+              <Sigil />
+            </aside>
+
+            <button
+              type="button"
+              className="section-arrow section-arrow--hero-up"
+              onClick={() => scrollToSection("esoteric")}
+              aria-label="Scroll to interests and bio"
+              aria-hidden={activeSection === "esoteric"}
+              tabIndex={activeSection === "esoteric" ? -1 : 0}
+            >
+              <span>Interests / Bio</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 20V6" />
+                <path d="M6 12l6-6 6 6" />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              className="section-arrow section-arrow--down"
+              onClick={() => scrollToSection("history")}
+              aria-label="Scroll to work history"
+              aria-hidden={activeSection === "history"}
+              tabIndex={activeSection === "history" ? -1 : 0}
+            >
+              <span>Work History</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 4v14" />
+                <path d="M6 12l6 6 6-6" />
+              </svg>
+            </button>
+          </main>
         </section>
 
-        <aside
-          className="sigil-panel"
-          aria-label="Sacred geometry illustration"
+        <section
+          ref={historySectionRef}
+          className="page-section page-section--history"
+          aria-label="Work history section"
         >
-          <ul className="sigil-quotes" aria-label="Occult inscriptions">
-            {sigilQuotes.map((quote) => (
-              <li key={quote.text} className={quote.position}>
-                {quote.text}
-              </li>
-            ))}
-          </ul>
-          <Sigil />
-          <section className="experience-panel" aria-label="LinkedIn history">
-            <p className="experience-panel__title">
-              LinkedIn History / Field Record
-            </p>
-            <ul className="experience-list">
-              {experience.map((item) => (
-                <li key={`${item.company}-${item.period}`}>
-                  <p className="experience-list__period">{item.period}</p>
-                  <p className="experience-list__role">{item.role}</p>
-                  <p className="experience-list__company">{item.company}</p>
+          <div className="work-history">
+            <div className="work-history__header">
+              <p className="work-history__eyebrow">Field Record</p>
+              <h2 className="work-history__title">Work History</h2>
+              <p className="work-history__lede">
+                Stations in the craft, from startup crucibles to platform-scale
+                systems.
+              </p>
+            </div>
+
+            <ul className="work-history__list" aria-label="LinkedIn history">
+              {promotionTracks.map((track) => (
+                <li
+                  key={track.company}
+                  className="work-history__item work-history__item--track"
+                >
+                  <p className="work-history__company">{track.company}</p>
+                  <ol
+                    className="work-history__stages"
+                    aria-label={`${track.company} progression`}
+                  >
+                    {track.stages.map((stage) => (
+                      <li
+                        key={`${track.company}-${stage.period}`}
+                        className="work-history__stage"
+                      >
+                        <p className="work-history__period">{stage.period}</p>
+                        <p className="work-history__role">{stage.role}</p>
+                      </li>
+                    ))}
+                  </ol>
                 </li>
               ))}
             </ul>
-          </section>
-        </aside>
-      </main>
 
-      <div className="corner-sanctuary" ref={sanctuaryRef}>
+            <div className="section-arrow-row">
+              <button
+                type="button"
+                className="section-arrow section-arrow--up"
+                onClick={() => scrollToSection("hero")}
+                aria-label="Scroll to top section"
+              >
+                <span>Return</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 20V6" />
+                  <path d="M6 12l6-6 6 6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section
+          ref={esotericSectionRef}
+          className="page-section page-section--esoteric"
+          aria-label="Esoteric bio section"
+        >
+          <div className="esoteric-bio">
+            <p className="esoteric-bio__eyebrow">Inner Chamber</p>
+            <h2 className="esoteric-bio__title">Interests / Bio</h2>
+            <p className="esoteric-bio__lede">
+              Engineering by daylight; by candlelit hours, symbols, rites, and
+              old currents of thought.
+            </p>
+            <ul className="esoteric-bio__list" aria-label="Interests">
+              {bioInterests.map((interest) => (
+                <li key={interest}>{interest}</li>
+              ))}
+            </ul>
+
+            <div className="section-arrow-row">
+              <button
+                type="button"
+                className="section-arrow section-arrow--next"
+                onClick={() => scrollToSection("hero")}
+                aria-label="Scroll down to main section"
+              >
+                <span>Return</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 4v14" />
+                  <path d="M6 12l6 6 6-6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div
+        className={`corner-sanctuary${
+          activeSection === "hero" ? " corner-sanctuary--visible" : ""
+        }`}
+        ref={sanctuaryRef}
+        aria-hidden={activeSection !== "hero"}
+      >
         <div
           className={`sanctuary-invocation${
             sanctuaryInvoked ? " sanctuary-invocation--revealed" : ""
@@ -702,6 +1200,7 @@ export default function Home() {
           target="_blank"
           rel="noreferrer noopener"
           aria-label="MILodges — Square and Compass"
+          tabIndex={activeSection === "hero" ? 0 : -1}
         >
           <img src="/sc.svg" alt="Square and compass" />
         </a>

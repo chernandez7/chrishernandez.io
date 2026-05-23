@@ -46,7 +46,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  manifest: "/site.webmanifest",
   referrer: "origin-when-cross-origin",
   robots: {
     index: true,
@@ -66,7 +65,6 @@ export const metadata: Metadata = {
       { url: "/favicon.svg", type: "image/svg+xml" },
     ],
     shortcut: ["/favicon.ico"],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
   openGraph: {
     title: "Christopher Hernandez | Senior Software Engineer II",
