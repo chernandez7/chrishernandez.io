@@ -1,14 +1,58 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Sigil } from "../components/Sigil";
 import { socialLinks } from "../lib/links";
+
+type NavWithHints = Navigator & {
+  connection?: {
+    saveData?: boolean;
+  };
+  deviceMemory?: number;
+};
+
+const canonicalName = "Christopher Hernandez";
+const enochianTransliteration = "KHRISTOFER HERNANDEZ OD ZIRDO";
+const glitchAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>[]{}|/\\+=-_*#?~";
+
+const scrambleName = (name: string, intensity = 0.35) => {
+  return name
+    .split("")
+    .map((char) => {
+      if (char === " ") {
+        return char;
+      }
+
+      if (Math.random() > intensity) {
+        return char;
+      }
+
+      const index = Math.floor(Math.random() * glitchAlphabet.length);
+      return glitchAlphabet[index];
+    })
+    .join("");
+};
 
 const signals = [
   "Observatory",
   "Atlas",
   "Signal Hunter",
   "Sacred Infrastructure",
+];
+
+const occultPulse = [
+  "AS ABOVE // SO BELOW",
+  "TREE OF LIFE PATHWORK",
+  "SQUARE + COMPASS FIELD",
+  "MERCURY : SULFUR : SALT",
+];
+
+const linkPossessionBursts = [
+  "// TRACE : ASTRAL HANDSHAKE",
+  "// KETER->MALKUTH BRIDGE",
+  "// ORDO:CONVERGENCE:ACTIVE",
+  "// GATE SIGIL RESONANCE",
+  "// WATCHER ACKNOWLEDGED",
 ];
 
 const sigilQuotes = [
@@ -65,6 +109,15 @@ const experience = [
 
 export default function Home() {
   const sanctuaryRef = useRef<HTMLDivElement>(null);
+  const [displayName, setDisplayName] = useState(canonicalName);
+  const [phaseShiftActive, setPhaseShiftActive] = useState(false);
+  const [perfLite, setPerfLite] = useState(false);
+  const [sanctuaryInvoked, setSanctuaryInvoked] = useState(false);
+  const [sanctuaryCharge, setSanctuaryCharge] = useState(0);
+  const [possessedLink, setPossessedLink] = useState<{
+    index: number;
+    text: string;
+  } | null>(null);
   const personJsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -82,9 +135,147 @@ export default function Home() {
   };
 
   useEffect(() => {
+    const navigatorHints = navigator as NavWithHints;
+    const reducedMotionQuery = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+
+    const syncPerfMode = () => {
+      const params = new URLSearchParams(window.location.search);
+      const manualLite = params.get("perf") === "lite";
+      const saveData = Boolean(navigatorHints.connection?.saveData);
+      const lowCpu =
+        navigator.hardwareConcurrency > 0 && navigator.hardwareConcurrency <= 4;
+      const lowMemory =
+        typeof navigatorHints.deviceMemory === "number" &&
+        navigatorHints.deviceMemory <= 4;
+
+      setPerfLite(
+        manualLite ||
+          reducedMotionQuery.matches ||
+          saveData ||
+          lowCpu ||
+          lowMemory,
+      );
+    };
+
+    syncPerfMode();
+    reducedMotionQuery.addEventListener("change", syncPerfMode);
+
+    return () => {
+      reducedMotionQuery.removeEventListener("change", syncPerfMode);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (perfLite) {
+      setDisplayName(canonicalName);
+      return;
+    }
+
+    let scrambleFrames = 0;
+
+    const timer = window.setInterval(() => {
+      if (phaseShiftActive) {
+        setDisplayName(
+          scrambleName(enochianTransliteration, 0.24 + Math.random() * 0.34),
+        );
+        return;
+      }
+
+      if (scrambleFrames > 0) {
+        scrambleFrames -= 1;
+        setDisplayName(scrambleName(canonicalName, 0.28 + Math.random() * 0.5));
+        if (scrambleFrames === 0) {
+          setDisplayName(canonicalName);
+        }
+        return;
+      }
+
+      if (Math.random() < 0.17) {
+        scrambleFrames = 2 + Math.floor(Math.random() * 5);
+      }
+    }, 170);
+
+    return () => {
+      window.clearInterval(timer);
+      setDisplayName(canonicalName);
+    };
+  }, [perfLite, phaseShiftActive]);
+
+  useEffect(() => {
+    if (perfLite) {
+      setPossessedLink(null);
+      return;
+    }
+
+    let possessionFrames = 0;
+    let nextPossessed: { index: number; text: string } | null = null;
+
+    const timer = window.setInterval(() => {
+      if (possessionFrames > 0 && nextPossessed) {
+        possessionFrames -= 1;
+        setPossessedLink(nextPossessed);
+        if (possessionFrames === 0) {
+          setPossessedLink(null);
+          nextPossessed = null;
+        }
+        return;
+      }
+
+      if (Math.random() < 0.08) {
+        nextPossessed = {
+          index: Math.floor(Math.random() * socialLinks.length),
+          text: linkPossessionBursts[
+            Math.floor(Math.random() * linkPossessionBursts.length)
+          ],
+        };
+        possessionFrames = 1 + Math.floor(Math.random() * 2);
+      }
+    }, 120);
+
+    return () => {
+      window.clearInterval(timer);
+      setPossessedLink(null);
+    };
+  }, [perfLite]);
+
+  useEffect(() => {
+    if (perfLite) {
+      setPhaseShiftActive(false);
+      return;
+    }
+
+    let timeoutId = 0;
+    let activeWindowId = 0;
+
+    const schedulePhaseShift = () => {
+      const waitMs = 40000 + Math.floor(Math.random() * 30000);
+      timeoutId = window.setTimeout(() => {
+        setPhaseShiftActive(true);
+        activeWindowId = window.setTimeout(() => {
+          setPhaseShiftActive(false);
+          schedulePhaseShift();
+        }, 2800);
+      }, waitMs);
+    };
+
+    schedulePhaseShift();
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      window.clearTimeout(activeWindowId);
+      setPhaseShiftActive(false);
+    };
+  }, [perfLite]);
+
+  useEffect(() => {
+    const invocationHoldMs = 6000;
     const root = document.documentElement;
     let frameId = 0;
+    let chargeFrameId = 0;
     let sanctuaryActive = false;
+    let lastChargeTick = 0;
 
     const clampUnit = (value: number) => Math.max(-1, Math.min(1, value));
 
@@ -135,10 +326,48 @@ export default function Home() {
 
     const activateSanctuary = () => {
       sanctuaryActive = true;
+
+      if (sanctuaryInvoked) {
+        return;
+      }
+
+      lastChargeTick = performance.now();
+
+      const chargeLoop = (time: number) => {
+        if (!sanctuaryActive || sanctuaryInvoked) {
+          return;
+        }
+
+        const elapsed = time - lastChargeTick;
+        lastChargeTick = time;
+
+        setSanctuaryCharge((currentCharge) => {
+          const nextCharge = Math.min(
+            1,
+            currentCharge + elapsed / invocationHoldMs,
+          );
+          if (nextCharge >= 1) {
+            setSanctuaryInvoked(true);
+            return 1;
+          }
+          return nextCharge;
+        });
+
+        chargeFrameId = requestAnimationFrame(chargeLoop);
+      };
+
+      chargeFrameId = requestAnimationFrame(chargeLoop);
     };
 
     const deactivateSanctuary = () => {
       sanctuaryActive = false;
+      if (chargeFrameId) {
+        cancelAnimationFrame(chargeFrameId);
+        chargeFrameId = 0;
+      }
+      if (!sanctuaryInvoked) {
+        setSanctuaryCharge(0);
+      }
       resetMouseState();
     };
 
@@ -154,17 +383,25 @@ export default function Home() {
       if (frameId) {
         cancelAnimationFrame(frameId);
       }
+      if (chargeFrameId) {
+        cancelAnimationFrame(chargeFrameId);
+      }
       sanctuaryElement?.removeEventListener("pointerenter", activateSanctuary);
-      sanctuaryElement?.removeEventListener("pointerleave", deactivateSanctuary);
+      sanctuaryElement?.removeEventListener(
+        "pointerleave",
+        deactivateSanctuary,
+      );
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerleave", resetMouseState);
       resetMouseState();
     };
-  }, []);
+  }, [sanctuaryInvoked]);
 
   return (
     <>
-      <main className="page">
+      <main
+        className={`page${phaseShiftActive ? " page--phase-shift" : ""}${perfLite ? " page--perf-lite" : ""}`}
+      >
         <div className="page__grain" aria-hidden="true" />
         <div className="page__scanlines" aria-hidden="true" />
         <div className="page__glitch" aria-hidden="true" />
@@ -177,9 +414,10 @@ export default function Home() {
           <div className="hero__mast">
             <h1
               className="title glitch-title"
-              data-text="Christopher Hernandez"
+              data-text={displayName}
+              aria-label={canonicalName}
             >
-              Christopher Hernandez
+              {displayName}
             </h1>
             <a
               className="role-link"
@@ -203,17 +441,35 @@ export default function Home() {
               ))}
             </ul>
 
+            <ul className="occult-pulse" aria-label="Occult frame signals">
+              {occultPulse.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+
             <nav className="link-grid" aria-label="Social links">
-              {socialLinks.map((link) => (
+              {socialLinks.map((link, index) => (
                 <a
                   key={link.label}
-                  className="link-card"
+                  className={`link-card${
+                    possessedLink?.index === index
+                      ? " link-card--possessed"
+                      : ""
+                  }`}
                   href={link.href}
                   target="_blank"
                   rel="noreferrer noopener"
                 >
-                  <span className="link-card__label">{link.label}</span>
-                  <span className="link-card__meta">{link.meta}</span>
+                  <span className="link-card__label">
+                    {possessedLink?.index === index
+                      ? possessedLink.text
+                      : link.label}
+                  </span>
+                  <span className="link-card__meta">
+                    {possessedLink?.index === index
+                      ? "ritual-channel"
+                      : link.meta}
+                  </span>
                 </a>
               ))}
             </nav>
@@ -250,6 +506,34 @@ export default function Home() {
       </main>
 
       <div className="corner-sanctuary" ref={sanctuaryRef}>
+        <div
+          className={`sanctuary-invocation${
+            sanctuaryInvoked ? " sanctuary-invocation--revealed" : ""
+          }${
+            !sanctuaryInvoked && sanctuaryCharge > 0
+              ? " sanctuary-invocation--charging"
+              : ""
+          }`}
+          aria-live="polite"
+          style={{ "--charge": sanctuaryCharge.toFixed(3) } as CSSProperties}
+        >
+          <svg
+            className="sanctuary-seal"
+            viewBox="0 0 120 120"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="60" cy="60" r="48" className="sanctuary-seal__ring" />
+            <circle cx="60" cy="60" r="33" className="sanctuary-seal__ring" />
+            <path d="M60 20 L94 80 L26 80 Z" className="sanctuary-seal__mark" />
+            <path d="M30 76 L60 98 L90 76" className="sanctuary-seal__mark" />
+          </svg>
+          <p className="sanctuary-invocation__text">
+            {sanctuaryInvoked
+              ? "the gate remembers your measure"
+              : "hold sanctuary to invoke"}
+          </p>
+        </div>
         <a
           className="corner-hit"
           href="https://milodges.com/"

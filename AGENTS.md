@@ -22,7 +22,7 @@ masonry meets software engineering. Do not sanitize or normalize the aesthetic.
 | Framework       | Next.js (app router, static export)                                        |
 | Language        | TypeScript strict mode                                                     |
 | Node            | 22 via `fnm` (`.node-version` file)                                        |
-| Package manager | `corepack yarn`                                                            |
+| Package manager | npm                                                                        |
 | Fonts           | Cormorant Garamond (serif) + IBM Plex Mono — loaded via `next/font/google` |
 | CSS             | Single flat file: `styles/globals.css` — no CSS modules                    |
 | Analytics       | Cloudflare Web Analytics (token in `app/layout.tsx`)                       |
@@ -36,16 +36,16 @@ masonry meets software engineering. Do not sanitize or normalize the aesthetic.
 eval "$(fnm env --shell zsh)" && fnm use 22
 
 # Dev server
-corepack yarn dev
+npm run dev
 
 # Typecheck (run after any change)
-corepack yarn typecheck    # tsc --noEmit
+npm run typecheck    # tsc --noEmit
 
 # Build
-corepack yarn build
+npm run build
 ```
 
-**Always run `yarn typecheck` after edits. Never skip it.**
+**Always run `npm run typecheck` after edits. Never skip it.**
 
 ---
 

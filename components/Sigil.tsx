@@ -1,9 +1,46 @@
 const rays = Array.from({ length: 24 }, (_, index) => index);
 const outerTicks = Array.from({ length: 8 }, (_, index) => index);
+const alchemicalMarks = ["🜂", "🜁", "🜃", "🜄", "🜍", "🜔"];
+const enochianText =
+  "  ✶  ZODACARE OD ZIRDO NAZAVAB  ✶  LONSHI CALZ IRGIL  ✶  MADRIAX NANTA  ✶  ";
+
+const treeNodes = [
+  { name: "keter", x: 400, y: 132 },
+  { name: "chokmah", x: 322, y: 206 },
+  { name: "binah", x: 478, y: 206 },
+  { name: "chesed", x: 302, y: 298 },
+  { name: "gevurah", x: 498, y: 298 },
+  { name: "tiferet", x: 400, y: 384 },
+  { name: "netzach", x: 322, y: 476 },
+  { name: "hod", x: 478, y: 476 },
+  { name: "yesod", x: 400, y: 560 },
+  { name: "malkuth", x: 400, y: 652 },
+];
+
+const treeLinks: Array<[number, number]> = [
+  [0, 1],
+  [0, 2],
+  [1, 2],
+  [1, 3],
+  [2, 4],
+  [1, 5],
+  [2, 5],
+  [3, 4],
+  [3, 5],
+  [4, 5],
+  [3, 6],
+  [4, 7],
+  [5, 6],
+  [5, 7],
+  [6, 7],
+  [6, 8],
+  [7, 8],
+  [8, 9],
+];
 
 // Heptagon (7 vertices), r=318, center (400,400), starting from top
 const heptagonPoints = Array.from({ length: 7 }, (_, i) => {
-  const angle = (Math.PI * (-0.5 + (2 * i) / 7));
+  const angle = Math.PI * (-0.5 + (2 * i) / 7);
   return `${(400 + 318 * Math.cos(angle)).toFixed(1)},${(400 + 318 * Math.sin(angle)).toFixed(1)}`;
 }).join(" ");
 const flowerCenters = (() => {
@@ -55,6 +92,11 @@ export function Sigil() {
         <path
           id="ordoPath"
           d="M 400,40 A 360,360 0 0,1 400,760 A 360,360 0 0,1 400,40"
+          fill="none"
+        />
+        <path
+          id="enochPath"
+          d="M 400,12 A 388,388 0 0,1 400,788 A 388,388 0 0,1 400,12"
           fill="none"
         />
       </defs>
@@ -209,9 +251,91 @@ export function Sigil() {
       {/* Inscription ring — masonic motto follows the outer orbit */}
       <text className="sigil__inscription">
         <textPath href="#ordoPath" startOffset="0%">
-          {"  ✦  ORDO AB CHAO  ✦  LVX IN TENEBRIS  ✦  V.I.T.R.I.O.L  ✦  FIAT LVX  ✦  "}
+          {
+            "  ✦  ORDO AB CHAO  ✦  LVX IN TENEBRIS  ✦  V.I.T.R.I.O.L  ✦  FIAT LVX  ✦  "
+          }
         </textPath>
       </text>
+
+      <text className="sigil__enochian sigil__enochian--forward">
+        <textPath href="#enochPath" startOffset="0%">
+          {enochianText}
+        </textPath>
+      </text>
+
+      <text className="sigil__enochian sigil__enochian--reverse">
+        <textPath href="#enochPath" startOffset="50%">
+          {enochianText}
+        </textPath>
+      </text>
+
+      <g className="sigil__tree-life" aria-hidden="true">
+        {treeLinks.map(([from, to], index) => (
+          <line
+            key={`path-${from}-${to}`}
+            x1={treeNodes[from].x}
+            y1={treeNodes[from].y}
+            x2={treeNodes[to].x}
+            y2={treeNodes[to].y}
+            className="sigil__tree-path"
+            style={{ animationDelay: `${-(index * 0.19).toFixed(2)}s` }}
+          />
+        ))}
+        {treeNodes.map((node, index) => (
+          <circle
+            key={node.name}
+            cx={node.x}
+            cy={node.y}
+            r={index === 9 ? 12 : 10}
+            className="sigil__tree-node"
+            style={{ animationDelay: `${-(index * 0.37).toFixed(2)}s` }}
+          />
+        ))}
+      </g>
+
+      <g className="sigil__square-compass" aria-hidden="true">
+        <path
+          d="M400 202 L548 556 L252 556 Z"
+          className="sigil__masonic-compass"
+        />
+        <path
+          d="M274 544 L400 350 L526 544"
+          className="sigil__masonic-compass"
+        />
+        <path
+          d="M244 536 L400 640 L556 536"
+          className="sigil__masonic-square"
+        />
+        <path
+          d="M284 506 L400 582 L516 506"
+          className="sigil__masonic-square"
+        />
+        <text x="400" y="485" className="sigil__masonic-glyph">
+          G
+        </text>
+      </g>
+
+      <text x="400" y="168" className="sigil__axiom sigil__axiom--north">
+        AS ABOVE
+      </text>
+      <text x="400" y="636" className="sigil__axiom sigil__axiom--south">
+        SO BELOW
+      </text>
+
+      <g className="sigil__alchemy" aria-hidden="true">
+        {alchemicalMarks.map((mark, index) => (
+          <text
+            key={`alchemy-${mark}-${index}`}
+            x="400"
+            y="72"
+            className="sigil__alchemy-mark"
+            transform={`rotate(${index * 60} 400 400)`}
+            style={{ animationDelay: `${-(index * 0.8).toFixed(2)}s` }}
+          >
+            {mark}
+          </text>
+        ))}
+      </g>
     </svg>
   );
 }

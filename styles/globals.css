@@ -89,6 +89,55 @@ svg {
   animation: worldShift 19s ease-in-out infinite;
 }
 
+.page--perf-lite {
+  animation: none;
+}
+
+.page--perf-lite .page__grain,
+.page--perf-lite .page__scanlines,
+.page--perf-lite .page__glitch,
+.page--perf-lite .page__sweep,
+.page--perf-lite .page__halo {
+  display: none;
+}
+
+.page--perf-lite .sigil {
+  animation: none;
+  transform: scale(1.8);
+  filter:
+    drop-shadow(0 0 26px rgba(223, 186, 122, 0.35))
+    drop-shadow(0 0 74px rgba(185, 140, 79, 0.18));
+}
+
+.page--perf-lite .sigil__flower-life,
+.page--perf-lite .sigil__metashape,
+.page--perf-lite .sigil__tree-life,
+.page--perf-lite .sigil__square-compass,
+.page--perf-lite .sigil__alchemy,
+.page--perf-lite .sigil__enochian--reverse,
+.page--perf-lite .sigil__ray,
+.page--perf-lite .sigil__tick,
+.page--perf-lite .signal-glitch,
+.page--perf-lite .occult-pulse li,
+.page--perf-lite .link-card,
+.page--perf-lite .experience-list li {
+  animation: none !important;
+}
+
+.page--perf-lite .sigil__seed,
+.page--perf-lite .sigil__flower-circle,
+.page--perf-lite .sigil__alchemy-mark,
+.page--perf-lite .sigil__inscription,
+.page--perf-lite .sigil__enochian,
+.page--perf-lite .corner-rays,
+.page--perf-lite .corner-wing {
+  filter: none;
+}
+
+.page--perf-lite .signal-list li {
+  backdrop-filter: none;
+}
+
 .corner-sanctuary {
   position: fixed;
   bottom: 0;
@@ -286,6 +335,83 @@ svg {
     drop-shadow(0 0 8px rgba(223, 186, 122, 0.55));
 }
 
+.sanctuary-invocation {
+  --charge: 0;
+  position: absolute;
+  right: 0.8rem;
+  bottom: 2.9rem;
+  display: grid;
+  justify-items: end;
+  gap: 0.2rem;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px) scale(0.96);
+}
+
+.sanctuary-invocation--charging {
+  opacity: 0.56;
+  transform: translateY(0) scale(1);
+}
+
+.sanctuary-invocation--revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  animation: invocationArrival 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.sanctuary-seal {
+  width: 5.1rem;
+  height: 5.1rem;
+  filter:
+    drop-shadow(0 0 12px rgba(241, 214, 140, 0.56))
+    drop-shadow(0 0 28px rgba(110, 8, 28, 0.24));
+}
+
+.sanctuary-seal__ring,
+.sanctuary-seal__mark {
+  fill: none;
+  stroke: rgba(241, 214, 140, 0.85);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sanctuary-seal__ring {
+  stroke-width: 1.2;
+  stroke-dasharray: 302;
+  stroke-dashoffset: calc(302 * (1 - var(--charge)));
+  transition: stroke-dashoffset 80ms linear;
+  animation: sealSpin 18s linear infinite;
+  transform-origin: 60px 60px;
+}
+
+.sanctuary-seal__ring:nth-of-type(2) {
+  stroke-dasharray: 208;
+  stroke-dashoffset: calc(208 * (1 - min(1, var(--charge) * 1.35)));
+  animation-duration: 12s;
+}
+
+.sanctuary-seal__mark {
+  stroke-width: 1.35;
+  opacity: 0.84;
+  animation: sealMarkPulse 3.1s ease-in-out infinite;
+}
+
+.sanctuary-invocation__text {
+  margin: 0;
+  max-width: 14rem;
+  font-family: var(--mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: right;
+  color: rgba(241, 214, 140, 0.78);
+  text-shadow: 0 0 9px rgba(223, 186, 122, 0.36);
+}
+
+.sanctuary-invocation--charging .sanctuary-invocation__text {
+  color: rgba(241, 214, 140, 0.6);
+}
+
 .page__grain,
 .page__scanlines,
 .page__glitch,
@@ -447,19 +573,29 @@ svg {
 }
 
 .glitch-title::before {
-  content: "ORDO AB CHAO";
+  content: attr(data-text);
   color: rgba(110, 8, 28, 0.88);
   transform: translate(-2px, 0);
   clip-path: polygon(0 8%, 100% 0, 100% 40%, 0 52%);
-  animation: glitchSliceA 2s steps(2, end) infinite;
+  animation: glitchSliceA 1.6s steps(2, end) infinite;
 }
 
 .glitch-title::after {
-  content: "LVX IN TENEBRIS";
+  content: attr(data-text);
   color: rgba(48, 0, 92, 0.82);
   transform: translate(2px, 0);
   clip-path: polygon(0 50%, 100% 42%, 100% 96%, 0 90%);
-  animation: glitchSliceB 2.2s steps(2, end) infinite;
+  animation: glitchSliceB 1.8s steps(2, end) infinite;
+}
+
+.glitch-title[data-text*="#"],
+.glitch-title[data-text*="?"],
+.glitch-title[data-text*="["],
+.glitch-title[data-text*="{"] {
+  text-shadow:
+    -3px 0 rgba(110, 8, 28, 0.72),
+    3px 0 rgba(48, 0, 92, 0.72),
+    0 0 20px rgba(213, 177, 92, 0.22);
 }
 
 .lede {
@@ -521,6 +657,29 @@ svg {
   backdrop-filter: blur(10px);
 }
 
+.occult-pulse {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.occult-pulse li {
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(241, 214, 140, 0.72);
+  opacity: 0.6;
+  animation: occultBlink 9s steps(1) infinite;
+}
+
+.occult-pulse li:nth-child(2) { animation-delay: -2.3s; }
+.occult-pulse li:nth-child(3) { animation-delay: -5.2s; }
+.occult-pulse li:nth-child(4) { animation-delay: -7.1s; }
+
 .signal-glitch:nth-child(1) { animation: chipJitter 6.3s steps(1) infinite; }
 .signal-glitch:nth-child(2) { animation: chipJitter 8.1s steps(1) infinite; animation-delay: -2.4s; }
 .signal-glitch:nth-child(3) { animation: chipJitter 7.7s steps(1) infinite; animation-delay: -5.1s; }
@@ -577,6 +736,28 @@ svg {
 .link-card:focus-visible {
   outline: 2px solid rgba(241, 214, 140, 0.8);
   outline-offset: -2px;
+}
+
+.link-card--possessed {
+  background: rgba(110, 8, 28, 0.18);
+  animation: possessionFlash 180ms steps(1) 2;
+}
+
+.link-card--possessed::before {
+  color: rgba(241, 214, 140, 0.92);
+  transform: translateX(3px);
+}
+
+.link-card--possessed .link-card__label {
+  letter-spacing: 0.08em;
+  color: rgba(255, 236, 176, 0.96);
+  text-shadow:
+    -2px 0 rgba(110, 8, 28, 0.58),
+    2px 0 rgba(48, 0, 92, 0.56);
+}
+
+.link-card--possessed .link-card__meta {
+  color: rgba(241, 214, 140, 0.82);
 }
 
 .link-card__label {
@@ -825,6 +1006,120 @@ svg {
   opacity: 0.72;
   transform-box: fill-box;
   transform-origin: center;
+}
+
+.sigil__tree-path,
+.sigil__tree-node,
+.sigil__masonic-compass,
+.sigil__masonic-square {
+  fill: none;
+  stroke: url(#sigilStroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.sigil__tree-life {
+  animation: treeSpin 92s linear infinite;
+  transform-origin: 400px 400px;
+}
+
+.sigil__tree-path {
+  stroke-width: 0.95;
+  opacity: 0.22;
+  stroke-dasharray: 3 9;
+  animation: treePathPulse 8.4s ease-in-out infinite;
+}
+
+.sigil__tree-node {
+  stroke-width: 1.15;
+  fill: rgba(241, 214, 140, 0.08);
+  opacity: 0.42;
+  animation: treeNodePulse 6.6s ease-in-out infinite;
+}
+
+.sigil__square-compass {
+  transform-origin: 400px 400px;
+  animation: compassSway 48s ease-in-out infinite;
+}
+
+.sigil__masonic-compass,
+.sigil__masonic-square {
+  stroke-width: 1.1;
+  opacity: 0.2;
+}
+
+.sigil__masonic-compass {
+  stroke-dasharray: 6 12;
+}
+
+.sigil__masonic-square {
+  stroke-dasharray: 2 10;
+}
+
+.sigil__masonic-glyph {
+  font-family: var(--serif);
+  font-size: 24px;
+  letter-spacing: 0.09em;
+  text-anchor: middle;
+  fill: rgba(241, 214, 140, 0.5);
+  opacity: 0.4;
+  animation: masonicGlyph 7.8s ease-in-out infinite;
+}
+
+.sigil__axiom {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-anchor: middle;
+  fill: rgba(241, 214, 140, 0.58);
+  opacity: 0.52;
+}
+
+.sigil__axiom--north {
+  animation: axiomNorth 12s steps(1) infinite;
+}
+
+.sigil__axiom--south {
+  animation: axiomSouth 12s steps(1) infinite;
+}
+
+.sigil__alchemy {
+  transform-origin: 400px 400px;
+  animation: orbitSpin 66s linear infinite;
+}
+
+.sigil__alchemy-mark {
+  font-family: var(--serif);
+  font-size: 30px;
+  text-anchor: middle;
+  fill: rgba(241, 214, 140, 0.74);
+  opacity: 0;
+  animation: alchemyBlink 4.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(223, 186, 122, 0.42));
+}
+
+.page--phase-shift .sigil__flower-life,
+.page--phase-shift .sigil__inscription,
+.page--phase-shift .sigil__enochian--forward,
+.page--phase-shift .sigil__metashape,
+.page--phase-shift .sigil__triangle,
+.page--phase-shift .sigil__diamond,
+.page--phase-shift .sigil__ring {
+  opacity: 0.2;
+  filter: blur(0.7px);
+}
+
+.page--phase-shift .sigil__tree-life,
+.page--phase-shift .sigil__square-compass,
+.page--phase-shift .sigil__axiom,
+.page--phase-shift .sigil__alchemy,
+.page--phase-shift .sigil__enochian--reverse {
+  opacity: 1;
+  filter:
+    drop-shadow(0 0 20px rgba(241, 214, 140, 0.58))
+    drop-shadow(0 0 48px rgba(110, 8, 28, 0.22));
 }
 
 .sigil__diamond {
@@ -1511,6 +1806,101 @@ svg {
   78% { transform: none; }
 }
 
+@keyframes occultBlink {
+  0%, 79%, 100% { opacity: 0.55; transform: translateX(0); }
+  81% { opacity: 0.95; transform: translateX(3px); }
+  82% { opacity: 0.4; transform: translateX(-2px); }
+  83% { opacity: 0.82; transform: translateX(0); }
+}
+
+@keyframes treeSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes treePathPulse {
+  0%, 100% { opacity: 0.14; stroke-dashoffset: 0; }
+  50% { opacity: 0.34; stroke-dashoffset: -18; }
+}
+
+@keyframes treeNodePulse {
+  0%, 100% { opacity: 0.24; transform: scale(0.92); }
+  50% { opacity: 0.66; transform: scale(1.05); }
+}
+
+@keyframes compassSway {
+  0%, 100% { transform: rotate(-3deg) scale(0.98); opacity: 0.75; }
+  50% { transform: rotate(3deg) scale(1.02); opacity: 1; }
+}
+
+@keyframes masonicGlyph {
+  0%, 100% { opacity: 0.15; letter-spacing: 0.09em; }
+  50% { opacity: 0.52; letter-spacing: 0.2em; }
+}
+
+@keyframes axiomNorth {
+  0%, 90%, 100% { opacity: 0.35; }
+  91% { opacity: 0.9; transform: translateY(-2px); }
+  92% { opacity: 0.28; transform: translateY(0); }
+}
+
+@keyframes axiomSouth {
+  0%, 86%, 100% { opacity: 0.35; }
+  87% { opacity: 0.88; transform: translateY(2px); }
+  88% { opacity: 0.24; transform: translateY(0); }
+}
+
+@keyframes alchemyBlink {
+  0%, 100% { opacity: 0.04; transform: translateY(0) scale(0.9); }
+  28% { opacity: 0.68; transform: translateY(-4px) scale(1); }
+  52% { opacity: 0.12; transform: translateY(0) scale(0.95); }
+  78% { opacity: 0.52; transform: translateY(3px) scale(1.05); }
+}
+
+@keyframes possessionFlash {
+  0%, 100% {
+    transform: translateX(0);
+    filter: none;
+  }
+
+  33% {
+    transform: translateX(-2px);
+    filter: contrast(1.18);
+  }
+
+  66% {
+    transform: translateX(2px);
+    filter: contrast(0.9);
+  }
+}
+
+@keyframes invocationArrival {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.94);
+  }
+
+  42% {
+    opacity: 1;
+    transform: translateY(0) scale(1.03);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sealSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes sealMarkPulse {
+  0%, 100% { opacity: 0.68; }
+  50% { opacity: 1; }
+}
+
 @media (max-width: 1100px) {
   .page {
     height: 100dvh;
@@ -1592,6 +1982,16 @@ svg {
     gap: 0.5rem;
   }
 
+  .occult-pulse {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+
+  .occult-pulse li {
+    font-size: 0.54rem;
+    letter-spacing: 0.12em;
+  }
+
   .signal-list li {
     padding: 0.34rem 0.55rem;
     font-size: 0.62rem;
@@ -1602,6 +2002,16 @@ svg {
     bottom: 0.45rem;
     width: 1.5rem;
     height: 1.5rem;
+  }
+
+  .sanctuary-invocation {
+    right: 0.45rem;
+    bottom: 2.3rem;
+  }
+
+  .sanctuary-seal {
+    width: 4.2rem;
+    height: 4.2rem;
   }
 
   .link-card {
@@ -1778,6 +2188,19 @@ svg {
     letter-spacing: 0.2em;
     filter: none;
   }
+
+  .sanctuary-invocation,
+  .sanctuary-seal,
+  .sanctuary-seal__ring,
+  .sanctuary-seal__mark,
+  .sigil__enochian,
+  .page--phase-shift .sigil__tree-life,
+  .page--phase-shift .sigil__square-compass,
+  .page--phase-shift .sigil__alchemy,
+  .page--phase-shift .sigil__axiom,
+  .link-card--possessed {
+    animation: none !important;
+  }
 }
 
 /* ── Sigil inscription (textPath ring) ───────────────────────── */
@@ -1793,6 +2216,26 @@ svg {
   transform-origin: center;
   animation: inscriptionSpin 220s linear infinite;
   pointer-events: none;
+}
+
+.sigil__enochian {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  fill: rgba(241, 214, 140, 0.34);
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.sigil__enochian--forward {
+  animation: enochSpinForward 310s linear infinite;
+}
+
+.sigil__enochian--reverse {
+  opacity: 0;
+  animation: enochSpinReverse 280s linear infinite, enochDesync 23s steps(1) infinite;
 }
 
 /* ── Sigil heptagon (outer sacred geometry layer) ────────────── */
@@ -1822,4 +2265,28 @@ svg {
 @keyframes inscriptionSpin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
+}
+
+@keyframes enochSpinForward {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes enochSpinReverse {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes enochDesync {
+  0%, 76%, 100% {
+    opacity: 0;
+  }
+
+  77%, 82% {
+    opacity: 0.62;
+  }
+
+  79% {
+    opacity: 0.16;
+  }
 }
