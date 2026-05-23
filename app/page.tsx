@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import { Sigil } from "../components/Sigil";
 import { socialLinks } from "../lib/links";
 
@@ -42,6 +45,68 @@ const experience = [
 ];
 
 export default function Home() {
+  const sanctuaryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    let frameId = 0;
+
+    const clampUnit = (value: number) => Math.max(-1, Math.min(1, value));
+
+    const writeMouseState = (clientX: number, clientY: number) => {
+      const viewportX = clampUnit((clientX / window.innerWidth) * 2 - 1);
+      const viewportY = clampUnit((clientY / window.innerHeight) * 2 - 1);
+
+      root.style.setProperty("--mouse-x", viewportX.toFixed(4));
+      root.style.setProperty("--mouse-y", viewportY.toFixed(4));
+
+      const rect = sanctuaryRef.current?.getBoundingClientRect();
+      if (!rect) {
+        root.style.setProperty("--sanctuary-x", "0");
+        root.style.setProperty("--sanctuary-y", "0");
+        return;
+      }
+
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const localX = clampUnit((clientX - centerX) / (rect.width / 2));
+      const localY = clampUnit((clientY - centerY) / (rect.height / 2));
+
+      root.style.setProperty("--sanctuary-x", localX.toFixed(4));
+      root.style.setProperty("--sanctuary-y", localY.toFixed(4));
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+
+      const { clientX, clientY } = event;
+      frameId = requestAnimationFrame(() => {
+        writeMouseState(clientX, clientY);
+      });
+    };
+
+    const resetMouseState = () => {
+      root.style.setProperty("--mouse-x", "0");
+      root.style.setProperty("--mouse-y", "0");
+      root.style.setProperty("--sanctuary-x", "0");
+      root.style.setProperty("--sanctuary-y", "0");
+    };
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("pointerleave", resetMouseState);
+
+    return () => {
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerleave", resetMouseState);
+      resetMouseState();
+    };
+  }, []);
+
   return (
     <>
       <main className="page">
@@ -126,7 +191,14 @@ export default function Home() {
         </aside>
       </main>
 
-      <div className="corner-sanctuary">
+      <div className="corner-sanctuary" ref={sanctuaryRef}>
+        <a
+          className="corner-hit"
+          href="https://milodges.com/"
+          target="_blank"
+          rel="noreferrer noopener"
+          aria-label="MILodges — Open from sanctuary"
+        />
         <svg
           className="corner-rays"
           viewBox="0 0 300 300"
@@ -135,8 +207,9 @@ export default function Home() {
         >
           <defs>
             <radialGradient id="holyLight" cx="100%" cy="100%" r="80%">
-              <stop offset="0%" stopColor="#fff8c0" stopOpacity="0.65" />
-              <stop offset="30%" stopColor="#dfba7a" stopOpacity="0.3" />
+              <stop offset="0%" stopColor="#fff8c0" stopOpacity="0.98" />
+              <stop offset="22%" stopColor="#f5daa0" stopOpacity="0.55" />
+              <stop offset="42%" stopColor="#dfba7a" stopOpacity="0.24" />
               <stop offset="100%" stopColor="#8b4a1a" stopOpacity="0" />
             </radialGradient>
           </defs>
@@ -287,17 +360,7 @@ export default function Home() {
           rel="noreferrer noopener"
           aria-label="MILodges — Square and Compass"
         >
-          <svg viewBox="0 0 64 64" role="img" aria-label="Square and compass">
-            {/* Square: ⌐-shaped carpenter’s tool — horizontal + vertical, corner at lower-left */}
-            <path d="M16,18 V48" />
-            <path d="M16,48 H54" />
-            <path d="M16,42 H23 V48" />
-            {/* Compass: wide-spread legs from top pivot, downward bow brace */}
-            <path d="M32,5 L7,60" />
-            <path d="M32,5 L57,60" />
-            <path d="M14,33 Q32,46 50,33" />
-            <circle cx="32" cy="5" r="3" />
-          </svg>
+          <img src="/sc.svg" alt="Square and compass" />
         </a>
       </div>
     </>
