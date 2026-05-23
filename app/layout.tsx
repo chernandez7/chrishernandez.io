@@ -21,25 +21,76 @@ const mono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://skate.dev"),
-  title: "Christopher Hernandez",
+  title: {
+    default: "Christopher Hernandez | Senior Software Engineer II",
+    template: "%s | Christopher Hernandez",
+  },
   description:
-    "A dark static site shaped by code, ritual, sacred geometry, and signal.",
+    "Christopher Hernandez is a Senior Software Engineer II at Tempus AI solving hard systems problems through architecture, platform design, and execution.",
+  applicationName: "Christopher Hernandez",
+  keywords: [
+    "Christopher Hernandez",
+    "Senior Software Engineer",
+    "Tempus AI",
+    "software architecture",
+    "platform engineering",
+    "full stack engineering",
+    "sacred geometry",
+    "occult design",
+    "alchemical aesthetics",
+  ],
+  authors: [{ name: "Christopher Hernandez", url: "https://skate.dev" }],
+  creator: "Christopher Hernandez",
+  publisher: "Christopher Hernandez",
+  category: "technology",
+  alternates: {
+    canonical: "/",
+  },
+  manifest: "/site.webmanifest",
+  referrer: "origin-when-cross-origin",
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", type: "image/x-icon", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
   openGraph: {
-    title: "Christopher Hernandez",
+    title: "Christopher Hernandez | Senior Software Engineer II",
     description:
-      "A dark static site shaped by code, ritual, sacred geometry, and signal.",
+      "Systems-minded engineering portfolio shaped by architecture, execution, and ritual aesthetics.",
     url: "/",
     siteName: "Christopher Hernandez",
+    locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Christopher Hernandez — Senior Software Engineer II",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Christopher Hernandez",
+    title: "Christopher Hernandez | Senior Software Engineer II",
     description:
-      "A dark static site shaped by code, ritual, sacred geometry, and signal.",
+      "Systems-minded engineering portfolio shaped by architecture, execution, and ritual aesthetics.",
+    images: ["/og-image.png"],
   },
 };
 

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Christopher Hernandez sigil mark">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#180b2a"/>
+      <stop offset="68%" stop-color="#07020f"/>
+      <stop offset="100%" stop-color="#030108"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f2e1ab"/>
+      <stop offset="52%" stop-color="#c8a24e"/>
+      <stop offset="100%" stop-color="#7c5b17"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" fill="url(#bg)" rx="40" ry="40"/>
+  <g fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="128" cy="128" r="88" stroke-width="5" opacity="0.85"/>
+    <circle cx="128" cy="128" r="62" stroke-width="4" opacity="0.9"/>
+    <polygon points="128,46 196,164 60,164" stroke-width="5" opacity="0.92"/>
+    <polygon points="128,210 196,92 60,92" stroke-width="4" opacity="0.58"/>
+    <path d="M128 80L149 143H83L107 126L128 80Z" stroke-width="4" opacity="0.95"/>
+  </g>
+  <circle cx="128" cy="128" r="11" fill="#dfba7a" opacity="0.85"/>
+</svg>

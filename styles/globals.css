@@ -136,6 +136,8 @@ svg {
   pointer-events: none;
   overflow: visible;
   z-index: 1;
+  contain: paint;
+  will-change: transform, opacity;
   transform-origin: 100% 100%;
   transform:
     translate(
@@ -149,9 +151,8 @@ svg {
   opacity: 1;
   animation: sanctuaryBurst 1.7s cubic-bezier(0.24, 0.76, 0.34, 1) both;
   filter:
-    drop-shadow(0 0 120px rgba(255, 244, 196, 0.8))
-    drop-shadow(0 0 220px rgba(241, 210, 138, 0.55))
-    drop-shadow(0 0 360px rgba(185, 140, 79, 0.33));
+    drop-shadow(0 0 90px rgba(255, 244, 196, 0.76))
+    drop-shadow(0 0 180px rgba(241, 210, 138, 0.44));
 }
 
 .corner-sanctuary:hover::before {
@@ -464,8 +465,11 @@ svg {
 .lede {
   margin: 0;
   max-width: 42rem;
+  font-family: var(--mono);
   font-size: clamp(1.04rem, 1.45vw, 1.25rem);
   line-height: 1.52;
+  letter-spacing: 0.01em;
+  text-transform: none;
   color: var(--muted);
 }
 
@@ -608,6 +612,58 @@ svg {
   justify-self: end;
   align-items: stretch;
   overflow: visible;
+}
+
+.sigil-quotes {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+  font-family: var(--serif);
+  z-index: 3;
+}
+
+.sigil-quote {
+  position: absolute;
+  margin: 0;
+  max-width: 18ch;
+  font-size: clamp(0.7rem, 0.95vw, 1rem);
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(241, 214, 140, 0.72);
+  text-shadow: 0 0 14px rgba(223, 186, 122, 0.34);
+  opacity: 0.78;
+}
+
+.sigil-quote--north {
+  top: 2.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.sigil-quote--east {
+  top: 34%;
+  right: -0.4rem;
+  transform: rotate(90deg) translateY(-50%);
+  transform-origin: top right;
+}
+
+.sigil-quote--south {
+  bottom: 2.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.sigil-quote--west {
+  top: 66%;
+  left: -0.4rem;
+  transform: rotate(-90deg) translateY(-50%);
+  transform-origin: top left;
 }
 
 .sigil-panel__frame {
@@ -1353,32 +1409,29 @@ svg {
   0% {
     transform: scale(0.95);
     filter:
-      drop-shadow(0 0 0 rgba(255, 248, 205, 0))
-      drop-shadow(0 0 0 rgba(241, 210, 138, 0));
+      drop-shadow(0 0 10px rgba(255, 248, 205, 0.02))
+      drop-shadow(0 0 20px rgba(241, 210, 138, 0.02));
   }
 
   18% {
     transform: scale(1.04);
     filter:
-      drop-shadow(0 0 220px rgba(255, 248, 205, 1))
-      drop-shadow(0 0 380px rgba(241, 210, 138, 0.86))
-      drop-shadow(0 0 560px rgba(223, 186, 122, 0.48));
+      drop-shadow(0 0 120px rgba(255, 248, 205, 0.76))
+      drop-shadow(0 0 240px rgba(241, 210, 138, 0.48));
   }
 
   42% {
     transform: scale(1.02);
     filter:
-      drop-shadow(0 0 170px rgba(255, 242, 188, 0.78))
-      drop-shadow(0 0 300px rgba(223, 186, 122, 0.58))
-      drop-shadow(0 0 460px rgba(185, 140, 79, 0.36));
+      drop-shadow(0 0 100px rgba(255, 242, 188, 0.68))
+      drop-shadow(0 0 200px rgba(223, 186, 122, 0.38));
   }
 
   100% {
     transform: scale(1);
     filter:
-      drop-shadow(0 0 120px rgba(255, 244, 196, 0.8))
-      drop-shadow(0 0 220px rgba(241, 210, 138, 0.55))
-      drop-shadow(0 0 360px rgba(185, 140, 79, 0.33));
+      drop-shadow(0 0 90px rgba(255, 244, 196, 0.76))
+      drop-shadow(0 0 180px rgba(241, 210, 138, 0.44));
   }
 }
 
@@ -1473,6 +1526,10 @@ svg {
   }
 
   .sigil-panel {
+    display: none;
+  }
+
+  .sigil-quotes {
     display: none;
   }
 }

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Christopher Hernandez social preview">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#07020f"/>
+      <stop offset="52%" stop-color="#13051d"/>
+      <stop offset="100%" stop-color="#040108"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="70%" cy="52%" r="52%">
+      <stop offset="0%" stop-color="#dfba7a" stop-opacity="0.3"/>
+      <stop offset="45%" stop-color="#8b4a1a" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f2e1ab"/>
+      <stop offset="50%" stop-color="#c8a24e"/>
+      <stop offset="100%" stop-color="#7c5b17"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <g opacity="0.82" fill="none" stroke="url(#gold)">
+    <circle cx="865" cy="315" r="206" stroke-width="3"/>
+    <circle cx="865" cy="315" r="146" stroke-width="2.5"/>
+    <polygon points="865,126 973,313 757,313" stroke-width="3"/>
+    <polygon points="865,504 973,317 757,317" stroke-width="2.5" opacity="0.6"/>
+  </g>
+
+  <g fill="#dfba7a">
+    <text x="82" y="228" font-size="74" letter-spacing="2">Christopher Hernandez</text>
+    <text x="82" y="286" font-size="30" letter-spacing="1.5" opacity="0.9">Senior Software Engineer II @ Tempus AI</text>
+    <text x="82" y="384" font-size="36" letter-spacing="1.2" opacity="0.95">I solve hard problems and build the systems around them.</text>
+    <text x="82" y="474" font-size="24" letter-spacing="3" opacity="0.78">SYSTEMS  •  ARCHITECTURE  •  EXECUTION</text>
+    <text x="82" y="536" font-size="22" letter-spacing="4" opacity="0.68">skate.dev</text>
+  </g>
+</svg>

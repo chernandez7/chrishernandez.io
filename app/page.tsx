@@ -11,6 +11,25 @@ const signals = [
   "Sacred Infrastructure",
 ];
 
+const sigilQuotes = [
+  {
+    text: "As above, so below.",
+    position: "sigil-quote sigil-quote--north",
+  },
+  {
+    text: "Visita interiora terrae.",
+    position: "sigil-quote sigil-quote--east",
+  },
+  {
+    text: "Solve et coagula.",
+    position: "sigil-quote sigil-quote--south",
+  },
+  {
+    text: "From ash, measure and build.",
+    position: "sigil-quote sigil-quote--west",
+  },
+];
+
 const experience = [
   {
     period: "2025 - Present",
@@ -46,10 +65,26 @@ const experience = [
 
 export default function Home() {
   const sanctuaryRef = useRef<HTMLDivElement>(null);
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Christopher Hernandez",
+    url: "https://skate.dev",
+    sameAs: socialLinks.map((link) => link.href),
+    jobTitle: "Senior Software Engineer II",
+    worksFor: {
+      "@type": "Organization",
+      name: "Tempus AI",
+      url: "https://www.tempus.com/",
+    },
+    description:
+      "Senior Software Engineer II focused on hard systems problems, platform architecture, and resilient product delivery.",
+  };
 
   useEffect(() => {
     const root = document.documentElement;
     let frameId = 0;
+    let sanctuaryActive = false;
 
     const clampUnit = (value: number) => Math.max(-1, Math.min(1, value));
 
@@ -77,6 +112,10 @@ export default function Home() {
     };
 
     const onPointerMove = (event: PointerEvent) => {
+      if (!sanctuaryActive) {
+        return;
+      }
+
       if (frameId) {
         cancelAnimationFrame(frameId);
       }
@@ -94,6 +133,20 @@ export default function Home() {
       root.style.setProperty("--sanctuary-y", "0");
     };
 
+    const activateSanctuary = () => {
+      sanctuaryActive = true;
+    };
+
+    const deactivateSanctuary = () => {
+      sanctuaryActive = false;
+      resetMouseState();
+    };
+
+    const sanctuaryElement = sanctuaryRef.current;
+
+    sanctuaryElement?.addEventListener("pointerenter", activateSanctuary);
+    sanctuaryElement?.addEventListener("pointerleave", deactivateSanctuary);
+
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     window.addEventListener("pointerleave", resetMouseState);
 
@@ -101,6 +154,8 @@ export default function Home() {
       if (frameId) {
         cancelAnimationFrame(frameId);
       }
+      sanctuaryElement?.removeEventListener("pointerenter", activateSanctuary);
+      sanctuaryElement?.removeEventListener("pointerleave", deactivateSanctuary);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerleave", resetMouseState);
       resetMouseState();
@@ -169,6 +224,13 @@ export default function Home() {
           className="sigil-panel"
           aria-label="Sacred geometry illustration"
         >
+          <ul className="sigil-quotes" aria-label="Occult inscriptions">
+            {sigilQuotes.map((quote) => (
+              <li key={quote.text} className={quote.position}>
+                {quote.text}
+              </li>
+            ))}
+          </ul>
           <Sigil />
           <section className="experience-panel" aria-label="LinkedIn history">
             <p className="experience-panel__title">
@@ -359,6 +421,11 @@ export default function Home() {
           <img src="/sc.svg" alt="Square and compass" />
         </a>
       </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
     </>
   );
 }
