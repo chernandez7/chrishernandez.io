@@ -159,6 +159,7 @@ export default function Home() {
   const prefersReducedMotionRef = useRef(false);
   const activeSectionRef = useRef<SectionId>("hero");
   const navLockRef = useRef(false);
+  const acaciaRevealTimerRef = useRef(0);
   const touchStartYRef = useRef<number | null>(null);
   const sanctuaryRef = useRef<HTMLDivElement>(null);
   const [displayName, setDisplayName] = useState(canonicalName);
@@ -349,13 +350,14 @@ export default function Home() {
       return;
     }
 
-    let settleTimer = 0;
-
     const onScroll = () => {
       const settleDelay = prefersReducedMotionRef.current ? 120 : 420;
       setAcaciaHiddenByScroll(true);
-      window.clearTimeout(settleTimer);
-      settleTimer = window.setTimeout(() => {
+      window.clearTimeout(acaciaRevealTimerRef.current);
+      acaciaRevealTimerRef.current = window.setTimeout(() => {
+        if (navLockRef.current) {
+          return;
+        }
         setAcaciaHiddenByScroll(false);
       }, settleDelay);
     };
@@ -364,7 +366,7 @@ export default function Home() {
 
     return () => {
       stack.removeEventListener("scroll", onScroll);
-      window.clearTimeout(settleTimer);
+      window.clearTimeout(acaciaRevealTimerRef.current);
     };
   }, []);
 
@@ -610,6 +612,10 @@ export default function Home() {
     const releaseDelay = prefersReducedMotionRef.current ? 120 : 760;
     window.setTimeout(() => {
       navLockRef.current = false;
+      window.clearTimeout(acaciaRevealTimerRef.current);
+      acaciaRevealTimerRef.current = window.setTimeout(() => {
+        setAcaciaHiddenByScroll(false);
+      }, prefersReducedMotionRef.current ? 40 : 120);
     }, releaseDelay);
   };
 
