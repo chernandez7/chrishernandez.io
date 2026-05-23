@@ -63,39 +63,57 @@ const flowerCenters = (() => {
   return centers;
 })();
 
-export function Sigil() {
+type SigilProps = {
+  className?: string;
+  idPrefix?: string;
+  ariaHidden?: boolean;
+};
+
+export function Sigil({
+  className,
+  idPrefix = "sigil",
+  ariaHidden = false,
+}: SigilProps = {}) {
+  const rootClassName = className ? `sigil ${className}` : "sigil";
+  const glowId = `${idPrefix}-glow`;
+  const glowInnerId = `${idPrefix}-glow-inner`;
+  const strokeId = `${idPrefix}-stroke`;
+  const ordoPathId = `${idPrefix}-ordo-path`;
+  const enochPathId = `${idPrefix}-enoch-path`;
+
   return (
     <svg
       viewBox="0 0 800 800"
-      className="sigil"
+      className={rootClassName}
       role="img"
       aria-label="Sacred geometry sigil"
+      aria-hidden={ariaHidden}
     >
       <defs>
-        <radialGradient id="sigilGlow" cx="50%" cy="50%" r="50%">
+        <radialGradient id={glowId} cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#fff8d0" stopOpacity="0.6" />
           <stop offset="30%" stopColor="#d6b35f" stopOpacity="0.38" />
           <stop offset="65%" stopColor="#8e6d22" stopOpacity="0.12" />
           <stop offset="100%" stopColor="#050505" stopOpacity="0" />
         </radialGradient>
-        <radialGradient id="sigilGlowInner" cx="50%" cy="50%" r="50%">
+        <radialGradient id={glowInnerId} cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#fffbe8" stopOpacity="0.9" />
           <stop offset="50%" stopColor="#dfba7a" stopOpacity="0.3" />
           <stop offset="100%" stopColor="#dfba7a" stopOpacity="0" />
         </radialGradient>
-        <linearGradient id="sigilStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id={strokeId} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#f2e1ab" />
           <stop offset="50%" stopColor="#c8a24e" />
           <stop offset="100%" stopColor="#7c5b17" />
         </linearGradient>
         {/* circular path for inscription text */}
         <path
-          id="ordoPath"
+          id={ordoPathId}
           d="M 400,40 A 360,360 0 0,1 400,760 A 360,360 0 0,1 400,40"
           fill="none"
         />
         <path
-          id="enochPath"
+          id={enochPathId}
           d="M 400,12 A 388,388 0 0,1 400,788 A 388,388 0 0,1 400,12"
           fill="none"
         />
@@ -228,8 +246,8 @@ export function Sigil() {
         className="sigil__ring"
       />
 
-      <circle cx="400" cy="400" r="332" fill="url(#sigilGlow)" />
-      <circle cx="400" cy="400" r="120" fill="url(#sigilGlowInner)" />
+      <circle cx="400" cy="400" r="332" fill={`url(#${glowId})`} />
+      <circle cx="400" cy="400" r="120" fill={`url(#${glowInnerId})`} />
       <circle cx="400" cy="400" r="390" className="sigil__frame" />
 
       {/* Heptagon — slowly counter-rotates outside the inner layers */}
@@ -250,7 +268,7 @@ export function Sigil() {
 
       {/* Inscription ring — masonic motto follows the outer orbit */}
       <text className="sigil__inscription">
-        <textPath href="#ordoPath" startOffset="0%">
+        <textPath href={`#${ordoPathId}`} startOffset="0%">
           {
             "  ✦  ORDO AB CHAO  ✦  LVX IN TENEBRIS  ✦  V.I.T.R.I.O.L  ✦  FIAT LVX  ✦  "
           }
@@ -258,13 +276,13 @@ export function Sigil() {
       </text>
 
       <text className="sigil__enochian sigil__enochian--forward">
-        <textPath href="#enochPath" startOffset="0%">
+        <textPath href={`#${enochPathId}`} startOffset="0%">
           {enochianText}
         </textPath>
       </text>
 
       <text className="sigil__enochian sigil__enochian--reverse">
-        <textPath href="#enochPath" startOffset="50%">
+        <textPath href={`#${enochPathId}`} startOffset="50%">
           {enochianText}
         </textPath>
       </text>

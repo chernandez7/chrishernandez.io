@@ -168,6 +168,7 @@ export default function Home() {
   const [sanctuaryInvoked, setSanctuaryInvoked] = useState(false);
   const [sanctuaryCharge, setSanctuaryCharge] = useState(0);
   const [introPhase, setIntroPhase] = useState<"active" | "dismissing" | "done">("active");
+  const [acaciaHiddenByScroll, setAcaciaHiddenByScroll] = useState(false);
   const [possessedLink, setPossessedLink] = useState<{
     index: number;
     text: string;
@@ -341,6 +342,30 @@ export default function Home() {
   useEffect(() => {
     activeSectionRef.current = activeSection;
   }, [activeSection]);
+
+  useEffect(() => {
+    const stack = sectionStackRef.current;
+    if (!stack) {
+      return;
+    }
+
+    let settleTimer = 0;
+
+    const onScroll = () => {
+      setAcaciaHiddenByScroll(true);
+      window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(() => {
+        setAcaciaHiddenByScroll(false);
+      }, 180);
+    };
+
+    stack.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      stack.removeEventListener("scroll", onScroll);
+      window.clearTimeout(settleTimer);
+    };
+  }, []);
 
   useEffect(() => {
     if (activeSection !== "hero") {
@@ -689,7 +714,7 @@ export default function Home() {
   return (
     <>
       <div
-        className={`page-stack page-stack--active-${activeSection}${perfLite ? " page-stack--perf-lite" : ""}`}
+        className={`page-stack page-stack--active-${activeSection}${perfLite ? " page-stack--perf-lite" : ""}${acaciaHiddenByScroll ? " page-stack--scrolling" : ""}`}
         ref={sectionStackRef}
       >
         <svg
@@ -1234,42 +1259,11 @@ export default function Home() {
           onAnimationEnd={() => setIntroPhase("done")}
           aria-hidden="true"
         >
-          <svg
-            className="intro-screensaver__sigil"
-            viewBox="0 0 800 800"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <radialGradient id="ssGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="rgba(223, 186, 122, 0.44)" />
-                <stop offset="55%" stopColor="rgba(110, 8, 28, 0.1)" />
-                <stop offset="100%" stopColor="transparent" />
-              </radialGradient>
-            </defs>
-            <circle cx="400" cy="400" r="390" fill="url(#ssGlow)" />
-            <circle cx="400" cy="400" r="340" fill="none" stroke="rgba(223, 186, 122, 0.14)" strokeWidth="0.7" />
-            <circle cx="400" cy="400" r="290" fill="none" stroke="rgba(223, 186, 122, 0.18)" strokeWidth="0.6" />
-            <circle cx="400" cy="400" r="220" fill="none" stroke="rgba(223, 186, 122, 0.22)" strokeWidth="0.8" />
-            <circle cx="400" cy="400" r="148" fill="none" stroke="rgba(223, 186, 122, 0.28)" strokeWidth="0.7" />
-            <circle cx="400" cy="400" r="76" fill="none" stroke="rgba(223, 186, 122, 0.34)" strokeWidth="0.6" />
-            {Array.from({ length: 12 }, (_, i) => {
-              const a = (i * 30 * Math.PI) / 180;
-              const cos = Math.cos(a);
-              const sin = Math.sin(a);
-              return (
-                <line
-                  key={i}
-                  x1={(400 + 76 * cos).toFixed(1)}
-                  y1={(400 + 76 * sin).toFixed(1)}
-                  x2={(400 + 340 * cos).toFixed(1)}
-                  y2={(400 + 340 * sin).toFixed(1)}
-                  stroke="rgba(223, 186, 122, 0.1)"
-                  strokeWidth="0.5"
-                />
-              );
-            })}
-          </svg>
+          <Sigil
+            className="intro-screensaver__sigil-art"
+            idPrefix="intro-sigil"
+            ariaHidden
+          />
         </div>
       )}
 
