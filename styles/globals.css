@@ -912,7 +912,7 @@ svg {
   mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 12%, rgba(0, 0, 0, 0.88) 54%, rgba(0, 0, 0, 1) 70%);
   transform-origin: 100% 100%;
   animation: acaciaSway 35s ease-in-out infinite;
-  transition: opacity 180ms ease;
+  transition: opacity 65ms linear;
 }
 
 .page-stack--scrolling .page__acacia {

@@ -356,7 +356,7 @@ export default function Home() {
       window.clearTimeout(settleTimer);
       settleTimer = window.setTimeout(() => {
         setAcaciaHiddenByScroll(false);
-      }, 180);
+      }, 90);
     };
 
     stack.addEventListener("scroll", onScroll, { passive: true });
@@ -599,6 +599,7 @@ export default function Home() {
       return;
     }
 
+    setAcaciaHiddenByScroll(true);
     navLockRef.current = true;
     target?.scrollIntoView({
       behavior: prefersReducedMotionRef.current ? "auto" : "smooth",
