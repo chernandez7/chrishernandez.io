@@ -167,6 +167,7 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState<SectionId>("hero");
   const [sanctuaryInvoked, setSanctuaryInvoked] = useState(false);
   const [sanctuaryCharge, setSanctuaryCharge] = useState(0);
+  const [introPhase, setIntroPhase] = useState<"active" | "dismissing" | "done">("active");
   const [possessedLink, setPossessedLink] = useState<{
     index: number;
     text: string;
@@ -324,6 +325,17 @@ export default function Home() {
       window.clearTimeout(activeWindowId);
       setPhaseShiftActive(false);
     };
+  }, [perfLite]);
+
+  useEffect(() => {
+    if (perfLite) {
+      setIntroPhase("done");
+      return;
+    }
+    const dismissTimer = window.setTimeout(() => {
+      setIntroPhase("dismissing");
+    }, 1800);
+    return () => window.clearTimeout(dismissTimer);
   }, [perfLite]);
 
   useEffect(() => {
@@ -687,91 +699,101 @@ export default function Home() {
           xmlns="http://www.w3.org/2000/svg"
         >
           <g className="acacia__fractal acacia__fractal--left">
-            <path className="acacia__branch acacia__branch--trunk" d="M700 320 C694 292 686 268 674 244" />
-            <path className="acacia__branch" d="M674 244 C656 228 638 214 617 201" />
-            <path className="acacia__branch" d="M674 244 C692 227 709 212 726 197" />
-            <path className="acacia__branch acacia__branch--minor" d="M617 201 C601 189 586 180 570 171" />
-            <path className="acacia__branch acacia__branch--minor" d="M617 201 C603 204 588 209 574 216" />
-            <path className="acacia__branch acacia__branch--minor" d="M726 197 C742 186 756 176 771 166" />
-            <path className="acacia__branch acacia__branch--minor" d="M726 197 C740 204 755 211 770 222" />
-            <path className="acacia__branch acacia__branch--twig" d="M570 171 C560 164 551 159 542 154" />
-            <path className="acacia__branch acacia__branch--twig" d="M574 216 C563 219 552 223 542 228" />
-            <path className="acacia__branch acacia__branch--twig" d="M771 166 C781 159 790 153 800 146" />
-            <path className="acacia__branch acacia__branch--twig" d="M770 222 C781 227 792 234 803 241" />
-            <path className="acacia__leaflet" d="M550 160 l10 -4" />
-            <path className="acacia__leaflet" d="M560 171 l10 -2" />
-            <path className="acacia__leaflet" d="M570 182 l10 1" />
-            <path className="acacia__leaflet" d="M579 192 l9 3" />
-            <path className="acacia__leaflet" d="M588 188 l10 -4" />
-            <path className="acacia__leaflet" d="M598 198 l11 -2" />
-            <path className="acacia__leaflet" d="M607 208 l10 2" />
-            <path className="acacia__leaflet" d="M620 214 l9 4" />
-            <path className="acacia__leaflet" d="M734 187 l11 -4" />
-            <path className="acacia__leaflet" d="M744 197 l11 -1" />
-            <path className="acacia__leaflet" d="M753 207 l10 2" />
-            <path className="acacia__leaflet" d="M762 217 l9 5" />
-            <path className="acacia__leaflet" d="M778 203 l9 -4" />
-            <path className="acacia__leaflet" d="M788 213 l10 -2" />
-            <path className="acacia__leaflet" d="M798 224 l9 2" />
-            <path className="acacia__leaflet" d="M807 236 l8 5" />
+            <path className="acacia__branch acacia__branch--trunk" d="M80,320 C78,306 76,288 76,268" />
+            <path className="acacia__branch" d="M76,268 C50,258 20,250 -10,246" />
+            <path className="acacia__branch" d="M76,268 C104,258 136,250 172,246" />
+            <path className="acacia__branch acacia__branch--minor" d="M172,246 C200,240 230,236 258,233" />
+            <path className="acacia__branch acacia__branch--minor" d="M172,246 C178,254 184,264 188,272" />
+            <path className="acacia__branch acacia__branch--minor" d="M-10,246 C-28,240 -44,236 -58,233" />
+            <path className="acacia__branch acacia__branch--minor" d="M-10,246 C-4,254 2,264 6,272" />
+            <path className="acacia__branch acacia__branch--twig" d="M258,233 C276,230 292,228 306,226" />
+            <path className="acacia__branch acacia__branch--twig" d="M-58,233 C-70,230 -80,228 -88,226" />
+            <path className="acacia__leaflet" d="M300,225 l5,-5" />
+            <path className="acacia__leaflet" d="M300,225 l5,5" />
+            <path className="acacia__leaflet" d="M306,225 l4,-4" />
+            <path className="acacia__leaflet" d="M306,225 l4,4" />
+            <path className="acacia__leaflet" d="M252,232 l5,-5" />
+            <path className="acacia__leaflet" d="M252,232 l5,5" />
+            <path className="acacia__leaflet" d="M258,232 l4,-4" />
+            <path className="acacia__leaflet" d="M258,232 l4,4" />
+            <path className="acacia__leaflet" d="M186,268 l-5,5" />
+            <path className="acacia__leaflet" d="M186,268 l5,5" />
+            <path className="acacia__leaflet" d="M188,274 l-4,4" />
+            <path className="acacia__leaflet" d="M188,274 l4,4" />
+            <path className="acacia__leaflet" d="M-64,232 l-5,-5" />
+            <path className="acacia__leaflet" d="M-64,232 l-5,5" />
+            <path className="acacia__leaflet" d="M-58,232 l-4,-4" />
+            <path className="acacia__leaflet" d="M-58,232 l-4,4" />
           </g>
           <g className="acacia__fractal acacia__fractal--center">
-            <path className="acacia__branch acacia__branch--trunk" d="M960 320 C954 292 946 266 934 242" />
-            <path className="acacia__branch" d="M934 242 C916 225 898 210 878 196" />
-            <path className="acacia__branch" d="M934 242 C952 224 969 209 986 194" />
-            <path className="acacia__branch acacia__branch--minor" d="M878 196 C862 184 847 175 832 166" />
-            <path className="acacia__branch acacia__branch--minor" d="M878 196 C863 200 848 206 834 213" />
-            <path className="acacia__branch acacia__branch--minor" d="M986 194 C1002 182 1018 172 1033 162" />
-            <path className="acacia__branch acacia__branch--minor" d="M986 194 C1001 202 1016 210 1030 220" />
-            <path className="acacia__branch acacia__branch--twig" d="M832 166 C822 160 812 154 802 149" />
-            <path className="acacia__branch acacia__branch--twig" d="M834 213 C823 217 813 221 802 226" />
-            <path className="acacia__branch acacia__branch--twig" d="M1033 162 C1043 156 1054 149 1064 142" />
-            <path className="acacia__branch acacia__branch--twig" d="M1030 220 C1041 225 1052 232 1063 239" />
-            <path className="acacia__leaflet" d="M812 154 l10 -4" />
-            <path className="acacia__leaflet" d="M822 165 l10 -2" />
-            <path className="acacia__leaflet" d="M832 176 l10 1" />
-            <path className="acacia__leaflet" d="M841 186 l9 3" />
-            <path className="acacia__leaflet" d="M850 182 l10 -4" />
-            <path className="acacia__leaflet" d="M861 192 l11 -2" />
-            <path className="acacia__leaflet" d="M870 203 l10 2" />
-            <path className="acacia__leaflet" d="M882 210 l9 4" />
-            <path className="acacia__leaflet" d="M997 183 l11 -4" />
-            <path className="acacia__leaflet" d="M1007 194 l11 -1" />
-            <path className="acacia__leaflet" d="M1016 204 l10 3" />
-            <path className="acacia__leaflet" d="M1025 214 l9 5" />
-            <path className="acacia__leaflet" d="M1042 199 l9 -4" />
-            <path className="acacia__leaflet" d="M1052 210 l10 -2" />
-            <path className="acacia__leaflet" d="M1062 221 l9 2" />
-            <path className="acacia__leaflet" d="M1071 233 l8 5" />
+            <path className="acacia__branch acacia__branch--trunk" d="M756,320 C752,292 748,254 746,212" />
+            <path className="acacia__branch" d="M746,212 C690,194 624,180 548,172" />
+            <path className="acacia__branch" d="M746,212 C802,194 868,180 944,172" />
+            <path className="acacia__branch acacia__branch--minor" d="M548,172 C496,164 442,158 390,154" />
+            <path className="acacia__branch acacia__branch--minor" d="M548,172 C556,182 564,194 568,204" />
+            <path className="acacia__branch acacia__branch--minor" d="M944,172 C992,164 1046,158 1098,154" />
+            <path className="acacia__branch acacia__branch--minor" d="M944,172 C936,182 928,194 924,204" />
+            <path className="acacia__branch acacia__branch--twig" d="M390,154 C350,149 312,146 276,144" />
+            <path className="acacia__branch acacia__branch--twig" d="M390,154 C382,162 374,172 370,180" />
+            <path className="acacia__branch acacia__branch--twig" d="M1098,154 C1136,149 1174,146 1210,144" />
+            <path className="acacia__branch acacia__branch--twig" d="M1098,154 C1106,162 1114,172 1118,180" />
+            <path className="acacia__branch acacia__branch--twig" d="M276,144 C248,141 222,140 198,139" />
+            <path className="acacia__branch acacia__branch--twig" d="M1210,144 C1236,141 1260,140 1282,139" />
+            <path className="acacia__leaflet" d="M202,138 l-5,-5" />
+            <path className="acacia__leaflet" d="M202,138 l-5,5" />
+            <path className="acacia__leaflet" d="M196,138 l-4,-4" />
+            <path className="acacia__leaflet" d="M196,138 l-4,4" />
+            <path className="acacia__leaflet" d="M280,143 l-5,-5" />
+            <path className="acacia__leaflet" d="M280,143 l-5,5" />
+            <path className="acacia__leaflet" d="M274,143 l-4,-4" />
+            <path className="acacia__leaflet" d="M274,143 l-4,4" />
+            <path className="acacia__leaflet" d="M566,202 l-5,5" />
+            <path className="acacia__leaflet" d="M566,202 l5,5" />
+            <path className="acacia__leaflet" d="M568,208 l-4,4" />
+            <path className="acacia__leaflet" d="M568,208 l4,4" />
+            <path className="acacia__leaflet" d="M370,178 l-5,5" />
+            <path className="acacia__leaflet" d="M370,178 l5,5" />
+            <path className="acacia__leaflet" d="M370,184 l-4,4" />
+            <path className="acacia__leaflet" d="M370,184 l4,4" />
+            <path className="acacia__leaflet" d="M924,202 l-5,5" />
+            <path className="acacia__leaflet" d="M924,202 l5,5" />
+            <path className="acacia__leaflet" d="M924,208 l-4,4" />
+            <path className="acacia__leaflet" d="M924,208 l4,4" />
+            <path className="acacia__leaflet" d="M1118,178 l-5,5" />
+            <path className="acacia__leaflet" d="M1118,178 l5,5" />
+            <path className="acacia__leaflet" d="M1118,184 l-4,4" />
+            <path className="acacia__leaflet" d="M1118,184 l4,4" />
+            <path className="acacia__leaflet" d="M1208,143 l5,-5" />
+            <path className="acacia__leaflet" d="M1208,143 l5,5" />
+            <path className="acacia__leaflet" d="M1214,143 l4,-4" />
+            <path className="acacia__leaflet" d="M1214,143 l4,4" />
+            <path className="acacia__leaflet" d="M1278,138 l5,-5" />
+            <path className="acacia__leaflet" d="M1278,138 l5,5" />
+            <path className="acacia__leaflet" d="M1284,138 l4,-4" />
+            <path className="acacia__leaflet" d="M1284,138 l4,4" />
           </g>
           <g className="acacia__fractal acacia__fractal--right">
-            <path className="acacia__branch acacia__branch--trunk" d="M1220 320 C1214 292 1206 268 1194 244" />
-            <path className="acacia__branch" d="M1194 244 C1176 228 1158 214 1137 201" />
-            <path className="acacia__branch" d="M1194 244 C1212 227 1229 212 1246 197" />
-            <path className="acacia__branch acacia__branch--minor" d="M1137 201 C1121 189 1106 180 1090 171" />
-            <path className="acacia__branch acacia__branch--minor" d="M1137 201 C1122 205 1107 210 1092 217" />
-            <path className="acacia__branch acacia__branch--minor" d="M1246 197 C1262 186 1277 176 1292 166" />
-            <path className="acacia__branch acacia__branch--minor" d="M1246 197 C1261 204 1276 212 1290 222" />
-            <path className="acacia__branch acacia__branch--twig" d="M1090 171 C1080 164 1071 159 1062 154" />
-            <path className="acacia__branch acacia__branch--twig" d="M1092 217 C1081 220 1071 224 1060 229" />
-            <path className="acacia__branch acacia__branch--twig" d="M1292 166 C1302 160 1311 154 1321 147" />
-            <path className="acacia__branch acacia__branch--twig" d="M1290 222 C1301 227 1312 234 1323 241" />
-            <path className="acacia__leaflet" d="M1070 160 l10 -4" />
-            <path className="acacia__leaflet" d="M1080 171 l10 -2" />
-            <path className="acacia__leaflet" d="M1090 182 l10 1" />
-            <path className="acacia__leaflet" d="M1099 192 l9 3" />
-            <path className="acacia__leaflet" d="M1110 188 l10 -4" />
-            <path className="acacia__leaflet" d="M1121 198 l11 -2" />
-            <path className="acacia__leaflet" d="M1130 208 l10 2" />
-            <path className="acacia__leaflet" d="M1142 215 l9 4" />
-            <path className="acacia__leaflet" d="M1257 187 l11 -4" />
-            <path className="acacia__leaflet" d="M1267 197 l11 -1" />
-            <path className="acacia__leaflet" d="M1276 207 l10 2" />
-            <path className="acacia__leaflet" d="M1285 217 l9 5" />
-            <path className="acacia__leaflet" d="M1300 203 l9 -4" />
-            <path className="acacia__leaflet" d="M1310 213 l10 -2" />
-            <path className="acacia__leaflet" d="M1320 224 l9 2" />
-            <path className="acacia__leaflet" d="M1329 236 l8 5" />
+            <path className="acacia__branch acacia__branch--trunk" d="M1520,320 C1518,306 1516,288 1516,268" />
+            <path className="acacia__branch" d="M1516,268 C1490,258 1456,250 1418,246" />
+            <path className="acacia__branch" d="M1516,268 C1542,258 1566,250 1592,246" />
+            <path className="acacia__branch acacia__branch--minor" d="M1418,246 C1390,240 1360,236 1332,233" />
+            <path className="acacia__branch acacia__branch--minor" d="M1418,246 C1424,254 1430,264 1434,272" />
+            <path className="acacia__branch acacia__branch--minor" d="M1592,246 C1596,242 1600,238 1602,234" />
+            <path className="acacia__branch acacia__branch--twig" d="M1332,233 C1314,230 1298,228 1284,226" />
+            <path className="acacia__leaflet" d="M1288,225 l-5,-5" />
+            <path className="acacia__leaflet" d="M1288,225 l-5,5" />
+            <path className="acacia__leaflet" d="M1282,225 l-4,-4" />
+            <path className="acacia__leaflet" d="M1282,225 l-4,4" />
+            <path className="acacia__leaflet" d="M1336,232 l-5,-5" />
+            <path className="acacia__leaflet" d="M1336,232 l-5,5" />
+            <path className="acacia__leaflet" d="M1330,232 l-4,-4" />
+            <path className="acacia__leaflet" d="M1330,232 l-4,4" />
+            <path className="acacia__leaflet" d="M1432,270 l-5,5" />
+            <path className="acacia__leaflet" d="M1432,270 l5,5" />
+            <path className="acacia__leaflet" d="M1434,276 l-4,4" />
+            <path className="acacia__leaflet" d="M1434,276 l4,4" />
+            <path className="acacia__leaflet" d="M1590,245 l5,-5" />
+            <path className="acacia__leaflet" d="M1590,245 l5,5" />
           </g>
         </svg>
         <section
@@ -1205,6 +1227,51 @@ export default function Home() {
           <img src="/sc.svg" alt="Square and compass" />
         </a>
       </div>
+
+      {introPhase !== "done" && (
+        <div
+          className={`intro-screensaver${introPhase === "dismissing" ? " intro-screensaver--dismissing" : ""}`}
+          onAnimationEnd={() => setIntroPhase("done")}
+          aria-hidden="true"
+        >
+          <svg
+            className="intro-screensaver__sigil"
+            viewBox="0 0 800 800"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <radialGradient id="ssGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="rgba(223, 186, 122, 0.44)" />
+                <stop offset="55%" stopColor="rgba(110, 8, 28, 0.1)" />
+                <stop offset="100%" stopColor="transparent" />
+              </radialGradient>
+            </defs>
+            <circle cx="400" cy="400" r="390" fill="url(#ssGlow)" />
+            <circle cx="400" cy="400" r="340" fill="none" stroke="rgba(223, 186, 122, 0.14)" strokeWidth="0.7" />
+            <circle cx="400" cy="400" r="290" fill="none" stroke="rgba(223, 186, 122, 0.18)" strokeWidth="0.6" />
+            <circle cx="400" cy="400" r="220" fill="none" stroke="rgba(223, 186, 122, 0.22)" strokeWidth="0.8" />
+            <circle cx="400" cy="400" r="148" fill="none" stroke="rgba(223, 186, 122, 0.28)" strokeWidth="0.7" />
+            <circle cx="400" cy="400" r="76" fill="none" stroke="rgba(223, 186, 122, 0.34)" strokeWidth="0.6" />
+            {Array.from({ length: 12 }, (_, i) => {
+              const a = (i * 30 * Math.PI) / 180;
+              const cos = Math.cos(a);
+              const sin = Math.sin(a);
+              return (
+                <line
+                  key={i}
+                  x1={(400 + 76 * cos).toFixed(1)}
+                  y1={(400 + 76 * sin).toFixed(1)}
+                  x2={(400 + 340 * cos).toFixed(1)}
+                  y2={(400 + 340 * sin).toFixed(1)}
+                  stroke="rgba(223, 186, 122, 0.1)"
+                  strokeWidth="0.5"
+                />
+              );
+            })}
+          </svg>
+        </div>
+      )}
 
       <script
         type="application/ld+json"
