@@ -352,11 +352,12 @@ export default function Home() {
     let settleTimer = 0;
 
     const onScroll = () => {
+      const settleDelay = prefersReducedMotionRef.current ? 120 : 420;
       setAcaciaHiddenByScroll(true);
       window.clearTimeout(settleTimer);
       settleTimer = window.setTimeout(() => {
         setAcaciaHiddenByScroll(false);
-      }, 90);
+      }, settleDelay);
     };
 
     stack.addEventListener("scroll", onScroll, { passive: true });
