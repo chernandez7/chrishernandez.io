@@ -12,7 +12,6 @@ import { SectionGlyphFields } from "./SectionGlyphFields";
 type HeroPanelProps = {
   perfLite: boolean;
   activeSection: SectionId;
-  onScrollToSection: (section: SectionId) => void;
 };
 
 const canonicalName = "Christopher Hernandez";
@@ -42,20 +41,14 @@ function SocialLinksNav() {
           rel="noreferrer noopener"
         >
           <span className="link-card__label">{link.label}</span>
-          <span className="link-card__meta">
-            {link.meta}
-          </span>
+          <span className="link-card__meta">{link.meta}</span>
         </a>
       ))}
     </nav>
   );
 }
 
-export function HeroPanel({
-  perfLite,
-  activeSection,
-  onScrollToSection,
-}: HeroPanelProps) {
+export function HeroPanel({ perfLite, activeSection }: HeroPanelProps) {
   const heroActive = activeSection === "hero";
 
   return (
@@ -64,6 +57,7 @@ export function HeroPanel({
 
       <section className="hero">
         <div className="hero__mast">
+          <p className="hero__eyebrow">Skate.dev // Signal Console</p>
           <GlitchTitle />
           <a
             className="role-link"
@@ -113,36 +107,6 @@ export function HeroPanel({
         </ul>
         {heroActive && <Sigil />}
       </aside>
-
-      <button
-        type="button"
-        className="section-arrow section-arrow--hero-up"
-        onClick={() => onScrollToSection("esoteric")}
-        aria-label="Scroll to arcane dossier"
-        aria-hidden={activeSection === "esoteric"}
-        tabIndex={activeSection === "esoteric" ? -1 : 0}
-      >
-        <span>Arcane Dossier</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 20V6" />
-          <path d="M6 12l6-6 6 6" />
-        </svg>
-      </button>
-
-      <button
-        type="button"
-        className="section-arrow section-arrow--down"
-        onClick={() => onScrollToSection("history")}
-        aria-label="Scroll to craft chronicle"
-        aria-hidden={activeSection === "history"}
-        tabIndex={activeSection === "history" ? -1 : 0}
-      >
-        <span>Craft Chronicle</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 4v14" />
-          <path d="M6 12l6 6 6-6" />
-        </svg>
-      </button>
     </main>
   );
 }

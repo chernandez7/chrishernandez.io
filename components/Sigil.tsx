@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, type CSSProperties } from "react";
 
 const rays = Array.from({ length: 24 }, (_, index) => index);
 const outerTicks = Array.from({ length: 8 }, (_, index) => index);
@@ -81,12 +81,20 @@ type FlowerOfLifeGlyphProps = {
   className?: string;
   idPrefix?: string;
   ariaHidden?: boolean;
+  introCycleMs?: number;
+};
+
+type PhilosopherStoneGlyphProps = {
+  className?: string;
+  idPrefix?: string;
+  ariaHidden?: boolean;
 };
 
 function FlowerOfLifeGlyphImpl({
   className,
   idPrefix = "flower-of-life",
   ariaHidden = true,
+  introCycleMs,
 }: FlowerOfLifeGlyphProps = {}) {
   const rootClassName = className
     ? `flower-of-life-glyph ${className}`
@@ -118,8 +126,36 @@ function FlowerOfLifeGlyphImpl({
             r="64"
             className="flower-of-life__circle"
             stroke={`url(#${strokeId})`}
-            style={{ animationDelay: `${-(index * 0.19).toFixed(2)}s` }}
-          />
+            style={
+              {
+                animationDelay: `${-(index * 0.19).toFixed(2)}s`,
+                "--collapse-x": `${(400 - point.x).toFixed(2)}px`,
+                "--collapse-y": `${(400 - point.y).toFixed(2)}px`,
+              } as CSSProperties
+            }
+          >
+            {typeof introCycleMs === "number" && (
+              <>
+                <animateTransform
+                  attributeName="transform"
+                  type="translate"
+                  values={`0 0; ${400 - point.x} ${400 - point.y}; ${400 - point.x} ${400 - point.y}; 0 0; 0 0`}
+                  dur={`${(introCycleMs / 1000).toFixed(2)}s`}
+                  repeatCount="1"
+                  keyTimes="0; 0.44; 0.58; 0.82; 1"
+                  keySplines="0.42 0 0.2 1; 0 0 1 1; 0.25 0 0.2 1; 0 0 1 1"
+                  calcMode="spline"
+                />
+                <animate
+                  attributeName="opacity"
+                  values="0.78; 0.9; 0.62; 0.88; 0.78"
+                  dur={`${(introCycleMs / 1000).toFixed(2)}s`}
+                  repeatCount="1"
+                  keyTimes="0; 0.44; 0.58; 0.82; 1"
+                />
+              </>
+            )}
+          </circle>
         ))}
       </g>
     </svg>
@@ -176,6 +212,65 @@ function TreeOfLifeGlyphImpl({
             style={{ animationDelay: `${-(index * 0.31).toFixed(2)}s` }}
           />
         ))}
+      </g>
+    </svg>
+  );
+}
+
+function PhilosopherStoneGlyphImpl({
+  className,
+  idPrefix = "philosopher-stone",
+  ariaHidden = true,
+}: PhilosopherStoneGlyphProps = {}) {
+  const rootClassName = className
+    ? `philosopher-stone-glyph ${className}`
+    : "philosopher-stone-glyph";
+  const strokeId = `${idPrefix}-stroke`;
+
+  return (
+    <svg
+      viewBox="0 0 800 800"
+      className={rootClassName}
+      role="img"
+      aria-label="Philosopher's stone glyph"
+      aria-hidden={ariaHidden}
+    >
+      <defs>
+        <linearGradient id={strokeId} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#f2e1ab" />
+          <stop offset="50%" stopColor="#c8a24e" />
+          <stop offset="100%" stopColor="#7c5b17" />
+        </linearGradient>
+      </defs>
+
+      <g className="philosopher-stone__group" aria-hidden="true">
+        <circle
+          cx="400"
+          cy="400"
+          r="292"
+          className="philosopher-stone__ring"
+          stroke={`url(#${strokeId})`}
+        />
+        <polygon
+          points="400,134 630,532 170,532"
+          className="philosopher-stone__triangle"
+          stroke={`url(#${strokeId})`}
+        />
+        <rect
+          x="258"
+          y="258"
+          width="284"
+          height="284"
+          className="philosopher-stone__square"
+          stroke={`url(#${strokeId})`}
+        />
+        <circle
+          cx="400"
+          cy="400"
+          r="102"
+          className="philosopher-stone__core"
+          stroke={`url(#${strokeId})`}
+        />
       </g>
     </svg>
   );
@@ -329,7 +424,6 @@ function SigilImpl({
         className="sigil__ring"
       />
 
-
       <circle cx="400" cy="400" r="332" fill={`url(#${glowId})`} />
       <circle cx="400" cy="400" r="120" fill={`url(#${glowInnerId})`} />
       <circle cx="400" cy="400" r="390" className="sigil__frame" />
@@ -401,6 +495,9 @@ FlowerOfLifeGlyph.displayName = "FlowerOfLifeGlyph";
 
 export const TreeOfLifeGlyph = memo(TreeOfLifeGlyphImpl);
 TreeOfLifeGlyph.displayName = "TreeOfLifeGlyph";
+
+export const PhilosopherStoneGlyph = memo(PhilosopherStoneGlyphImpl);
+PhilosopherStoneGlyph.displayName = "PhilosopherStoneGlyph";
 
 export const Sigil = memo(SigilImpl);
 Sigil.displayName = "Sigil";

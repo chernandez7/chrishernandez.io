@@ -1,12 +1,12 @@
 export type SectionId = "hero" | "history" | "esoteric";
 
-export const sectionOrder: SectionId[] = ["esoteric", "hero", "history"];
+export const sectionOrder: SectionId[] = ["hero", "history", "esoteric"];
 
 export const signals = [
-  "Observatory",
-  "Atlas",
-  "Signal Hunter",
-  "Sacred Infrastructure",
+  "Performance Discipline",
+  "Systems Thinking",
+  "Signal Fidelity",
+  "Intentional Design",
 ];
 
 export const occultPulse = [
@@ -18,25 +18,29 @@ export const occultPulse = [
 
 export const sigilQuotes = [
   {
-    text: "As above, so below.",
+    text: "Measure before myth",
     position: "sigil-quote sigil-quote--north",
   },
   {
-    text: "Visita interiora terrae.",
+    text: "Pattern in, outcome out",
     position: "sigil-quote sigil-quote--east",
   },
   {
-    text: "Solve et coagula.",
+    text: "Break, refine, ship",
     position: "sigil-quote sigil-quote--south",
   },
   {
-    text: "From ash, measure and build.",
+    text: "Chaos, then clarity",
     position: "sigil-quote sigil-quote--west",
   },
 ] as const;
 
 export type PromotionTrack = {
   company: string;
+  subtitle?: string;
+  highlights?: string[];
+  evidenceUrl?: string;
+  evidenceLabel?: string;
   stages: {
     period: string;
     role: string;
@@ -46,27 +50,39 @@ export type PromotionTrack = {
 export const promotionTracks: PromotionTrack[] = [
   {
     company: "Tempus AI",
+    subtitle: "Chicago (Remote)",
+    highlights: [
+      "Infectious disease team of one with high-leverage glue work.",
+      "Frameworks contributor on a horizontal engineering lane.",
+      "AI engineering lead, building forward CIAM foundations.",
+    ],
     stages: [
-      {
-        period: "2022 - 2025",
-        role: "Senior Software Engineer",
-      },
       {
         period: "2025 - Present",
         role: "Senior Software Engineer II",
+      },
+      {
+        period: "2022 - 2025",
+        role: "Senior Software Engineer",
       },
     ],
   },
   {
     company: "Accenture",
+    subtitle: "Liquid Studios, Chicago",
+    highlights: [
+      "Liquid Studios build mode: co-create fast, ship in tight loops.",
+      "Delivered one of the largest Fortune 500 COVID scheduler programs.",
+      "Shipped airline vaccine passport systems and global machine vision work.",
+    ],
     stages: [
-      {
-        period: "2019 - 2020",
-        role: "Application Development Analyst",
-      },
       {
         period: "2020 - 2021",
         role: "Advanced App Engineering Senior Analyst / Specialist",
+      },
+      {
+        period: "2019 - 2020",
+        role: "Application Development Analyst",
       },
     ],
   },
@@ -74,39 +90,63 @@ export const promotionTracks: PromotionTrack[] = [
     company: "Alluxo",
     stages: [
       {
-        period: "2018 - 2020",
-        role: "Full Stack Developer",
+        period: "2020 - 2021",
+        role: "Head of Engineering (Contract)",
       },
       {
-        period: "2020 - 2021",
-        role: "Head of Engineering",
+        period: "2018 - 2020",
+        role: "Full Stack Developer (Contract)",
       },
     ],
   },
   {
     company: "Own It Technologies, Inc.",
+    highlights: [
+      "Mobile product scaled to ~30k users with zero paid marketing.",
+      "Growth was entirely word-of-mouth.",
+    ],
+    evidenceUrl: "https://www.youtube.com/watch?v=W6vzzWpSz74",
+    evidenceLabel: "Case video",
     stages: [
       {
         period: "2017 - 2020",
-        role: "VP of Engineering",
+        role: "Co-Owner & Full Stack Engineer",
       },
     ],
   },
   {
-    company: "NGHT LLC / Tandlr / The Authentic Company",
+    company: "NGHT LLC",
     stages: [
       {
-        period: "2016 - 2019",
-        role: "Co-Founder and Full Stack Engineer (Contract + Startup)",
+        period: "2016 - 2018",
+        role: "Full Stack Engineer (Contract)",
+      },
+    ],
+  },
+  {
+    company: "Tandlr",
+    stages: [
+      {
+        period: "2017 - 2019",
+        role: "Full Stack Engineer (Contract)",
+      },
+    ],
+  },
+  {
+    company: "The Authentic Company",
+    stages: [
+      {
+        period: "2018 - 2019",
+        role: "Full Stack Engineer (Contract)",
       },
     ],
   },
 ];
 
 export const bioInterests = [
-  "Thirty solar turns; I chart inner constellations and return carrying workable light.",
-  "Six strings, four strings, and shutter rites, with sacred geometry as the hidden grammar beneath form.",
-  "Game realms, old pages, and twin laboratories: glass and reagent by one light, racks and packets by another, both practicing transmutation.",
-  "Inner work, meditation, astral searching, manifestation, and operative magic: not all temples are built with hands.",
-  "Lodge currents, hermetic study, and philosophy as true north; body tempered beside mind, ascending toward the unopened door.",
+  "Symbolic systems and philosophy as tools for focus, discipline, and decision-making.",
+  "The arts as pattern practice across sound, light, and visual form.",
+  "Hands-on chemistry and software architecture with the same experimental mindset.",
+  "Meditation and reflective journaling as maintenance for attention and clarity.",
+  "Holding imagination and rigor in balance: one for direction, one for delivery.",
 ];

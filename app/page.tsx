@@ -9,11 +9,16 @@ import {
   useState,
   type CSSProperties,
 } from "react";
-import { Sigil } from "../components/Sigil";
+import { FlowerOfLifeGlyph } from "../components/Sigil";
 import { EsotericBioPanel } from "../components/home/EsotericBioPanel";
 import { HeroPanel } from "../components/home/HeroPanel";
 import { WorkHistoryPanel } from "../components/home/WorkHistoryPanel";
-import { sectionOrder, type SectionId } from "../lib/home-content";
+import {
+  bioInterests,
+  promotionTracks,
+  sectionOrder,
+  type SectionId,
+} from "../lib/home-content";
 import { socialLinks } from "../lib/links";
 
 type NavWithHints = Navigator & {
@@ -45,6 +50,17 @@ type PerformanceHudSnapshot = {
   lowFps: number;
   avgFrameMs: number;
   slowFramePct: number;
+  appAgeSec: number;
+};
+
+const matrixNoiseChars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#@$%&*+-/<>[]{}";
+
+type PerformanceHudProps = {
+  activeSection: SectionId;
+  introPhase: "active" | "dismissing" | "done";
+  trailEnabled: boolean;
+  scrolling: boolean;
+  sanctuaryInvoked: boolean;
 };
 
 const alchemyTrailSymbols = ["🜂", "🜁", "🜃", "🜄", "🜍", "🜔"];
@@ -104,10 +120,11 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
       velocityY: number,
       speed: number,
     ) => {
-      const burstCount = speed > 2.4 ? 1 : 0;
+      const burstCount = speed > 3.8 ? 3 : speed > 2 ? 2 : speed > 1.1 ? 1 : 0;
       if (burstCount === 0) {
         return;
       }
+
       const baseAngle = Math.atan2(velocityY, velocityX) + Math.PI;
       const createdAt = performance.now();
       const newGlyphs: AlchemyTrailRuntimeGlyph[] = [];
@@ -118,8 +135,8 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
 
         const angleJitter = (Math.random() - 0.5) * 1.3;
         const angle = baseAngle + angleJitter;
-        const driftMag = 22 + Math.min(84, speed * 62) + Math.random() * 24;
-        const durationMs = 760 + Math.floor(Math.random() * 260);
+        const driftMag = 24 + Math.min(108, speed * 74) + Math.random() * 30;
+        const durationMs = 820 + Math.floor(Math.random() * 360);
         const glyph: AlchemyTrailRuntimeGlyph = {
           id,
           symbol:
@@ -140,7 +157,7 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
         newGlyphs.push(glyph);
       }
 
-      activeGlyphs = [...activeGlyphs, ...newGlyphs].slice(-14);
+      activeGlyphs = [...activeGlyphs, ...newGlyphs].slice(-24);
       syncGlyphs();
       startPruneLoop();
     };
@@ -167,7 +184,7 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
       lastY = event.clientY;
       lastTime = now;
 
-      if (distance < 22 || dt < 24) {
+      if (distance < 14 || dt < 16) {
         return;
       }
 
@@ -217,19 +234,74 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
   );
 }
 
-function PerformanceHud({ enabled }: { enabled: boolean }) {
+function PerformanceHud({
+  activeSection,
+  introPhase,
+  trailEnabled,
+  scrolling,
+  sanctuaryInvoked,
+}: PerformanceHudProps) {
   const [snapshot, setSnapshot] = useState<PerformanceHudSnapshot>({
     fps: 0,
     lowFps: 0,
     avgFrameMs: 0,
     slowFramePct: 0,
+    appAgeSec: 0,
   });
 
-  useEffect(() => {
-    if (!enabled) {
-      return;
+  const historyCorpus = useMemo(
+    () =>
+      promotionTracks
+        .map((track) => {
+          const stageText = track.stages
+            .map((stage) => `${stage.period} ${stage.role}`)
+            .join(". ");
+          return `${track.company}. ${stageText}`;
+        })
+        .join(". "),
+    [],
+  );
+  const esotericCorpus = useMemo(() => bioInterests.join(". "), []);
+  const historyStartYear = useMemo(() => {
+    let minYear = Number.POSITIVE_INFINITY;
+    for (const track of promotionTracks) {
+      for (const stage of track.stages) {
+        const match = stage.period.match(/(\d{4})/);
+        if (!match) {
+          continue;
+        }
+        const year = Number(match[1]);
+        if (Number.isFinite(year)) {
+          minYear = Math.min(minYear, year);
+        }
+      }
     }
+    if (!Number.isFinite(minYear)) {
+      return new Date().getFullYear();
+    }
+    return minYear;
+  }, []);
+  const historyCompanyCount = promotionTracks.length;
+  const historyRoleCount = useMemo(
+    () =>
+      promotionTracks.reduce((total, track) => total + track.stages.length, 0),
+    [],
+  );
+  const historyExperienceYears = Math.max(
+    0,
+    new Date().getFullYear() - historyStartYear,
+  );
+  const esotericWordCount = useMemo(
+    () =>
+      esotericCorpus
+        .split(/\s+/)
+        .map((word) => word.trim())
+        .filter(Boolean).length,
+    [esotericCorpus],
+  );
+  const [matrixNoise, setMatrixNoise] = useState("--------");
 
+  useEffect(() => {
     let frameId = 0;
     let sampleStart = performance.now();
     let previousFrameAt = sampleStart;
@@ -237,6 +309,7 @@ function PerformanceHud({ enabled }: { enabled: boolean }) {
     let totalFrameMs = 0;
     let slowFrames = 0;
     let lowFps = Number.POSITIVE_INFINITY;
+    const appStart = sampleStart;
 
     const sample = (now: number) => {
       const frameMs = now - previousFrameAt;
@@ -257,6 +330,7 @@ function PerformanceHud({ enabled }: { enabled: boolean }) {
           lowFps: Number.isFinite(lowFps) ? lowFps : fps,
           avgFrameMs: Number((totalFrameMs / frames).toFixed(1)),
           slowFramePct: Math.round((slowFrames / frames) * 100),
+          appAgeSec: Math.max(0, Math.floor((now - appStart) / 1000)),
         });
 
         sampleStart = now;
@@ -273,19 +347,100 @@ function PerformanceHud({ enabled }: { enabled: boolean }) {
     return () => {
       cancelAnimationFrame(frameId);
     };
-  }, [enabled]);
+  }, []);
 
-  if (!enabled) {
-    return null;
-  }
+  useEffect(() => {
+    if (activeSection === "hero") {
+      setMatrixNoise("--------");
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      let next = "";
+      for (let i = 0; i < 12; i += 1) {
+        next +=
+          matrixNoiseChars[Math.floor(Math.random() * matrixNoiseChars.length)];
+      }
+      setMatrixNoise(next);
+    }, 120);
+
+    return () => window.clearInterval(timer);
+  }, [activeSection]);
+
+  const sectionLabel =
+    activeSection === "hero"
+      ? "MAIN"
+      : activeSection === "history"
+        ? "WORK"
+        : "DOSSIER";
+  const appState = scrolling ? "SCROLLING" : "IDLE";
+  const sanctuaryState = sanctuaryInvoked ? "INVOKED" : "DORMANT";
+  const sectionCorpus =
+    activeSection === "history"
+      ? historyCorpus
+      : activeSection === "esoteric"
+        ? esotericCorpus
+        : "";
+  const corpusChars = sectionCorpus.length;
+  const corpusSentences = sectionCorpus
+    .split(/[.!?]+/)
+    .map((line) => line.trim())
+    .filter(Boolean).length;
+  const showContentStats = activeSection !== "hero";
+  const showStateStats = activeSection !== "hero";
 
   return (
-    <div className="perf-hud" aria-live="polite">
-      <span className="perf-hud__metric">FPS {snapshot.fps}</span>
-      <span className="perf-hud__metric">LOW {snapshot.lowFps}</span>
-      <span className="perf-hud__metric">MS {snapshot.avgFrameMs}</span>
-      <span className="perf-hud__metric">SLOW {snapshot.slowFramePct}%</span>
-    </div>
+    <>
+      <div className="perf-hud perf-hud--perf" aria-live="polite">
+        <span className="perf-hud__metric">FPS {snapshot.fps}</span>
+        <span className="perf-hud__metric">LOW {snapshot.lowFps}</span>
+        <span className="perf-hud__metric">MS {snapshot.avgFrameMs}</span>
+      </div>
+      {showStateStats && (
+        <div className="perf-hud perf-hud--state" aria-hidden="true">
+          <span className="perf-hud__metric">SEC {sectionLabel}</span>
+          <span className="perf-hud__metric">
+            PHASE {introPhase.toUpperCase()}
+          </span>
+          <span className="perf-hud__metric">APP {appState}</span>
+          <span className="perf-hud__metric">
+            TRAIL {trailEnabled ? "ON" : "OFF"}
+          </span>
+          <span className="perf-hud__metric">AGE {snapshot.appAgeSec}s</span>
+          <span className="perf-hud__metric">SANCT {sanctuaryState}</span>
+        </div>
+      )}
+      {showContentStats && (
+        <div className="perf-hud perf-hud--content" aria-hidden="true">
+          {activeSection === "history" ? (
+            <>
+              <span className="perf-hud__metric">
+                EXP {historyExperienceYears}Y
+              </span>
+              <span className="perf-hud__metric">CO {historyCompanyCount}</span>
+              <span className="perf-hud__metric">ROLES {historyRoleCount}</span>
+              <span className="perf-hud__metric perf-hud__metric--noise">
+                NOISE {matrixNoise}
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="perf-hud__metric">
+                NOTES {bioInterests.length}
+              </span>
+              <span className="perf-hud__metric">
+                WORDS {esotericWordCount}
+              </span>
+              <span className="perf-hud__metric">SENT {corpusSentences}</span>
+              <span className="perf-hud__metric">CHARS {corpusChars}</span>
+              <span className="perf-hud__metric perf-hud__metric--noise">
+                NOISE {matrixNoise}
+              </span>
+            </>
+          )}
+        </div>
+      )}
+    </>
   );
 }
 
@@ -298,17 +453,17 @@ export default function Home() {
   const activeSectionRef = useRef<SectionId>("hero");
   const navLockRef = useRef(false);
   const acaciaRevealTimerRef = useRef(0);
+  const acaciaLastScrollAtRef = useRef(0);
+  const acaciaSettleFrameRef = useRef(0);
   const touchStartYRef = useRef<number | null>(null);
   const sanctuaryRef = useRef<HTMLDivElement>(null);
   const [perfLite, setPerfLite] = useState(false);
-  const [showFpsHud, setShowFpsHud] = useState(false);
   const [activeSection, setActiveSection] = useState<SectionId>("hero");
   const [sanctuaryInvoked, setSanctuaryInvoked] = useState(false);
   const [sanctuaryCharge, setSanctuaryCharge] = useState(0);
   const [introPhase, setIntroPhase] = useState<
     "active" | "dismissing" | "done"
   >("active");
-  const [acaciaHiddenByScroll, setAcaciaHiddenByScroll] = useState(false);
   const personJsonLd = useMemo(
     () => ({
       "@context": "https://schema.org",
@@ -341,7 +496,6 @@ export default function Home() {
     const syncPerfMode = () => {
       const params = new URLSearchParams(window.location.search);
       const manualLite = params.get("perf") === "lite";
-      const manualFpsHud = params.get("fps") === "1";
       const mobileWidth = window.matchMedia("(max-width: 860px)").matches;
       const saveData = Boolean(navigatorHints.connection?.saveData);
       const lowCpu =
@@ -351,8 +505,6 @@ export default function Home() {
         navigatorHints.deviceMemory <= 4;
 
       prefersReducedMotionRef.current = reducedMotionQuery.matches;
-      setShowFpsHud(manualFpsHud);
-
       setPerfLite(
         manualLite ||
           mobileWidth ||
@@ -378,9 +530,21 @@ export default function Home() {
     }
     const dismissTimer = window.setTimeout(() => {
       setIntroPhase("dismissing");
-    }, 1800);
+    }, 3600);
     return () => window.clearTimeout(dismissTimer);
   }, [perfLite]);
+
+  useEffect(() => {
+    if (introPhase !== "dismissing") {
+      return;
+    }
+
+    const finalizeTimer = window.setTimeout(() => {
+      setIntroPhase("done");
+    }, 980);
+
+    return () => window.clearTimeout(finalizeTimer);
+  }, [introPhase]);
 
   useEffect(() => {
     activeSectionRef.current = activeSection;
@@ -392,16 +556,37 @@ export default function Home() {
       return;
     }
 
-    const onScroll = () => {
-      const settleDelay = prefersReducedMotionRef.current ? 120 : 420;
-      setAcaciaHiddenByScroll(true);
-      window.clearTimeout(acaciaRevealTimerRef.current);
-      acaciaRevealTimerRef.current = window.setTimeout(() => {
-        if (navLockRef.current) {
+    const clearSettleLoop = () => {
+      if (acaciaSettleFrameRef.current) {
+        cancelAnimationFrame(acaciaSettleFrameRef.current);
+        acaciaSettleFrameRef.current = 0;
+      }
+    };
+
+    const startSettleLoop = () => {
+      if (acaciaSettleFrameRef.current) {
+        return;
+      }
+
+      const check = () => {
+        const now = performance.now();
+        const settleDelay = prefersReducedMotionRef.current ? 80 : 140;
+        if (now - acaciaLastScrollAtRef.current >= settleDelay) {
+          acaciaSettleFrameRef.current = 0;
           return;
         }
-        setAcaciaHiddenByScroll(false);
-      }, settleDelay);
+
+        acaciaSettleFrameRef.current = requestAnimationFrame(check);
+      };
+
+      acaciaSettleFrameRef.current = requestAnimationFrame(check);
+    };
+
+    const onScroll = () => {
+      acaciaLastScrollAtRef.current = performance.now();
+      window.clearTimeout(acaciaRevealTimerRef.current);
+      clearSettleLoop();
+      startSettleLoop();
     };
 
     stack.addEventListener("scroll", onScroll, { passive: true });
@@ -409,6 +594,7 @@ export default function Home() {
     return () => {
       stack.removeEventListener("scroll", onScroll);
       window.clearTimeout(acaciaRevealTimerRef.current);
+      clearSettleLoop();
     };
   }, []);
 
@@ -580,6 +766,24 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    const syncFullscreenFlag = () => {
+      if (document.fullscreenElement) {
+        document.documentElement.setAttribute("data-fullscreen", "1");
+      } else {
+        document.documentElement.removeAttribute("data-fullscreen");
+      }
+    };
+
+    syncFullscreenFlag();
+    document.addEventListener("fullscreenchange", syncFullscreenFlag);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", syncFullscreenFlag);
+      document.documentElement.removeAttribute("data-fullscreen");
+    };
+  }, []);
+
+  useEffect(() => {
     const root = sectionStackRef.current;
     const hero = heroSectionRef.current;
     const history = historySectionRef.current;
@@ -662,23 +866,15 @@ export default function Home() {
       return;
     }
 
-    setAcaciaHiddenByScroll(true);
     navLockRef.current = true;
     target?.scrollIntoView({
       behavior: prefersReducedMotionRef.current ? "auto" : "smooth",
       block: "start",
     });
 
-    const releaseDelay = prefersReducedMotionRef.current ? 120 : 760;
+    const releaseDelay = prefersReducedMotionRef.current ? 100 : 420;
     window.setTimeout(() => {
       navLockRef.current = false;
-      window.clearTimeout(acaciaRevealTimerRef.current);
-      acaciaRevealTimerRef.current = window.setTimeout(
-        () => {
-          setAcaciaHiddenByScroll(false);
-        },
-        prefersReducedMotionRef.current ? 40 : 120,
-      );
     }, releaseDelay);
   }, []);
 
@@ -714,8 +910,47 @@ export default function Home() {
       }
     };
 
+    const shouldAllowNativeListScroll = (
+      target: EventTarget | null,
+      deltaY: number,
+    ) => {
+      if (!(target instanceof Element)) {
+        return false;
+      }
+
+      const scrollable = target.closest(
+        ".work-history__list, .esoteric-bio__list",
+      );
+      if (!(scrollable instanceof HTMLElement)) {
+        return false;
+      }
+
+      const canScroll = scrollable.scrollHeight > scrollable.clientHeight + 2;
+      if (!canScroll) {
+        return false;
+      }
+
+      const atTop = scrollable.scrollTop <= 1;
+      const atBottom =
+        scrollable.scrollTop + scrollable.clientHeight >=
+        scrollable.scrollHeight - 1;
+
+      if (deltaY > 0 && !atBottom) {
+        return true;
+      }
+
+      if (deltaY < 0 && !atTop) {
+        return true;
+      }
+
+      return false;
+    };
+
     const onWheel = (event: WheelEvent) => {
       if (isMobileViewport()) {
+        return;
+      }
+      if (shouldAllowNativeListScroll(event.target, event.deltaY)) {
         return;
       }
       event.preventDefault();
@@ -801,9 +1036,43 @@ export default function Home() {
       <AlchemyMouseTrail
         enabled={introPhase === "done" && !perfLite && activeSection !== "hero"}
       />
-      <PerformanceHud enabled={showFpsHud} />
+      <PerformanceHud
+        activeSection={activeSection}
+        introPhase={introPhase}
+        trailEnabled={
+          introPhase === "done" && !perfLite && activeSection !== "hero"
+        }
+        scrolling={false}
+        sanctuaryInvoked={sanctuaryInvoked}
+      />
+      <nav
+        className={`ritual-nav${activeSection === "hero" ? " ritual-nav--hero" : " ritual-nav--side"}`}
+        aria-label="Section navigation"
+      >
+        <button
+          type="button"
+          className={`ritual-nav__item${activeSection === "hero" ? " ritual-nav__item--active" : ""}`}
+          onClick={() => scrollToSection("hero")}
+        >
+          Main Signal
+        </button>
+        <button
+          type="button"
+          className={`ritual-nav__item${activeSection === "history" ? " ritual-nav__item--active" : ""}`}
+          onClick={() => scrollToSection("history")}
+        >
+          Craft Chronicle
+        </button>
+        <button
+          type="button"
+          className={`ritual-nav__item${activeSection === "esoteric" ? " ritual-nav__item--active" : ""}`}
+          onClick={() => scrollToSection("esoteric")}
+        >
+          Arcane Dossier
+        </button>
+      </nav>
       <div
-        className={`page-stack page-stack--active-${activeSection}${perfLite ? " page-stack--perf-lite" : ""}${acaciaHiddenByScroll ? " page-stack--scrolling" : ""}`}
+        className={`page-stack page-stack--active-${activeSection}${perfLite ? " page-stack--perf-lite" : ""}`}
         ref={sectionStackRef}
       >
         <svg
@@ -998,23 +1267,11 @@ export default function Home() {
           </g>
         </svg>
         <section
-          ref={esotericSectionRef}
-          className="page-section page-section--esoteric"
-          aria-label="Arcane dossier section"
-        >
-          <EsotericBioPanel onScrollToSection={scrollToSection} />
-        </section>
-
-        <section
           ref={heroSectionRef}
           className="page-section page-section--hero"
           aria-label="Landing section"
         >
-          <HeroPanel
-            perfLite={perfLite}
-            activeSection={activeSection}
-            onScrollToSection={scrollToSection}
-          />
+          <HeroPanel perfLite={perfLite} activeSection={activeSection} />
         </section>
 
         <section
@@ -1022,7 +1279,15 @@ export default function Home() {
           className="page-section page-section--history"
           aria-label="Craft chronicle section"
         >
-          <WorkHistoryPanel onScrollToSection={scrollToSection} />
+          <WorkHistoryPanel />
+        </section>
+
+        <section
+          ref={esotericSectionRef}
+          className="page-section page-section--esoteric"
+          aria-label="Arcane dossier section"
+        >
+          <EsotericBioPanel />
         </section>
       </div>
 
@@ -1061,14 +1326,16 @@ export default function Home() {
               : "hold sanctuary to invoke"}
           </p>
         </div>
-        <a
-          className="corner-hit"
-          href="https://milodges.com/"
-          target="_blank"
-          rel="noreferrer noopener"
-          tabIndex={-1}
-          aria-hidden="true"
-        />
+        {activeSection === "hero" && (
+          <a
+            className="corner-hit"
+            href="https://milodges.com/"
+            target="_blank"
+            rel="noreferrer noopener"
+            tabIndex={-1}
+            aria-hidden="true"
+          />
+        )}
         <svg
           className="corner-rays"
           viewBox="0 0 300 300"
@@ -1223,27 +1490,29 @@ export default function Home() {
             FIAT LVX
           </text>
         </svg>
-        <a
-          className="corner-mark"
-          href="https://milodges.com/"
-          target="_blank"
-          rel="noreferrer noopener"
-          aria-label="MILodges — Square and Compass"
-          tabIndex={activeSection === "hero" ? 0 : -1}
-        >
-          <img src="/sc.svg" alt="Square and compass" />
-        </a>
+        {activeSection === "hero" && (
+          <a
+            className="corner-mark"
+            href="https://milodges.com/"
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="MILodges — Square and Compass"
+            tabIndex={0}
+          >
+            <img src="/sc.svg" alt="Square and compass" />
+          </a>
+        )}
       </div>
 
       {introPhase !== "done" && (
         <div
           className={`intro-screensaver${introPhase === "dismissing" ? " intro-screensaver--dismissing" : ""}`}
-          onAnimationEnd={() => setIntroPhase("done")}
           aria-hidden="true"
         >
-          <Sigil
-            className="intro-screensaver__sigil-art"
-            idPrefix="intro-sigil"
+          <FlowerOfLifeGlyph
+            className="intro-screensaver__flower"
+            idPrefix="intro-flower"
+            introCycleMs={3600}
             ariaHidden
           />
         </div>
