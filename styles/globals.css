@@ -180,6 +180,62 @@ svg {
   animation: noisePulse 520ms steps(1) infinite;
 }
 
+.signal-fault {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(110, 8, 28, 0.18), transparent 54%),
+    rgba(4, 1, 10, 0.74);
+  animation: faultOverlayFlicker 760ms steps(1) infinite;
+}
+
+.signal-fault__frame {
+  min-width: min(82vw, 34rem);
+  border: 1px solid rgba(223, 186, 122, 0.64);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  background: rgba(12, 3, 20, 0.88);
+  box-shadow:
+    0 0 24px rgba(223, 186, 122, 0.26),
+    inset 0 0 0 1px rgba(223, 186, 122, 0.2);
+}
+
+.signal-fault__label,
+.signal-fault__code,
+.signal-fault__meta {
+  margin: 0;
+  font-family: var(--mono);
+  text-transform: uppercase;
+}
+
+.signal-fault__label {
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  color: rgba(255, 223, 152, 0.82);
+}
+
+.signal-fault__code {
+  margin-top: 0.4rem;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 236, 178, 0.94);
+  text-shadow:
+    -1px 0 rgba(110, 8, 28, 0.6),
+    1px 0 rgba(46, 16, 80, 0.5),
+    0 0 12px rgba(223, 186, 122, 0.44);
+}
+
+.signal-fault__meta {
+  margin-top: 0.35rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  color: rgba(223, 186, 122, 0.86);
+}
+
 .ritual-nav {
   position: fixed;
   left: 0.75rem;
@@ -451,79 +507,110 @@ svg {
 
 .section-stonefield__glyph {
   position: absolute;
-  --stone-size: clamp(7.2rem, 10.8vw, 12rem);
+  --stone-scale: 0.86;
+  --stone-prominence: 1.12;
+  --stone-size: clamp(8.8rem, 13.2vw, 14.8rem);
   width: var(--stone-size);
   height: auto;
-  opacity: 0.12;
+  opacity: 0.34;
+  filter: drop-shadow(0 0 16px rgba(223, 186, 122, 0.36));
 }
 
 .section-stonefield--hero .section-stonefield__glyph--a {
   top: 22%;
   left: 12%;
-  --stone-size: clamp(6.8rem, 10.2vw, 10.8rem);
-  animation: treeFieldDriftAstral 33s ease-in-out infinite;
+  --stone-scale: 0.92;
+  --stone-size: clamp(9rem, 13.8vw, 15.2rem);
+  animation: stoneFieldDriftAstral 33s ease-in-out infinite;
   animation-delay: -6.2s;
 }
 
 .section-stonefield--hero .section-stonefield__glyph--b {
   top: 74%;
   left: 20%;
-  --stone-size: clamp(6.2rem, 9.4vw, 10rem);
-  animation: treeFieldDriftAstral 39s ease-in-out infinite;
+  --stone-scale: 0.82;
+  --stone-size: clamp(8.6rem, 12.4vw, 14rem);
+  animation: stoneFieldDriftAstral 39s ease-in-out infinite;
   animation-delay: -14.1s;
+}
+
+.section-stonefield--hero .section-stonefield__glyph--c {
+  top: 14%;
+  right: 18%;
+  --stone-scale: 0.84;
+  --stone-size: clamp(8.2rem, 12vw, 13.4rem);
+  animation: stoneFieldDriftArchitect 43s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  animation-delay: -18.8s;
+}
+
+.section-stonefield--hero .section-stonefield__glyph--d {
+  top: 58%;
+  right: 4%;
+  --stone-scale: 0.8;
+  --stone-size: clamp(8rem, 11.6vw, 13rem);
+  animation: stoneFieldDriftAstral 48s ease-in-out infinite;
+  animation-delay: -11.2s;
 }
 
 .section-stonefield--history .section-stonefield__glyph--a {
   top: 18%;
   left: 4%;
-  animation: treeFieldDriftArchitect 29s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  --stone-scale: 0.9;
+  animation: stoneFieldDriftArchitect 29s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
 }
 
 .section-stonefield--history .section-stonefield__glyph--b {
   top: 52%;
   right: 8%;
-  animation: treeFieldDriftArchitect 36s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  --stone-scale: 0.86;
+  animation: stoneFieldDriftArchitect 36s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
   animation-delay: -8.5s;
 }
 
 .section-stonefield--history .section-stonefield__glyph--c {
   top: 78%;
   left: 36%;
-  animation: treeFieldDriftArchitect 43s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  --stone-scale: 0.8;
+  animation: stoneFieldDriftArchitect 43s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
   animation-delay: -17.4s;
 }
 
 .section-stonefield--history .section-stonefield__glyph--d {
   top: 8%;
   right: 34%;
-  animation: treeFieldDriftArchitect 32s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  --stone-scale: 0.84;
+  animation: stoneFieldDriftArchitect 32s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
   animation-delay: -12.7s;
 }
 
 .section-stonefield--esoteric .section-stonefield__glyph--a {
   top: 10%;
   right: 6%;
-  animation: treeFieldDriftAstral 31s ease-in-out infinite;
+  --stone-scale: 0.9;
+  animation: stoneFieldDriftAstral 31s ease-in-out infinite;
 }
 
 .section-stonefield--esoteric .section-stonefield__glyph--b {
   top: 48%;
   left: 10%;
-  animation: treeFieldDriftAstral 37s ease-in-out infinite;
+  --stone-scale: 0.84;
+  animation: stoneFieldDriftAstral 37s ease-in-out infinite;
   animation-delay: -10.1s;
 }
 
 .section-stonefield--esoteric .section-stonefield__glyph--c {
   top: 72%;
   right: 26%;
-  animation: treeFieldDriftAstral 46s ease-in-out infinite;
+  --stone-scale: 0.8;
+  animation: stoneFieldDriftAstral 46s ease-in-out infinite;
   animation-delay: -18.2s;
 }
 
 .section-stonefield--esoteric .section-stonefield__glyph--d {
   top: 24%;
   left: 34%;
-  animation: treeFieldDriftAstral 40s ease-in-out infinite;
+  --stone-scale: 0.82;
+  animation: stoneFieldDriftAstral 40s ease-in-out infinite;
   animation-delay: -22.9s;
 }
 
@@ -534,26 +621,54 @@ svg {
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.philosopher-stone__group {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: stoneUnityMotion 42s ease-in-out infinite;
+}
+
+.section-stonefield .philosopher-stone__ring,
+.section-stonefield .philosopher-stone__triangle,
+.section-stonefield .philosopher-stone__square,
+.section-stonefield .philosopher-stone__core {
+  animation: stoneFieldFillGlitch 11.6s steps(1) infinite;
+}
+
+.section-stonefield .philosopher-stone__triangle {
+  animation-delay: -3.1s;
+}
+
+.section-stonefield .philosopher-stone__square {
+  animation-delay: -5.2s;
+}
+
+.section-stonefield .philosopher-stone__core {
+  animation-delay: -7.7s;
 }
 
 .philosopher-stone__ring {
-  stroke-width: 1.2;
-  opacity: 0.34;
+  stroke-width: 2.6;
+  opacity: 0.76;
+  stroke-dasharray: 8 16;
 }
 
 .philosopher-stone__triangle {
-  stroke-width: 1;
-  opacity: 0.5;
+  stroke-width: 2.1;
+  opacity: 0.82;
 }
 
 .philosopher-stone__square {
-  stroke-width: 1.05;
-  opacity: 0.46;
+  stroke-width: 2.2;
+  opacity: 0.78;
 }
 
 .philosopher-stone__core {
-  stroke-width: 1.15;
-  opacity: 0.62;
+  stroke-width: 2.4;
+  opacity: 0.9;
 }
 
 .section-flowerfield--hero .section-flowerfield__glyph--e {
@@ -564,6 +679,18 @@ svg {
   opacity: 0.07;
   animation: flowerFieldDriftA 57s ease-in-out infinite;
   animation-delay: -34.1s;
+}
+
+.section-flowerfield .flower-of-life__circle {
+  animation: flowerFieldFillGlitch 13.4s steps(1) infinite;
+}
+
+.section-flowerfield .flower-of-life__circle:nth-child(3n) {
+  animation-delay: -2.3s;
+}
+
+.section-flowerfield .flower-of-life__circle:nth-child(5n) {
+  animation-delay: -4.9s;
 }
 
 .section-flowerfield--hero .section-flowerfield__glyph--f {
@@ -1645,13 +1772,102 @@ svg {
 }
 
 .work-history__hl {
+  position: relative;
+  display: inline-block;
   color: rgba(241, 214, 140, 0.96);
   text-shadow: 0 0 8px rgba(223, 186, 122, 0.26);
+  animation: workHistoryHlGlitch 1360ms steps(1) infinite;
+}
+
+.work-history__hl::before,
+.work-history__hl::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.work-history__hl::before {
+  color: rgba(255, 220, 120, 0.86);
+  text-shadow: -1px 0 rgba(211, 66, 45, 0.62);
+  transform: translateX(-1px);
+  animation: workHistoryHlSplitA 1600ms steps(1) infinite;
+}
+
+.work-history__hl::after {
+  color: rgba(243, 219, 166, 0.9);
+  text-shadow: 1px 0 rgba(141, 78, 183, 0.52);
+  transform: translateX(1px);
+  animation: workHistoryHlSplitB 1700ms steps(1) infinite;
 }
 
 .work-history__highlights li::before {
   content: "// ";
   color: rgba(223, 186, 122, 0.84);
+}
+
+.work-history__skills {
+  margin: 0.1rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.work-history__skills li {
+  border: 1px solid rgba(223, 186, 122, 0.28);
+  border-radius: 999px;
+  padding: 0.18rem 0.46rem;
+  background: rgba(223, 186, 122, 0.08);
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(241, 214, 140, 0.9);
+}
+
+.work-history__education {
+  display: grid;
+  gap: 0.6rem;
+  border-top: 1px solid rgba(223, 186, 122, 0.2);
+  padding-top: 0.76rem;
+}
+
+.work-history__education-heading {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(241, 214, 140, 0.82);
+}
+
+.work-history__education-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.42rem;
+}
+
+.work-history__education-item {
+  border: 1px solid rgba(223, 186, 122, 0.16);
+  border-radius: 10px;
+  padding: 0.52rem 0.6rem;
+  background: rgba(255, 255, 255, 0.012);
+  display: grid;
+  gap: 0.24rem;
+}
+
+.work-history__education-activities {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: rgba(239, 229, 205, 0.78);
 }
 
 .work-history__evidence {
@@ -1786,6 +2002,12 @@ svg {
   letter-spacing: 0.05em;
   line-height: 1.5;
   color: rgba(241, 231, 214, 0.86);
+}
+
+.esoteric-bio__hl {
+  color: rgba(245, 219, 153, 0.96);
+  text-shadow: 0 0 8px rgba(223, 186, 122, 0.26);
+  animation: esotericWordPulse 6.2s ease-in-out infinite;
 }
 
 .page-stack--active-esoteric .esoteric-bio__list li {
@@ -2612,6 +2834,15 @@ svg {
   color: rgba(232, 227, 216, 0.8);
 }
 
+.hero__hl {
+  color: rgba(251, 229, 171, 0.98);
+  text-shadow:
+    0 0 10px rgba(223, 186, 122, 0.45),
+    -1px 0 rgba(143, 24, 48, 0.32),
+    1px 0 rgba(82, 30, 124, 0.24);
+  animation: heroWordGlitch 1650ms steps(1) infinite;
+}
+
 .role-link {
   display: inline-flex;
   align-items: center;
@@ -2968,6 +3199,97 @@ svg {
 
 .sigil-quote--west {
   top: 66%;
+  left: -0.4rem;
+  transform: rotate(-90deg) translateY(-50%);
+  transform-origin: top left;
+}
+
+.sigil-quote--northeast {
+  top: 12%;
+  right: 8%;
+  text-align: right;
+}
+
+.sigil-quote--southeast {
+  bottom: 14%;
+  right: 6%;
+  text-align: right;
+}
+
+.sigil-quote--southwest {
+  bottom: 15%;
+  left: 6%;
+}
+
+.sigil-quote--northwest {
+  top: 11%;
+  left: 8%;
+}
+
+.sigil-panel__stone-mark {
+  position: absolute;
+  inset: 17% 17%;
+  width: auto;
+  height: auto;
+  z-index: 2;
+  opacity: 0.24;
+  filter:
+    drop-shadow(0 0 26px rgba(223, 186, 122, 0.42))
+    drop-shadow(0 0 58px rgba(223, 186, 122, 0.2));
+  animation: sigilStonePulse 14s ease-in-out infinite;
+}
+
+.sigil-equations {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+  z-index: 3;
+  font-family: var(--mono);
+}
+
+.sigil-equation {
+  position: absolute;
+  margin: 0;
+  font-size: clamp(0.44rem, 0.62vw, 0.62rem);
+  letter-spacing: 0.07em;
+  color: rgba(241, 214, 140, 0.52);
+  text-shadow: 0 0 8px rgba(223, 186, 122, 0.18);
+  opacity: 0.64;
+  animation: equationNoiseFlicker 6.4s steps(1) infinite;
+}
+
+.sigil-equation--1 {
+  top: 5.6%;
+  left: 18%;
+}
+
+.sigil-equation--2 {
+  top: 5.6%;
+  right: 16%;
+}
+
+.sigil-equation--3 {
+  top: 44%;
+  right: -0.4rem;
+  transform: rotate(90deg) translateY(-50%);
+  transform-origin: top right;
+}
+
+.sigil-equation--4 {
+  bottom: 5.8%;
+  right: 17%;
+}
+
+.sigil-equation--5 {
+  bottom: 5.8%;
+  left: 9%;
+}
+
+.sigil-equation--6 {
+  top: 52%;
   left: -0.4rem;
   transform: rotate(-90deg) translateY(-50%);
   transform-origin: top left;
@@ -3859,6 +4181,279 @@ svg {
   }
 }
 
+@keyframes stoneFieldDriftArchitect {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(calc(var(--stone-scale) * var(--stone-prominence)));
+  }
+
+  50% {
+    transform: translate3d(0.3rem, -0.25rem, 0) rotate(1.5deg)
+      scale(calc(var(--stone-scale) * var(--stone-prominence) * 1.02));
+  }
+}
+
+@keyframes stoneFieldDriftAstral {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(calc(var(--stone-scale) * var(--stone-prominence)));
+  }
+
+  38% {
+    transform: translate3d(0.5rem, -0.45rem, 0) rotate(2.3deg)
+      scale(calc(var(--stone-scale) * var(--stone-prominence) * 1.03));
+  }
+
+  68% {
+    transform: translate3d(-0.4rem, 0.28rem, 0) rotate(-1.8deg)
+      scale(calc(var(--stone-scale) * var(--stone-prominence) * 0.98));
+  }
+}
+
+@keyframes workHistoryHlGlitch {
+  0%,
+  100% {
+    text-shadow: 0 0 8px rgba(223, 186, 122, 0.26);
+    filter: none;
+  }
+
+  33% {
+    text-shadow:
+      -1px 0 rgba(211, 66, 45, 0.44),
+      1px 0 rgba(141, 78, 183, 0.4),
+      0 0 12px rgba(223, 186, 122, 0.32);
+  }
+
+  66% {
+    text-shadow:
+      1px 0 rgba(211, 66, 45, 0.38),
+      -1px 0 rgba(141, 78, 183, 0.42),
+      0 0 14px rgba(223, 186, 122, 0.36);
+  }
+}
+
+@keyframes workHistoryHlSplitA {
+  0%,
+  100% {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+
+  47% {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+
+  50% {
+    opacity: 0.7;
+    clip-path: inset(0 0 48% 0);
+  }
+
+  53% {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+@keyframes workHistoryHlSplitB {
+  0%,
+  100% {
+    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+  }
+
+  69% {
+    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+  }
+
+  72% {
+    opacity: 0.64;
+    clip-path: inset(52% 0 0 0);
+  }
+
+  75% {
+    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+@keyframes sigilStonePulse {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.98) rotate(0deg);
+  }
+
+  50% {
+    opacity: 0.32;
+    transform: scale(1.02) rotate(1.8deg);
+  }
+}
+
+@keyframes heroWordGlitch {
+  0%,
+  86%,
+  100% {
+    text-shadow:
+      0 0 10px rgba(223, 186, 122, 0.45),
+      -1px 0 rgba(143, 24, 48, 0.32),
+      1px 0 rgba(82, 30, 124, 0.24);
+  }
+
+  88% {
+    text-shadow:
+      -2px 0 rgba(143, 24, 48, 0.52),
+      2px 0 rgba(82, 30, 124, 0.44),
+      0 0 16px rgba(223, 186, 122, 0.58);
+  }
+
+  91% {
+    text-shadow:
+      2px 0 rgba(143, 24, 48, 0.44),
+      -2px 0 rgba(82, 30, 124, 0.4),
+      0 0 12px rgba(223, 186, 122, 0.5);
+  }
+}
+
+@keyframes esotericWordPulse {
+  0%,
+  100% {
+    text-shadow: 0 0 8px rgba(223, 186, 122, 0.26);
+  }
+
+  50% {
+    text-shadow:
+      0 0 14px rgba(223, 186, 122, 0.42),
+      0 0 2px rgba(255, 237, 196, 0.72);
+  }
+}
+
+@keyframes stoneUnityMotion {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+
+  26% {
+    transform: translate3d(0.34rem, -0.3rem, 0) rotate(88deg) scale(1.015);
+  }
+
+  53% {
+    transform: translate3d(-0.34rem, -0.28rem, 0) rotate(183deg) scale(1.005);
+  }
+
+  77% {
+    transform: translate3d(0.32rem, 0.3rem, 0) rotate(278deg) scale(0.992);
+  }
+}
+
+@keyframes stoneFieldFillGlitch {
+  0%,
+  82%,
+  100% {
+    fill: transparent;
+    filter: none;
+  }
+
+  84% {
+    fill: rgba(223, 186, 122, 0.12);
+    filter: drop-shadow(0 0 8px rgba(223, 186, 122, 0.42));
+  }
+
+  86% {
+    fill: rgba(140, 62, 24, 0.16);
+    filter: drop-shadow(0 0 10px rgba(140, 62, 24, 0.44));
+  }
+
+  89% {
+    fill: rgba(46, 16, 80, 0.16);
+    filter: drop-shadow(0 0 10px rgba(46, 16, 80, 0.46));
+  }
+}
+
+@keyframes flowerFieldFillGlitch {
+  0%,
+  80%,
+  100% {
+    fill: transparent;
+  }
+
+  83% {
+    fill: rgba(223, 186, 122, 0.08);
+  }
+
+  86% {
+    fill: rgba(140, 62, 24, 0.1);
+  }
+
+  90% {
+    fill: rgba(46, 16, 80, 0.1);
+  }
+}
+
+@keyframes stoneGlyphSpinCw {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes stoneGlyphSpinCcw {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes stoneGlyphRingPhase {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -240;
+  }
+}
+
+@keyframes stoneGlyphCorePulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.84;
+  }
+
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+
+@keyframes equationNoiseFlicker {
+  0%,
+  84%,
+  100% {
+    opacity: 0.62;
+    transform: translate(0, 0);
+  }
+
+  86% {
+    opacity: 0.38;
+    transform: translate(-1px, 0);
+  }
+
+  89% {
+    opacity: 0.78;
+    transform: translate(1px, 0);
+  }
+}
+
 @keyframes treeGlyphSpinCw {
   from {
     transform: rotate(0deg);
@@ -3986,14 +4581,30 @@ svg {
 }
 
 @keyframes flowerPhase {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
-    transform: scale(1) rotate(0deg);
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+
+  25% {
+    opacity: 0.88;
+    transform: translate3d(0.34rem, -0.34rem, 0) scale(1.06) rotate(14deg);
   }
 
   50% {
-    opacity: 0.82;
-    transform: scale(1.08) rotate(28deg);
+    opacity: 0.84;
+    transform: translate3d(-0.34rem, -0.34rem, 0) scale(1.02) rotate(0deg);
+  }
+
+  75% {
+    opacity: 0.88;
+    transform: translate3d(-0.34rem, 0.34rem, 0) scale(1.06) rotate(-14deg);
+  }
+
+  88% {
+    opacity: 0.86;
+    transform: translate3d(0.34rem, 0.34rem, 0) scale(1.03) rotate(-6deg);
   }
 }
 
@@ -5004,6 +5615,33 @@ svg {
   }
 }
 
+@keyframes faultOverlayFlicker {
+  0%,
+  100% {
+    opacity: 0.96;
+    filter: none;
+  }
+
+  35% {
+    opacity: 0.62;
+    filter: blur(0.3px);
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  62% {
+    opacity: 0.74;
+    transform: translate3d(1px, 0, 0);
+  }
+
+  66% {
+    opacity: 0.98;
+    transform: translate3d(-1px, 0, 0);
+  }
+}
+
 @keyframes ssFlowerGlitch {
   0%,
   88%,
@@ -5168,6 +5806,7 @@ svg {
 
   .glitch-title::before,
   .glitch-title::after,
+  .signal-fault,
   .page__cadence,
   .page__scanlines,
   .page__glitch,
@@ -5228,6 +5867,10 @@ svg {
   .sanctuary-seal__mark,
   .alchemy-mouse-trail,
   .sigil__enochian,
+  .sigil-panel__stone-mark,
+  .sigil-equation,
+  .section-stonefield__glyph,
+  .philosopher-stone__group,
   .section-treefield__glyph,
   .tree-of-life__group,
   .tree-of-life__path,
@@ -5235,6 +5878,11 @@ svg {
   .section-flowerfield__glyph,
   .flower-of-life__group,
   .flower-of-life__circle,
+  .hero__hl,
+  .esoteric-bio__hl,
+  .work-history__hl,
+  .work-history__hl::before,
+  .work-history__hl::after,
   .page--phase-shift .sigil__tree-life,
   .page--phase-shift .sigil__square-compass,
   .page--phase-shift .sigil__alchemy,

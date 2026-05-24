@@ -257,17 +257,17 @@ function PhilosopherStoneGlyphImpl({
           stroke={`url(#${strokeId})`}
         />
         <rect
-          x="258"
-          y="258"
-          width="284"
-          height="284"
+          x="294"
+          y="319"
+          width="212"
+          height="212"
           className="philosopher-stone__square"
           stroke={`url(#${strokeId})`}
         />
         <circle
           cx="400"
-          cy="400"
-          r="102"
+          cy="425"
+          r="94"
           className="philosopher-stone__core"
           stroke={`url(#${strokeId})`}
         />

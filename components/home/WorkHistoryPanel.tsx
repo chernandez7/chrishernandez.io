@@ -1,7 +1,7 @@
 "use client";
 
 import { memo } from "react";
-import { promotionTracks } from "../../lib/home-content";
+import { educationEntries, promotionTracks } from "../../lib/home-content";
 import { SectionGlyphFields } from "./SectionGlyphFields";
 
 function WorkHistoryPanelImpl() {
@@ -34,7 +34,11 @@ function WorkHistoryPanelImpl() {
     return parts.map((part, index) => {
       if (part.match(pattern)) {
         return (
-          <span key={`${text}-${index}`} className="work-history__hl">
+          <span
+            key={`${text}-${index}`}
+            className="work-history__hl"
+            data-text={part}
+          >
             {part}
           </span>
         );
@@ -102,6 +106,16 @@ function WorkHistoryPanelImpl() {
                   ))}
                 </ul>
               ) : null}
+              {track.skills && track.skills.length > 0 ? (
+                <ul
+                  className="work-history__skills"
+                  aria-label={`${track.company} technologies and skills`}
+                >
+                  {track.skills.map((skill) => (
+                    <li key={`${track.company}-${skill}`}>{skill}</li>
+                  ))}
+                </ul>
+              ) : null}
               {track.evidenceUrl ? (
                 <a
                   className="work-history__evidence"
@@ -114,6 +128,40 @@ function WorkHistoryPanelImpl() {
               ) : null}
             </li>
           ))}
+
+          <li className="work-history__item work-history__item--track work-history__item--education">
+            <p className="work-history__education-heading">Education</p>
+            <ul
+              className="work-history__education-list"
+              aria-label="Education list"
+            >
+              {educationEntries.map((entry) => (
+                <li
+                  key={entry.school}
+                  className="work-history__education-item"
+                >
+                  <p className="work-history__company">{entry.school}</p>
+                  <p className="work-history__period">{entry.period}</p>
+                  <p className="work-history__role">{entry.degree}</p>
+                  {entry.activities ? (
+                    <p className="work-history__education-activities">
+                      {entry.activities}
+                    </p>
+                  ) : null}
+                  {entry.skills && entry.skills.length > 0 ? (
+                    <ul
+                      className="work-history__skills"
+                      aria-label={`${entry.school} skills`}
+                    >
+                      {entry.skills.map((skill) => (
+                        <li key={`${entry.school}-${skill}`}>{skill}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </li>
         </ul>
       </div>
     </>

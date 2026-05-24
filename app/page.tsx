@@ -54,6 +54,17 @@ type PerformanceHudSnapshot = {
 };
 
 const matrixNoiseChars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#@$%&*+-/<>[]{}";
+const matrixNoiseFavoredChars = "111333333357";
+const matrixNoiseSeed = "SIGNALVECTOR";
+const matrixNoiseLength = 12;
+const staticGlitchChars = "01[]{}<>#@!$%/\\|+-=*";
+const signalFaultMessages = [
+  "SYNC LOST // SEGMENT 03",
+  "PROCESS INTERRUPTED // 5-7",
+  "ERROR 333 // SIGNAL DESYNC",
+  "HALT 111 // RECOVERING",
+  "FRAME BREAK // RESUME 33",
+];
 
 type PerformanceHudProps = {
   activeSection: SectionId;
@@ -120,10 +131,7 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
       velocityY: number,
       speed: number,
     ) => {
-      const burstCount = speed > 3.8 ? 3 : speed > 2 ? 2 : speed > 1.1 ? 1 : 0;
-      if (burstCount === 0) {
-        return;
-      }
+      const burstCount = speed > 2.8 ? 3 : speed > 1.4 ? 2 : 1;
 
       const baseAngle = Math.atan2(velocityY, velocityX) + Math.PI;
       const createdAt = performance.now();
@@ -184,7 +192,7 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
       lastY = event.clientY;
       lastTime = now;
 
-      if (distance < 14 || dt < 16) {
+      if (distance < 6 || dt < 8) {
         return;
       }
 
@@ -299,7 +307,7 @@ function PerformanceHud({
         .filter(Boolean).length,
     [esotericCorpus],
   );
-  const [matrixNoise, setMatrixNoise] = useState("--------");
+  const [matrixNoise, setMatrixNoise] = useState("SIGNALVECTOR-");
 
   useEffect(() => {
     let frameId = 0;
@@ -351,17 +359,46 @@ function PerformanceHud({
 
   useEffect(() => {
     if (activeSection === "hero") {
-      setMatrixNoise("--------");
+      setMatrixNoise("SIGNALVECTOR-");
       return;
     }
 
     const timer = window.setInterval(() => {
-      let next = "";
-      for (let i = 0; i < 12; i += 1) {
-        next +=
-          matrixNoiseChars[Math.floor(Math.random() * matrixNoiseChars.length)];
-      }
-      setMatrixNoise(next);
+      setMatrixNoise((current) => {
+        const source =
+          current.length === matrixNoiseLength
+            ? current.split("")
+            : `${matrixNoiseSeed}-`.split("");
+        const baseline = `${matrixNoiseSeed}-`.split("");
+        const swapCount = 2 + Math.floor(Math.random() * 4);
+
+        // Revert a couple of positions toward the baseline so replacement is visible.
+        for (let i = 0; i < 2; i += 1) {
+          const revertIndex = Math.floor(Math.random() * matrixNoiseLength);
+          source[revertIndex] = baseline[revertIndex];
+        }
+
+        for (let i = 0; i < swapCount; i += 1) {
+          const index = Math.floor(Math.random() * matrixNoiseLength);
+          const useFavored = Math.random() < 0.66;
+          const pool = useFavored ? matrixNoiseFavoredChars : matrixNoiseChars;
+          source[index] = pool[Math.floor(Math.random() * pool.length)];
+        }
+
+        if (Math.random() < 0.35) {
+          const tokens = ["33", "33", "357", "111", "111", "333", "333", "666"];
+          const token = tokens[Math.floor(Math.random() * tokens.length)];
+          const start = Math.max(
+            0,
+            Math.floor(Math.random() * (matrixNoiseLength - token.length + 1)),
+          );
+          for (let i = 0; i < token.length; i += 1) {
+            source[start + i] = token[i];
+          }
+        }
+
+        return source.join("");
+      });
     }, 120);
 
     return () => window.clearInterval(timer);
@@ -464,6 +501,10 @@ export default function Home() {
   const [introPhase, setIntroPhase] = useState<
     "active" | "dismissing" | "done"
   >("active");
+  const [signalFault, setSignalFault] = useState(false);
+  const [signalFaultMessage, setSignalFaultMessage] = useState(
+    signalFaultMessages[0],
+  );
   const personJsonLd = useMemo(
     () => ({
       "@context": "https://schema.org",
@@ -754,6 +795,165 @@ export default function Home() {
   }, [activeSection, sanctuaryInvoked]);
 
   useEffect(() => {
+    if (introPhase !== "done" || perfLite) {
+      setSignalFault(false);
+      return;
+    }
+
+    const root = sectionStackRef.current;
+    if (!root) {
+      return;
+    }
+
+    let activationTimer = 0;
+    let deactivationTimer = 0;
+    let scrambleTimer = 0;
+    let passiveTimer = 0;
+    let passiveRestoreTimer = 0;
+    let activeNodes: Array<{ node: Text; base: string }> = [];
+    let faultActive = false;
+
+    const scrambleText = (text: string) =>
+      text.replace(/[A-Za-z0-9]/g, (char) => {
+        if (Math.random() > 0.74) {
+          return char;
+        }
+        return staticGlitchChars[
+          Math.floor(Math.random() * staticGlitchChars.length)
+        ];
+      });
+
+    const collectNodes = () => {
+      const nodes: Array<{ node: Text; base: string }> = [];
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      let current = walker.nextNode();
+
+      while (current) {
+        if (current.nodeType === Node.TEXT_NODE) {
+          const node = current as Text;
+          const base = node.textContent ?? "";
+          const parent = node.parentElement;
+          if (
+            parent &&
+            /[A-Za-z0-9]/.test(base) &&
+            !parent.closest("script,style,noscript,.signal-fault")
+          ) {
+            nodes.push({ node, base });
+          }
+        }
+        current = walker.nextNode();
+      }
+
+      return nodes;
+    };
+
+    const applyScramble = () => {
+      for (const entry of activeNodes) {
+        if (!entry.node.isConnected) {
+          continue;
+        }
+        entry.node.textContent = scrambleText(entry.base);
+      }
+    };
+
+    const restoreNodes = () => {
+      for (const entry of activeNodes) {
+        if (!entry.node.isConnected) {
+          continue;
+        }
+        entry.node.textContent = entry.base;
+      }
+      activeNodes = [];
+    };
+
+    const applyPassiveScramble = () => {
+      if (faultActive) {
+        return;
+      }
+
+      const nodes = collectNodes();
+      if (nodes.length === 0) {
+        return;
+      }
+
+      const sampleCount = Math.max(1, Math.floor(nodes.length * 0.015));
+      const sampled: Array<{ node: Text; base: string }> = [];
+
+      for (let i = 0; i < sampleCount; i += 1) {
+        const entry = nodes[Math.floor(Math.random() * nodes.length)];
+        if (!entry || sampled.includes(entry)) {
+          continue;
+        }
+        sampled.push(entry);
+      }
+
+      for (const entry of sampled) {
+        if (!entry.node.isConnected) {
+          continue;
+        }
+        entry.node.textContent = entry.base.replace(/[A-Za-z0-9]/g, (char) => {
+          if (Math.random() > 0.18) {
+            return char;
+          }
+          return staticGlitchChars[
+            Math.floor(Math.random() * staticGlitchChars.length)
+          ];
+        });
+      }
+
+      passiveRestoreTimer = window.setTimeout(() => {
+        for (const entry of sampled) {
+          if (!entry.node.isConnected) {
+            continue;
+          }
+          entry.node.textContent = entry.base;
+        }
+      }, 180);
+    };
+
+    const scheduleActivation = () => {
+      activationTimer = window.setTimeout(() => {
+        setSignalFaultMessage(
+          signalFaultMessages[
+            Math.floor(Math.random() * signalFaultMessages.length)
+          ],
+        );
+        faultActive = true;
+        activeNodes = collectNodes();
+        applyScramble();
+        scrambleTimer = window.setInterval(applyScramble, 88);
+        setSignalFault(true);
+
+        deactivationTimer = window.setTimeout(() => {
+          faultActive = false;
+          setSignalFault(false);
+          window.clearInterval(scrambleTimer);
+          restoreNodes();
+          scheduleActivation();
+        }, 760);
+      }, 12000 + Math.floor(Math.random() * 14000));
+    };
+
+    passiveTimer = window.setInterval(() => {
+      if (Math.random() < 0.5) {
+        applyPassiveScramble();
+      }
+    }, 2600);
+
+    scheduleActivation();
+
+    return () => {
+      window.clearTimeout(activationTimer);
+      window.clearTimeout(deactivationTimer);
+      window.clearInterval(scrambleTimer);
+      window.clearInterval(passiveTimer);
+      window.clearTimeout(passiveRestoreTimer);
+      restoreNodes();
+      setSignalFault(false);
+    };
+  }, [introPhase, perfLite]);
+
+  useEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
@@ -918,6 +1118,11 @@ export default function Home() {
         return false;
       }
 
+      const historyList = target.closest(".work-history__list");
+      if (historyList instanceof HTMLElement) {
+        return true;
+      }
+
       const scrollable = target.closest(
         ".work-history__list, .esoteric-bio__list",
       );
@@ -1033,6 +1238,15 @@ export default function Home() {
 
   return (
     <>
+      {signalFault && (
+        <div className="signal-fault" aria-hidden="true">
+          <div className="signal-fault__frame">
+            <p className="signal-fault__label">SYSTEM INTERRUPTION</p>
+            <p className="signal-fault__code">{signalFaultMessage}</p>
+            <p className="signal-fault__meta">PROCESS HALTED // RETRYING</p>
+          </div>
+        </div>
+      )}
       <AlchemyMouseTrail
         enabled={introPhase === "done" && !perfLite && activeSection !== "hero"}
       />

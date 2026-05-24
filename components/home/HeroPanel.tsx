@@ -1,8 +1,9 @@
 "use client";
-import { Sigil } from "../Sigil";
+import { PhilosopherStoneGlyph, Sigil } from "../Sigil";
 import { socialLinks } from "../../lib/links";
 import {
   occultPulse,
+  sigilEquations,
   signals,
   sigilQuotes,
   type SectionId,
@@ -73,7 +74,8 @@ export function HeroPanel({ perfLite, activeSection }: HeroPanelProps) {
             </span>
           </a>
           <p className="lede">
-            I solve hard problems and build the systems around them.
+            I <span className="hero__hl">solve</span> hard problems and
+            <span className="hero__hl"> build</span> the systems around them.
           </p>
           <span className="hero__scan-notch" aria-hidden="true" />
         </div>
@@ -105,6 +107,19 @@ export function HeroPanel({ perfLite, activeSection }: HeroPanelProps) {
             </li>
           ))}
         </ul>
+        <ul className="sigil-equations" aria-label="Foundational equations">
+          {sigilEquations.map((equation, index) => (
+            <li key={equation} className={`sigil-equation sigil-equation--${index + 1}`}>
+              {equation}
+            </li>
+          ))}
+        </ul>
+        {heroActive && (
+          <PhilosopherStoneGlyph
+            className="sigil-panel__stone-mark"
+            idPrefix="hero-sigil-stone"
+          />
+        )}
         {heroActive && <Sigil />}
       </aside>
     </main>

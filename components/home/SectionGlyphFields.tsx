@@ -24,7 +24,7 @@ const flowerGlyphKeysByVariant = {
 } as const;
 
 const stoneGlyphKeysByVariant = {
-  hero: ["a", "b"],
+  hero: ["a", "b", "c", "d"],
   history: ["a", "b", "c", "d"],
   esoteric: ["a", "b", "c", "d"],
 } as const;

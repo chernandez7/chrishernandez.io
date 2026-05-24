@@ -33,18 +33,54 @@ export const sigilQuotes = [
     text: "Chaos, then clarity",
     position: "sigil-quote sigil-quote--west",
   },
+  {
+    text: "Ordo ab chao // compile, test, ship",
+    position: "sigil-quote sigil-quote--northeast",
+  },
+  {
+    text: "Solve in layers, reveal in logs",
+    position: "sigil-quote sigil-quote--southeast",
+  },
+  {
+    text: "As above, so below the stack",
+    position: "sigil-quote sigil-quote--southwest",
+  },
+  {
+    text: "Square, compass, and clean abstractions",
+    position: "sigil-quote sigil-quote--northwest",
+  },
+] as const;
+
+export const sigilEquations = [
+  "e^(i*pi)+1=0",
+  "F(x)=x^2+c",
+  "dN/dt=rN(1-N/K)",
+  "S=k log W",
+  "Gmu nu+Lambda gmu nu=(8piG/c^4)Tmu nu",
+  "x_(n+1)=r x_n(1-x_n)",
+  "3:5:7",
+  "111 // 333 // 666 // 33",
 ] as const;
 
 export type PromotionTrack = {
   company: string;
   subtitle?: string;
   highlights?: string[];
+  skills?: string[];
   evidenceUrl?: string;
   evidenceLabel?: string;
   stages: {
     period: string;
     role: string;
   }[];
+};
+
+export type EducationEntry = {
+  school: string;
+  degree: string;
+  period: string;
+  activities?: string;
+  skills?: string[];
 };
 
 export const promotionTracks: PromotionTrack[] = [
@@ -55,6 +91,13 @@ export const promotionTracks: PromotionTrack[] = [
       "Infectious disease team of one with high-leverage glue work.",
       "Frameworks contributor on a horizontal engineering lane.",
       "AI engineering lead, building forward CIAM foundations.",
+    ],
+    skills: [
+      "Frontend Systems",
+      "Backend Architecture",
+      "Cloud Platforms",
+      "Scalable Data",
+      "Technical Leadership",
     ],
     stages: [
       {
@@ -75,6 +118,13 @@ export const promotionTracks: PromotionTrack[] = [
       "Delivered one of the largest Fortune 500 COVID scheduler programs.",
       "Shipped airline vaccine passport systems and global machine vision work.",
     ],
+    skills: [
+      "Product Delivery",
+      "Cross-Platform Apps",
+      "Cloud and Serverless",
+      "Enterprise Programs",
+      "Emerging Tech",
+    ],
     stages: [
       {
         period: "2020 - 2021",
@@ -88,6 +138,12 @@ export const promotionTracks: PromotionTrack[] = [
   },
   {
     company: "Alluxo",
+    skills: [
+      "Product Design",
+      "Technical Leadership",
+      "Systems Design",
+      "Team Development",
+    ],
     stages: [
       {
         period: "2020 - 2021",
@@ -105,6 +161,13 @@ export const promotionTracks: PromotionTrack[] = [
       "Mobile product scaled to ~30k users with zero paid marketing.",
       "Growth was entirely word-of-mouth.",
     ],
+    skills: [
+      "Startup Product Engineering",
+      "Mobile and API Systems",
+      "Scalable Data",
+      "Growth Engineering",
+      "Mentorship",
+    ],
     evidenceUrl: "https://www.youtube.com/watch?v=W6vzzWpSz74",
     evidenceLabel: "Case video",
     stages: [
@@ -116,6 +179,12 @@ export const promotionTracks: PromotionTrack[] = [
   },
   {
     company: "NGHT LLC",
+    skills: [
+      "POS Integrations",
+      "Location Discovery",
+      "Nightlife Ordering",
+      "Mobile Product Delivery",
+    ],
     stages: [
       {
         period: "2016 - 2018",
@@ -125,6 +194,12 @@ export const promotionTracks: PromotionTrack[] = [
   },
   {
     company: "Tandlr",
+    skills: [
+      "Education Platform",
+      "Tutor Marketplace",
+      "Payments and Booking",
+      "Student Experience",
+    ],
     stages: [
       {
         period: "2017 - 2019",
@@ -134,11 +209,34 @@ export const promotionTracks: PromotionTrack[] = [
   },
   {
     company: "The Authentic Company",
+    skills: [
+      "Rapid Prototyping",
+      "Mobile Development",
+      "Music Product Innovation",
+      "Experience Redesign",
+    ],
     stages: [
       {
         period: "2018 - 2019",
         role: "Full Stack Engineer (Contract)",
       },
+    ],
+  },
+];
+
+export const educationEntries: EducationEntry[] = [
+  {
+    school: "Loyola University Chicago",
+    degree: "Bachelor's Degree, Computer Science",
+    period: "2013 - 2017",
+    activities:
+      "Association for Computing Machinery (ACM) student chapter.",
+    skills: [
+      "Computer Science Fundamentals",
+      "Systems Programming",
+      "High Performance Computing",
+      "Graphics and Simulation",
+      "Scientific Tooling",
     ],
   },
 ];
