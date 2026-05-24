@@ -8,6 +8,10 @@ import {
   type CSSProperties,
 } from "react";
 import { Sigil } from "../components/Sigil";
+import { EsotericBioPanel } from "../components/home/EsotericBioPanel";
+import { HeroPanel } from "../components/home/HeroPanel";
+import { WorkHistoryPanel } from "../components/home/WorkHistoryPanel";
+import { sectionOrder, type SectionId } from "../lib/home-content";
 import { socialLinks } from "../lib/links";
 
 type NavWithHints = Navigator & {
@@ -17,139 +21,145 @@ type NavWithHints = Navigator & {
   deviceMemory?: number;
 };
 
-const canonicalName = "Christopher Hernandez";
-const enochianTransliteration = "KHRISTOFER HERNANDEZ OD ZIRDO";
-const glitchAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>[]{}|/\\+=-_*#?~";
-
-const scrambleName = (name: string, intensity = 0.35) => {
-  return name
-    .split("")
-    .map((char) => {
-      if (char === " ") {
-        return char;
-      }
-
-      if (Math.random() > intensity) {
-        return char;
-      }
-
-      const index = Math.floor(Math.random() * glitchAlphabet.length);
-      return glitchAlphabet[index];
-    })
-    .join("");
+type AlchemyTrailGlyph = {
+  id: number;
+  symbol: string;
+  x: number;
+  y: number;
+  size: number;
+  driftX: number;
+  driftY: number;
+  rotate: number;
+  durationMs: number;
+  opacity: number;
 };
 
-const signals = [
-  "Observatory",
-  "Atlas",
-  "Signal Hunter",
-  "Sacred Infrastructure",
-];
+const alchemyTrailSymbols = ["🜂", "🜁", "🜃", "🜄", "🜍", "🜔"];
 
-const occultPulse = [
-  "AS ABOVE // SO BELOW",
-  "TREE OF LIFE PATHWORK",
-  "SQUARE + COMPASS FIELD",
-  "MERCURY : SULFUR : SALT",
-];
+function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
+  const [glyphs, setGlyphs] = useState<AlchemyTrailGlyph[]>([]);
+  const nextGlyphIdRef = useRef(1);
 
-const linkPossessionBursts = [
-  "// TRACE : ASTRAL HANDSHAKE",
-  "// KETER->MALKUTH BRIDGE",
-  "// ORDO:CONVERGENCE:ACTIVE",
-  "// GATE SIGIL RESONANCE",
-  "// WATCHER ACKNOWLEDGED",
-];
+  useEffect(() => {
+    if (!enabled) {
+      setGlyphs([]);
+      return;
+    }
 
-const sigilQuotes = [
-  {
-    text: "As above, so below.",
-    position: "sigil-quote sigil-quote--north",
-  },
-  {
-    text: "Visita interiora terrae.",
-    position: "sigil-quote sigil-quote--east",
-  },
-  {
-    text: "Solve et coagula.",
-    position: "sigil-quote sigil-quote--south",
-  },
-  {
-    text: "From ash, measure and build.",
-    position: "sigil-quote sigil-quote--west",
-  },
-];
+    let lastX = 0;
+    let lastY = 0;
+    let lastTime = 0;
 
-const promotionTracks = [
-  {
-    company: "Tempus AI",
-    stages: [
-      {
-        period: "2022 - 2025",
-        role: "Senior Software Engineer",
-      },
-      {
-        period: "2025 - Present",
-        role: "Senior Software Engineer II",
-      },
-    ],
-  },
-  {
-    company: "Accenture",
-    stages: [
-      {
-        period: "2019 - 2020",
-        role: "Application Development Analyst",
-      },
-      {
-        period: "2020 - 2021",
-        role: "Advanced App Engineering Senior Analyst / Specialist",
-      },
-    ],
-  },
-  {
-    company: "Alluxo",
-    stages: [
-      {
-        period: "2018 - 2020",
-        role: "Full Stack Developer",
-      },
-      {
-        period: "2020 - 2021",
-        role: "Head of Engineering",
-      },
-    ],
-  },
-  {
-    company: "Own It Technologies, Inc.",
-    stages: [
-      {
-        period: "2017 - 2020",
-        role: "VP of Engineering",
-      },
-    ],
-  },
-  {
-    company: "NGHT LLC / Tandlr / The Authentic Company",
-    stages: [
-      {
-        period: "2016 - 2019",
-        role: "Co-Founder and Full Stack Engineer (Contract + Startup)",
-      },
-    ],
-  },
-];
+    const removeGlyph = (id: number) => {
+      setGlyphs((current) => current.filter((glyph) => glyph.id !== id));
+    };
 
-const bioInterests = [
-  "Thirty solar turns; I chart inner constellations and return carrying workable light.",
-  "Six strings, four strings, and shutter rites, with sacred geometry as the hidden grammar beneath form.",
-  "Game realms, old pages, and twin laboratories: glass and reagent by one light, racks and packets by another, both practicing transmutation.",
-  "Inner work, meditation, astral searching, manifestation, and operative magic: not all temples are built with hands.",
-  "Lodge currents, hermetic study, and philosophy as true north; body tempered beside mind, ascending toward the unopened door.",
-];
+    const emitGlyphs = (
+      x: number,
+      y: number,
+      velocityX: number,
+      velocityY: number,
+      speed: number,
+    ) => {
+      const burstCount = speed > 1.4 ? 2 : 1;
+      const baseAngle = Math.atan2(velocityY, velocityX) + Math.PI;
 
-type SectionId = "hero" | "history" | "esoteric";
-const sectionOrder: SectionId[] = ["esoteric", "hero", "history"];
+      for (let burst = 0; burst < burstCount; burst += 1) {
+        const id = nextGlyphIdRef.current;
+        nextGlyphIdRef.current += 1;
+
+        const angleJitter = (Math.random() - 0.5) * 1.3;
+        const angle = baseAngle + angleJitter;
+        const driftMag = 26 + Math.min(120, speed * 95) + Math.random() * 38;
+        const durationMs = 900 + Math.floor(Math.random() * 480);
+        const glyph: AlchemyTrailGlyph = {
+          id,
+          symbol:
+            alchemyTrailSymbols[
+              Math.floor(Math.random() * alchemyTrailSymbols.length)
+            ],
+          x,
+          y,
+          size: 18 + Math.random() * 14,
+          driftX: Math.cos(angle) * driftMag,
+          driftY: Math.sin(angle) * driftMag,
+          rotate: -40 + Math.random() * 160,
+          durationMs,
+          opacity: 0.54 + Math.random() * 0.34,
+        };
+
+        setGlyphs((current) => [...current.slice(-42), glyph]);
+        window.setTimeout(() => removeGlyph(id), durationMs + 48);
+      }
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      if (event.pointerType === "touch") {
+        return;
+      }
+
+      const now = performance.now();
+      if (lastTime === 0) {
+        lastX = event.clientX;
+        lastY = event.clientY;
+        lastTime = now;
+        return;
+      }
+
+      const dx = event.clientX - lastX;
+      const dy = event.clientY - lastY;
+      const dt = Math.max(1, now - lastTime);
+      const distance = Math.hypot(dx, dy);
+
+      lastX = event.clientX;
+      lastY = event.clientY;
+      lastTime = now;
+
+      if (distance < 12 || dt < 14) {
+        return;
+      }
+
+      const speed = distance / dt;
+      emitGlyphs(event.clientX, event.clientY, dx, dy, speed);
+    };
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      setGlyphs([]);
+    };
+  }, [enabled]);
+
+  if (!enabled || glyphs.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="alchemy-mouse-trail" aria-hidden="true">
+      {glyphs.map((glyph) => (
+        <span
+          key={glyph.id}
+          className="alchemy-mouse-trail__glyph"
+          style={
+            {
+              left: `${glyph.x}px`,
+              top: `${glyph.y}px`,
+              "--glyph-size": `${glyph.size}px`,
+              "--glyph-drift-x": `${glyph.driftX.toFixed(2)}px`,
+              "--glyph-drift-y": `${glyph.driftY.toFixed(2)}px`,
+              "--glyph-rotate": `${glyph.rotate.toFixed(2)}deg`,
+              "--glyph-duration": `${glyph.durationMs}ms`,
+              "--glyph-opacity": glyph.opacity.toFixed(3),
+            } as CSSProperties
+          }
+        >
+          {glyph.symbol}
+        </span>
+      ))}
+    </div>
+  );
+}
 
 export default function Home() {
   const sectionStackRef = useRef<HTMLDivElement>(null);
@@ -162,18 +172,15 @@ export default function Home() {
   const acaciaRevealTimerRef = useRef(0);
   const touchStartYRef = useRef<number | null>(null);
   const sanctuaryRef = useRef<HTMLDivElement>(null);
-  const [displayName, setDisplayName] = useState(canonicalName);
   const [phaseShiftActive, setPhaseShiftActive] = useState(false);
   const [perfLite, setPerfLite] = useState(false);
   const [activeSection, setActiveSection] = useState<SectionId>("hero");
   const [sanctuaryInvoked, setSanctuaryInvoked] = useState(false);
   const [sanctuaryCharge, setSanctuaryCharge] = useState(0);
-  const [introPhase, setIntroPhase] = useState<"active" | "dismissing" | "done">("active");
+  const [introPhase, setIntroPhase] = useState<
+    "active" | "dismissing" | "done"
+  >("active");
   const [acaciaHiddenByScroll, setAcaciaHiddenByScroll] = useState(false);
-  const [possessedLink, setPossessedLink] = useState<{
-    index: number;
-    text: string;
-  } | null>(null);
   const personJsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -226,79 +233,6 @@ export default function Home() {
       reducedMotionQuery.removeEventListener("change", syncPerfMode);
     };
   }, []);
-
-  useEffect(() => {
-    if (perfLite) {
-      setDisplayName(canonicalName);
-      return;
-    }
-
-    let scrambleFrames = 0;
-
-    const timer = window.setInterval(() => {
-      if (phaseShiftActive) {
-        setDisplayName(
-          scrambleName(enochianTransliteration, 0.24 + Math.random() * 0.34),
-        );
-        return;
-      }
-
-      if (scrambleFrames > 0) {
-        scrambleFrames -= 1;
-        setDisplayName(scrambleName(canonicalName, 0.28 + Math.random() * 0.5));
-        if (scrambleFrames === 0) {
-          setDisplayName(canonicalName);
-        }
-        return;
-      }
-
-      if (Math.random() < 0.17) {
-        scrambleFrames = 2 + Math.floor(Math.random() * 5);
-      }
-    }, 170);
-
-    return () => {
-      window.clearInterval(timer);
-      setDisplayName(canonicalName);
-    };
-  }, [perfLite, phaseShiftActive]);
-
-  useEffect(() => {
-    if (perfLite) {
-      setPossessedLink(null);
-      return;
-    }
-
-    let possessionFrames = 0;
-    let nextPossessed: { index: number; text: string } | null = null;
-
-    const timer = window.setInterval(() => {
-      if (possessionFrames > 0 && nextPossessed) {
-        possessionFrames -= 1;
-        setPossessedLink(nextPossessed);
-        if (possessionFrames === 0) {
-          setPossessedLink(null);
-          nextPossessed = null;
-        }
-        return;
-      }
-
-      if (Math.random() < 0.08) {
-        nextPossessed = {
-          index: Math.floor(Math.random() * socialLinks.length),
-          text: linkPossessionBursts[
-            Math.floor(Math.random() * linkPossessionBursts.length)
-          ],
-        };
-        possessionFrames = 1 + Math.floor(Math.random() * 2);
-      }
-    }, 120);
-
-    return () => {
-      window.clearInterval(timer);
-      setPossessedLink(null);
-    };
-  }, [perfLite]);
 
   useEffect(() => {
     if (perfLite) {
@@ -385,6 +319,7 @@ export default function Home() {
     let frameId = 0;
     let chargeFrameId = 0;
     let sanctuaryActive = false;
+    let pointerTrackingActive = false;
     let lastChargeTick = 0;
 
     const clampUnit = (value: number) => Math.max(-1, Math.min(1, value));
@@ -413,10 +348,6 @@ export default function Home() {
     };
 
     const onPointerMove = (event: PointerEvent) => {
-      if (!sanctuaryActive) {
-        return;
-      }
-
       if (frameId) {
         cancelAnimationFrame(frameId);
       }
@@ -434,8 +365,27 @@ export default function Home() {
       root.style.setProperty("--sanctuary-y", "0");
     };
 
+    const attachPointerTracking = () => {
+      if (pointerTrackingActive) {
+        return;
+      }
+      pointerTrackingActive = true;
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+      window.addEventListener("pointerleave", resetMouseState);
+    };
+
+    const detachPointerTracking = () => {
+      if (!pointerTrackingActive) {
+        return;
+      }
+      pointerTrackingActive = false;
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerleave", resetMouseState);
+    };
+
     const activateSanctuary = () => {
       sanctuaryActive = true;
+      attachPointerTracking();
 
       if (sanctuaryInvoked) {
         return;
@@ -471,6 +421,7 @@ export default function Home() {
 
     const deactivateSanctuary = () => {
       sanctuaryActive = false;
+      detachPointerTracking();
       if (chargeFrameId) {
         cancelAnimationFrame(chargeFrameId);
         chargeFrameId = 0;
@@ -486,9 +437,6 @@ export default function Home() {
     sanctuaryElement?.addEventListener("pointerenter", activateSanctuary);
     sanctuaryElement?.addEventListener("pointerleave", deactivateSanctuary);
 
-    window.addEventListener("pointermove", onPointerMove, { passive: true });
-    window.addEventListener("pointerleave", resetMouseState);
-
     return () => {
       if (frameId) {
         cancelAnimationFrame(frameId);
@@ -501,8 +449,7 @@ export default function Home() {
         "pointerleave",
         deactivateSanctuary,
       );
-      window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerleave", resetMouseState);
+      detachPointerTracking();
       resetMouseState();
     };
   }, [activeSection, sanctuaryInvoked]);
@@ -581,7 +528,7 @@ export default function Home() {
 
     const previousBehavior = stack.style.scrollBehavior;
     stack.style.scrollBehavior = "auto";
-    stack.scrollTop = hero.offsetTop;
+    hero.scrollIntoView({ behavior: "auto", block: "start" });
     stack.style.scrollBehavior = previousBehavior;
     setActiveSection("hero");
   }, []);
@@ -613,9 +560,12 @@ export default function Home() {
     window.setTimeout(() => {
       navLockRef.current = false;
       window.clearTimeout(acaciaRevealTimerRef.current);
-      acaciaRevealTimerRef.current = window.setTimeout(() => {
-        setAcaciaHiddenByScroll(false);
-      }, prefersReducedMotionRef.current ? 40 : 120);
+      acaciaRevealTimerRef.current = window.setTimeout(
+        () => {
+          setAcaciaHiddenByScroll(false);
+        },
+        prefersReducedMotionRef.current ? 40 : 120,
+      );
     }, releaseDelay);
   };
 
@@ -624,6 +574,9 @@ export default function Home() {
     if (!stack) {
       return;
     }
+
+    const isMobileViewport = () =>
+      window.matchMedia("(max-width: 860px)").matches;
 
     const goByDelta = (delta: number) => {
       if (Math.abs(delta) < 24) {
@@ -649,6 +602,9 @@ export default function Home() {
     };
 
     const onWheel = (event: WheelEvent) => {
+      if (isMobileViewport()) {
+        return;
+      }
       event.preventDefault();
       if (navLockRef.current) {
         return;
@@ -664,10 +620,18 @@ export default function Home() {
     };
 
     const onTouchMove = (event: TouchEvent) => {
+      if (isMobileViewport()) {
+        return;
+      }
       event.preventDefault();
     };
 
     const onTouchEnd = (event: TouchEvent) => {
+      if (isMobileViewport()) {
+        touchStartYRef.current = null;
+        return;
+      }
+
       if (navLockRef.current || touchStartYRef.current === null) {
         touchStartYRef.current = null;
         return;
@@ -721,6 +685,7 @@ export default function Home() {
 
   return (
     <>
+      <AlchemyMouseTrail enabled={introPhase === "done" && !perfLite} />
       <div
         className={`page-stack page-stack--active-${activeSection}${perfLite ? " page-stack--perf-lite" : ""}${acaciaHiddenByScroll ? " page-stack--scrolling" : ""}`}
         ref={sectionStackRef}
@@ -732,15 +697,42 @@ export default function Home() {
           xmlns="http://www.w3.org/2000/svg"
         >
           <g className="acacia__fractal acacia__fractal--left">
-            <path className="acacia__branch acacia__branch--trunk" d="M80,320 C78,306 76,288 76,268" />
-            <path className="acacia__branch" d="M76,268 C50,258 20,250 -10,246" />
-            <path className="acacia__branch" d="M76,268 C104,258 136,250 172,246" />
-            <path className="acacia__branch acacia__branch--minor" d="M172,246 C200,240 230,236 258,233" />
-            <path className="acacia__branch acacia__branch--minor" d="M172,246 C178,254 184,264 188,272" />
-            <path className="acacia__branch acacia__branch--minor" d="M-10,246 C-28,240 -44,236 -58,233" />
-            <path className="acacia__branch acacia__branch--minor" d="M-10,246 C-4,254 2,264 6,272" />
-            <path className="acacia__branch acacia__branch--twig" d="M258,233 C276,230 292,228 306,226" />
-            <path className="acacia__branch acacia__branch--twig" d="M-58,233 C-70,230 -80,228 -88,226" />
+            <path
+              className="acacia__branch acacia__branch--trunk"
+              d="M80,320 C78,306 76,288 76,268"
+            />
+            <path
+              className="acacia__branch"
+              d="M76,268 C50,258 20,250 -10,246"
+            />
+            <path
+              className="acacia__branch"
+              d="M76,268 C104,258 136,250 172,246"
+            />
+            <path
+              className="acacia__branch acacia__branch--minor"
+              d="M172,246 C200,240 230,236 258,233"
+            />
+            <path
+              className="acacia__branch acacia__branch--minor"
+              d="M172,246 C178,254 184,264 188,272"
+            />
+            <path
+              className="acacia__branch acacia__branch--minor"
+              d="M-10,246 C-28,240 -44,236 -58,233"
+            />
+            <path
+              className="acacia__branch acacia__branch--minor"
+              d="M-10,246 C-4,254 2,264 6,272"
+            />
+            <path
+              className="acacia__branch acacia__branch--twig"
+              d="M258,233 C276,230 292,228 306,226"
+            />
+            <path
+              className="acacia__branch acacia__branch--twig"
+              d="M-58,233 C-70,230 -80,228 -88,226"
+            />
             <path className="acacia__leaflet" d="M300,225 l5,-5" />
             <path className="acacia__leaflet" d="M300,225 l5,5" />
             <path className="acacia__leaflet" d="M306,225 l4,-4" />
@@ -759,19 +751,58 @@ export default function Home() {
             <path className="acacia__leaflet" d="M-58,232 l-4,4" />
           </g>
           <g className="acacia__fractal acacia__fractal--center">
-            <path className="acacia__branch acacia__branch--trunk" d="M756,320 C752,292 748,254 746,212" />
-            <path className="acacia__branch" d="M746,212 C690,194 624,180 548,172" />
-            <path className="acacia__branch" d="M746,212 C802,194 868,180 944,172" />
-            <path className="acacia__branch acacia__branch--minor" d="M548,172 C496,164 442,158 390,154" />
-            <path className="acacia__branch acacia__branch--minor" d="M548,172 C556,182 564,194 568,204" />
-            <path className="acacia__branch acacia__branch--minor" d="M944,172 C992,164 1046,158 1098,154" />
-            <path className="acacia__branch acacia__branch--minor" d="M944,172 C936,182 928,194 924,204" />
-            <path className="acacia__branch acacia__branch--twig" d="M390,154 C350,149 312,146 276,144" />
-            <path className="acacia__branch acacia__branch--twig" d="M390,154 C382,162 374,172 370,180" />
-            <path className="acacia__branch acacia__branch--twig" d="M1098,154 C1136,149 1174,146 1210,144" />
-            <path className="acacia__branch acacia__branch--twig" d="M1098,154 C1106,162 1114,172 1118,180" />
-            <path className="acacia__branch acacia__branch--twig" d="M276,144 C248,141 222,140 198,139" />
-            <path className="acacia__branch acacia__branch--twig" d="M1210,144 C1236,141 1260,140 1282,139" />
+            <path
+              className="acacia__branch acacia__branch--trunk"
+              d="M756,320 C752,292 748,254 746,212"
+            />
+            <path
+              className="acacia__branch"
+              d="M746,212 C690,194 624,180 548,172"
+            />
+            <path
+              className="acacia__branch"
+              d="M746,212 C802,194 868,180 944,172"
+            />
+            <path
+              className="acacia__branch acacia__branch--minor"
+              d="M548,172 C496,164 442,158 390,154"
+            />
+            <path
+              className="acacia__branch acacia__branch--minor"
+              d="M548,172 C556,182 564,194 568,204"
+            />
+            <path
+              className="acacia__branch acacia__branch--minor"
+              d="M944,172 C992,164 1046,158 1098,154"
+            />
+            <path
+              className="acacia__branch acacia__branch--minor"
+              d="M944,172 C936,182 928,194 924,204"
+            />
+            <path
+              className="acacia__branch acacia__branch--twig"
+              d="M390,154 C350,149 312,146 276,144"
+            />
+            <path
+              className="acacia__branch acacia__branch--twig"
+              d="M390,154 C382,162 374,172 370,180"
+            />
+            <path
+              className="acacia__branch acacia__branch--twig"
+              d="M1098,154 C1136,149 1174,146 1210,144"
+            />
+            <path
+              className="acacia__branch acacia__branch--twig"
+              d="M1098,154 C1106,162 1114,172 1118,180"
+            />
+            <path
+              className="acacia__branch acacia__branch--twig"
+              d="M276,144 C248,141 222,140 198,139"
+            />
+            <path
+              className="acacia__branch acacia__branch--twig"
+              d="M1210,144 C1236,141 1260,140 1282,139"
+            />
             <path className="acacia__leaflet" d="M202,138 l-5,-5" />
             <path className="acacia__leaflet" d="M202,138 l-5,5" />
             <path className="acacia__leaflet" d="M196,138 l-4,-4" />
@@ -806,13 +837,34 @@ export default function Home() {
             <path className="acacia__leaflet" d="M1284,138 l4,4" />
           </g>
           <g className="acacia__fractal acacia__fractal--right">
-            <path className="acacia__branch acacia__branch--trunk" d="M1520,320 C1518,306 1516,288 1516,268" />
-            <path className="acacia__branch" d="M1516,268 C1490,258 1456,250 1418,246" />
-            <path className="acacia__branch" d="M1516,268 C1542,258 1566,250 1592,246" />
-            <path className="acacia__branch acacia__branch--minor" d="M1418,246 C1390,240 1360,236 1332,233" />
-            <path className="acacia__branch acacia__branch--minor" d="M1418,246 C1424,254 1430,264 1434,272" />
-            <path className="acacia__branch acacia__branch--minor" d="M1592,246 C1596,242 1600,238 1602,234" />
-            <path className="acacia__branch acacia__branch--twig" d="M1332,233 C1314,230 1298,228 1284,226" />
+            <path
+              className="acacia__branch acacia__branch--trunk"
+              d="M1520,320 C1518,306 1516,288 1516,268"
+            />
+            <path
+              className="acacia__branch"
+              d="M1516,268 C1490,258 1456,250 1418,246"
+            />
+            <path
+              className="acacia__branch"
+              d="M1516,268 C1542,258 1566,250 1592,246"
+            />
+            <path
+              className="acacia__branch acacia__branch--minor"
+              d="M1418,246 C1390,240 1360,236 1332,233"
+            />
+            <path
+              className="acacia__branch acacia__branch--minor"
+              d="M1418,246 C1424,254 1430,264 1434,272"
+            />
+            <path
+              className="acacia__branch acacia__branch--minor"
+              d="M1592,246 C1596,242 1600,238 1602,234"
+            />
+            <path
+              className="acacia__branch acacia__branch--twig"
+              d="M1332,233 C1314,230 1298,228 1284,226"
+            />
             <path className="acacia__leaflet" d="M1288,225 l-5,-5" />
             <path className="acacia__leaflet" d="M1288,225 l-5,5" />
             <path className="acacia__leaflet" d="M1282,225 l-4,-4" />
@@ -834,129 +886,12 @@ export default function Home() {
           className="page-section page-section--hero"
           aria-label="Landing section"
         >
-          <main
-            className={`page${phaseShiftActive ? " page--phase-shift" : ""}${perfLite ? " page--perf-lite" : ""}`}
-          >
-            <div className="page__grain" aria-hidden="true" />
-            <div className="page__cadence" aria-hidden="true" />
-            <div className="page__scanlines" aria-hidden="true" />
-            <div className="page__glitch" aria-hidden="true" />
-            <div className="page__sweep" aria-hidden="true" />
-            <div className="page__ashlar" aria-hidden="true" />
-            <div className="page__halo page__halo--one" aria-hidden="true" />
-            <div className="page__halo page__halo--two" aria-hidden="true" />
-            <div className="page__halo page__halo--three" aria-hidden="true" />
-
-            <section className="hero">
-              <div className="hero__mast">
-                <h1
-                  className="title glitch-title"
-                  data-text={displayName}
-                  aria-label={canonicalName}
-                >
-                  {displayName}
-                </h1>
-                <a
-                  className="role-link"
-                  href="https://www.tempus.com/"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  Senior Software Engineer II @ Tempus AI
-                </a>
-                <p className="lede">
-                  I solve hard problems and build the systems around them.
-                </p>
-              </div>
-
-              <div className="hero__footer">
-                <ul className="signal-list" aria-label="Design signals">
-                  {signals.map((signal) => (
-                    <li key={signal} className="signal-glitch">
-                      {signal}
-                    </li>
-                  ))}
-                </ul>
-
-                <ul className="occult-pulse" aria-label="Occult frame signals">
-                  {occultPulse.map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-
-                <nav className="link-grid" aria-label="Social links">
-                  {socialLinks.map((link, index) => (
-                    <a
-                      key={link.label}
-                      className={`link-card${
-                        possessedLink?.index === index
-                          ? " link-card--possessed"
-                          : ""
-                      }`}
-                      href={link.href}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      <span className="link-card__label">
-                        {possessedLink?.index === index
-                          ? possessedLink.text
-                          : link.label}
-                      </span>
-                      <span className="link-card__meta">
-                        {possessedLink?.index === index
-                          ? "ritual-channel"
-                          : link.meta}
-                      </span>
-                    </a>
-                  ))}
-                </nav>
-              </div>
-            </section>
-
-            <aside
-              className="sigil-panel"
-              aria-label="Sacred geometry illustration"
-            >
-              <ul className="sigil-quotes" aria-label="Occult inscriptions">
-                {sigilQuotes.map((quote) => (
-                  <li key={quote.text} className={quote.position}>
-                    {quote.text}
-                  </li>
-                ))}
-              </ul>
-              <Sigil />
-            </aside>
-
-            <button
-              type="button"
-              className="section-arrow section-arrow--hero-up"
-              onClick={() => scrollToSection("esoteric")}
-              aria-label="Scroll to interests and bio"
-              aria-hidden={activeSection === "esoteric"}
-              tabIndex={activeSection === "esoteric" ? -1 : 0}
-            >
-              <span>Interests / Bio</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 20V6" />
-                <path d="M6 12l6-6 6 6" />
-              </svg>
-            </button>
-
-            <button
-              type="button"
-              className="section-arrow section-arrow--down"
-              onClick={() => scrollToSection("history")}
-              aria-label="Scroll to work history"
-              aria-hidden={activeSection === "history"}
-              tabIndex={activeSection === "history" ? -1 : 0}
-            >
-              <span>Work History</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 4v14" />
-                <path d="M6 12l6 6 6-6" />
-              </svg>
-            </button>
-          </main>
+          <HeroPanel
+            perfLite={perfLite}
+            phaseShiftActive={phaseShiftActive}
+            activeSection={activeSection}
+            onScrollToSection={scrollToSection}
+          />
         </section>
 
         <section
@@ -964,56 +899,7 @@ export default function Home() {
           className="page-section page-section--history"
           aria-label="Work history section"
         >
-          <div className="work-history">
-            <div className="work-history__header">
-              <p className="work-history__eyebrow">Field Record</p>
-              <h2 className="work-history__title">Work History</h2>
-              <p className="work-history__lede">
-                Stations in the craft, from startup crucibles to platform-scale
-                systems.
-              </p>
-            </div>
-
-            <ul className="work-history__list" aria-label="LinkedIn history">
-              {promotionTracks.map((track) => (
-                <li
-                  key={track.company}
-                  className="work-history__item work-history__item--track"
-                >
-                  <p className="work-history__company">{track.company}</p>
-                  <ol
-                    className="work-history__stages"
-                    aria-label={`${track.company} progression`}
-                  >
-                    {track.stages.map((stage) => (
-                      <li
-                        key={`${track.company}-${stage.period}`}
-                        className="work-history__stage"
-                      >
-                        <p className="work-history__period">{stage.period}</p>
-                        <p className="work-history__role">{stage.role}</p>
-                      </li>
-                    ))}
-                  </ol>
-                </li>
-              ))}
-            </ul>
-
-            <div className="section-arrow-row">
-              <button
-                type="button"
-                className="section-arrow section-arrow--up"
-                onClick={() => scrollToSection("hero")}
-                aria-label="Scroll to top section"
-              >
-                <span>Return</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 20V6" />
-                  <path d="M6 12l6-6 6 6" />
-                </svg>
-              </button>
-            </div>
-          </div>
+          <WorkHistoryPanel onScrollToSection={scrollToSection} />
         </section>
 
         <section
@@ -1021,34 +907,7 @@ export default function Home() {
           className="page-section page-section--esoteric"
           aria-label="Esoteric bio section"
         >
-          <div className="esoteric-bio">
-            <p className="esoteric-bio__eyebrow">Inner Chamber</p>
-            <h2 className="esoteric-bio__title">Interests / Bio</h2>
-            <p className="esoteric-bio__lede">
-              Engineering by daylight; by candlelit hours, symbols, rites, and
-              old currents of thought.
-            </p>
-            <ul className="esoteric-bio__list" aria-label="Interests">
-              {bioInterests.map((interest) => (
-                <li key={interest}>{interest}</li>
-              ))}
-            </ul>
-
-            <div className="section-arrow-row">
-              <button
-                type="button"
-                className="section-arrow section-arrow--next"
-                onClick={() => scrollToSection("hero")}
-                aria-label="Scroll down to main section"
-              >
-                <span>Return</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 4v14" />
-                  <path d="M6 12l6 6 6-6" />
-                </svg>
-              </button>
-            </div>
-          </div>
+          <EsotericBioPanel onScrollToSection={scrollToSection} />
         </section>
       </div>
 

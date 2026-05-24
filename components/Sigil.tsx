@@ -69,6 +69,116 @@ type SigilProps = {
   ariaHidden?: boolean;
 };
 
+type TreeOfLifeGlyphProps = {
+  className?: string;
+  idPrefix?: string;
+  ariaHidden?: boolean;
+};
+
+type FlowerOfLifeGlyphProps = {
+  className?: string;
+  idPrefix?: string;
+  ariaHidden?: boolean;
+};
+
+export function FlowerOfLifeGlyph({
+  className,
+  idPrefix = "flower-of-life",
+  ariaHidden = true,
+}: FlowerOfLifeGlyphProps = {}) {
+  const rootClassName = className
+    ? `flower-of-life-glyph ${className}`
+    : "flower-of-life-glyph";
+  const strokeId = `${idPrefix}-stroke`;
+
+  return (
+    <svg
+      viewBox="0 0 800 800"
+      className={rootClassName}
+      role="img"
+      aria-label="Flower of life glyph"
+      aria-hidden={ariaHidden}
+    >
+      <defs>
+        <linearGradient id={strokeId} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#f2e1ab" />
+          <stop offset="50%" stopColor="#c8a24e" />
+          <stop offset="100%" stopColor="#7c5b17" />
+        </linearGradient>
+      </defs>
+
+      <g className="flower-of-life__group" aria-hidden="true">
+        {flowerCenters.map((point, index) => (
+          <circle
+            key={`glyph-flower-${index}`}
+            cx={point.x}
+            cy={point.y}
+            r="64"
+            className="flower-of-life__circle"
+            stroke={`url(#${strokeId})`}
+            style={{ animationDelay: `${-(index * 0.19).toFixed(2)}s` }}
+          />
+        ))}
+      </g>
+    </svg>
+  );
+}
+
+export function TreeOfLifeGlyph({
+  className,
+  idPrefix = "tree-of-life",
+  ariaHidden = true,
+}: TreeOfLifeGlyphProps = {}) {
+  const rootClassName = className
+    ? `tree-of-life-glyph ${className}`
+    : "tree-of-life-glyph";
+  const strokeId = `${idPrefix}-stroke`;
+
+  return (
+    <svg
+      viewBox="0 0 800 800"
+      className={rootClassName}
+      role="img"
+      aria-label="Tree of life glyph"
+      aria-hidden={ariaHidden}
+    >
+      <defs>
+        <linearGradient id={strokeId} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#f2e1ab" />
+          <stop offset="50%" stopColor="#c8a24e" />
+          <stop offset="100%" stopColor="#7c5b17" />
+        </linearGradient>
+      </defs>
+
+      <g className="tree-of-life__group" aria-hidden="true">
+        {treeLinks.map(([from, to], index) => (
+          <line
+            key={`glyph-path-${from}-${to}`}
+            x1={treeNodes[from].x}
+            y1={treeNodes[from].y}
+            x2={treeNodes[to].x}
+            y2={treeNodes[to].y}
+            className="tree-of-life__path"
+            stroke={`url(#${strokeId})`}
+            style={{ animationDelay: `${-(index * 0.23).toFixed(2)}s` }}
+          />
+        ))}
+        {treeNodes.map((node, index) => (
+          <circle
+            key={`glyph-node-${node.name}`}
+            cx={node.x}
+            cy={node.y}
+            r={index === 9 ? 14 : 12}
+            className="tree-of-life__node"
+            stroke={`url(#${strokeId})`}
+            style={{ animationDelay: `${-(index * 0.31).toFixed(2)}s` }}
+          />
+        ))}
+      </g>
+    </svg>
+  );
+}
+
 export function Sigil({
   className,
   idPrefix = "sigil",
