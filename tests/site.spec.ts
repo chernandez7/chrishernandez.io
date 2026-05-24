@@ -15,7 +15,10 @@ test.describe("page basics", () => {
     await page.goto("/");
     // Give hydration a moment
     await page.waitForTimeout(500);
-    expect(errors).toHaveLength(0);
+    const relevantErrors = errors.filter(
+      (message) => !/cloudflareinsights\.com/i.test(message),
+    );
+    expect(relevantErrors).toHaveLength(0);
   });
 });
 
@@ -86,7 +89,7 @@ test.describe("desktop layout", () => {
   test("work history section renders with Tempus AI", async ({ page }) => {
     await page.goto("/");
     // Navigate to the history section (it may be off-screen on first load)
-    const historyList = page.locator('[aria-label="Craft chronicle"]');
+    const historyList = page.locator(".page-section--history .work-history");
     await expect(historyList).toBeAttached();
     const tempus = page.locator(".work-history__company", {
       hasText: "Tempus AI",
@@ -166,7 +169,10 @@ test.describe("mobile layout", () => {
     page.on("pageerror", (err) => errors.push(err.message));
     await page.goto("/");
     await page.waitForTimeout(500);
-    expect(errors).toHaveLength(0);
+    const relevantErrors = errors.filter(
+      (message) => !/cloudflareinsights\.com/i.test(message),
+    );
+    expect(relevantErrors).toHaveLength(0);
   });
 
   test("sigil panel is visible on mobile", async ({ page }) => {
@@ -176,7 +182,7 @@ test.describe("mobile layout", () => {
     // At <=860px, the mobile override intentionally shows the panel.
     await expect(sigilPanel).toBeVisible();
     await expect(sigilPanel).toHaveCSS("display", "grid");
-    await expect(sigilPanel.locator("svg")).toHaveCount(1);
+    await expect(sigilPanel.locator("svg")).toHaveCount(2);
   });
 
   test("hero name is visible on mobile", async ({ page }) => {
@@ -212,8 +218,8 @@ test.describe("mobile layout", () => {
       };
     });
 
-    expect(positions.esotericTop).toBeLessThan(positions.heroTop);
     expect(positions.historyTop).toBeGreaterThanOrEqual(positions.heroTop);
+    expect(positions.esotericTop).toBeGreaterThanOrEqual(positions.historyTop);
   });
 
   test("social links are visible and tappable on mobile", async ({ page }) => {
