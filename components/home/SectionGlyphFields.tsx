@@ -6,7 +6,20 @@ type SectionGlyphFieldsProps = {
   variant: "hero" | "history" | "esoteric";
 };
 
-const glyphKeys = ["a", "b", "c", "d", "e"] as const;
+const glyphKeys = [
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "h",
+  "i",
+  "j",
+  "k",
+  "l",
+] as const;
 
 export function SectionGlyphFields({ variant }: SectionGlyphFieldsProps) {
   return (

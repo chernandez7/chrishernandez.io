@@ -330,6 +330,76 @@ svg {
   animation-delay: -34.1s;
 }
 
+.section-flowerfield--hero .section-flowerfield__glyph--f {
+  top: 38%;
+  left: 5%;
+  --flower-size: clamp(8.2rem, 12.4vw, 13.6rem);
+  --flower-scale: 0.6;
+  opacity: 0.08;
+  animation: flowerFieldDriftB 48s ease-in-out infinite;
+  animation-delay: -7.3s;
+}
+
+.section-flowerfield--hero .section-flowerfield__glyph--g {
+  top: 82%;
+  right: 8%;
+  --flower-size: clamp(7.4rem, 11vw, 12rem);
+  --flower-scale: 0.55;
+  opacity: 0.07;
+  animation: flowerFieldDriftA 55s ease-in-out infinite;
+  animation-delay: -31.6s;
+}
+
+.section-flowerfield--hero .section-flowerfield__glyph--h {
+  top: 26%;
+  right: 16%;
+  --flower-size: clamp(9rem, 13.6vw, 14.8rem);
+  --flower-scale: 0.64;
+  opacity: 0.08;
+  animation: flowerFieldDriftB 43s ease-in-out infinite;
+  animation-delay: -18.7s;
+}
+
+.section-flowerfield--hero .section-flowerfield__glyph--i {
+  top: 80%;
+  left: 26%;
+  --flower-size: clamp(7.2rem, 10.6vw, 11.4rem);
+  --flower-scale: 0.52;
+  opacity: 0.06;
+  animation: flowerFieldDriftA 62s ease-in-out infinite;
+  animation-delay: -44.2s;
+}
+
+.section-flowerfield--hero .section-flowerfield__glyph--j {
+  top: 44%;
+  right: 40%;
+  --flower-size: clamp(8rem, 12vw, 13rem);
+  --flower-scale: 0.58;
+  opacity: 0.07;
+  animation: flowerFieldDriftB 39s ease-in-out infinite;
+  animation-delay: -22.9s;
+}
+
+.section-flowerfield--hero .section-flowerfield__glyph--k {
+  top: 6%;
+  right: 9%;
+  --flower-size: clamp(9.4rem, 14.2vw, 15.4rem);
+  --flower-scale: 0.68;
+  opacity: 0.09;
+  animation: flowerFieldDriftA 46s ease-in-out infinite;
+  animation-delay: -12.4s;
+}
+
+.section-flowerfield--hero .section-flowerfield__glyph--l {
+  top: 72%;
+  right: 36%;
+  --flower-size: clamp(7rem, 10.4vw, 11.2rem);
+  --flower-scale: 0.5;
+  opacity: 0.06;
+  animation: flowerFieldDriftB 67s ease-in-out infinite;
+  animation-delay: -38.5s;
+}
+
 .section-flowerfield--history .section-flowerfield__glyph--a {
   top: 10%;
   left: 30%;
@@ -380,6 +450,76 @@ svg {
   animation-delay: -19.7s;
 }
 
+.section-flowerfield--history .section-flowerfield__glyph--f {
+  top: 46%;
+  right: 22%;
+  --flower-size: clamp(8.6rem, 13vw, 14rem);
+  --flower-scale: 0.62;
+  opacity: 0.07;
+  animation: flowerFieldDriftB 47s ease-in-out infinite;
+  animation-delay: -8.6s;
+}
+
+.section-flowerfield--history .section-flowerfield__glyph--g {
+  top: 84%;
+  right: 4%;
+  --flower-size: clamp(7.6rem, 11.4vw, 12.4rem);
+  --flower-scale: 0.54;
+  opacity: 0.06;
+  animation: flowerFieldDriftA 58s ease-in-out infinite;
+  animation-delay: -26.4s;
+}
+
+.section-flowerfield--history .section-flowerfield__glyph--h {
+  top: 14%;
+  left: 4%;
+  --flower-size: clamp(9.2rem, 14vw, 15.2rem);
+  --flower-scale: 0.66;
+  opacity: 0.08;
+  animation: flowerFieldDriftB 42s ease-in-out infinite;
+  animation-delay: -14.8s;
+}
+
+.section-flowerfield--history .section-flowerfield__glyph--i {
+  top: 56%;
+  left: 18%;
+  --flower-size: clamp(8rem, 11.8vw, 12.8rem);
+  --flower-scale: 0.57;
+  opacity: 0.07;
+  animation: flowerFieldDriftA 51s ease-in-out infinite;
+  animation-delay: -33.7s;
+}
+
+.section-flowerfield--history .section-flowerfield__glyph--j {
+  top: 90%;
+  left: 42%;
+  --flower-size: clamp(7.4rem, 10.8vw, 11.8rem);
+  --flower-scale: 0.52;
+  opacity: 0.06;
+  animation: flowerFieldDriftB 63s ease-in-out infinite;
+  animation-delay: -41.2s;
+}
+
+.section-flowerfield--history .section-flowerfield__glyph--k {
+  top: 32%;
+  right: 36%;
+  --flower-size: clamp(8.4rem, 12.6vw, 13.6rem);
+  --flower-scale: 0.6;
+  opacity: 0.07;
+  animation: flowerFieldDriftA 44s ease-in-out infinite;
+  animation-delay: -19.3s;
+}
+
+.section-flowerfield--history .section-flowerfield__glyph--l {
+  top: 76%;
+  right: 26%;
+  --flower-size: clamp(7.2rem, 10.6vw, 11.4rem);
+  --flower-scale: 0.5;
+  opacity: 0.06;
+  animation: flowerFieldDriftB 55s ease-in-out infinite;
+  animation-delay: -29.8s;
+}
+
 .section-flowerfield--esoteric .section-flowerfield__glyph--a {
   top: 8%;
   left: 4%;
@@ -428,6 +568,76 @@ svg {
   opacity: 0.07;
   animation: flowerFieldDriftB 58s ease-in-out infinite;
   animation-delay: -41.8s;
+}
+
+.section-flowerfield--esoteric .section-flowerfield__glyph--f {
+  top: 42%;
+  right: 3%;
+  --flower-size: clamp(8.6rem, 13.2vw, 14.2rem);
+  --flower-scale: 0.63;
+  opacity: 0.08;
+  animation: flowerFieldDriftA 48s ease-in-out infinite;
+  animation-delay: -9.4s;
+}
+
+.section-flowerfield--esoteric .section-flowerfield__glyph--g {
+  top: 88%;
+  right: 28%;
+  --flower-size: clamp(7.6rem, 11.4vw, 12.4rem);
+  --flower-scale: 0.54;
+  opacity: 0.07;
+  animation: flowerFieldDriftB 55s ease-in-out infinite;
+  animation-delay: -27.6s;
+}
+
+.section-flowerfield--esoteric .section-flowerfield__glyph--h {
+  top: 22%;
+  left: 22%;
+  --flower-size: clamp(9rem, 13.8vw, 14.8rem);
+  --flower-scale: 0.65;
+  opacity: 0.08;
+  animation: flowerFieldDriftA 41s ease-in-out infinite;
+  animation-delay: -15.3s;
+}
+
+.section-flowerfield--esoteric .section-flowerfield__glyph--i {
+  top: 76%;
+  right: 14%;
+  --flower-size: clamp(8.2rem, 12.4vw, 13.4rem);
+  --flower-scale: 0.58;
+  opacity: 0.07;
+  animation: flowerFieldDriftB 62s ease-in-out infinite;
+  animation-delay: -37.8s;
+}
+
+.section-flowerfield--esoteric .section-flowerfield__glyph--j {
+  top: 52%;
+  left: 44%;
+  --flower-size: clamp(7.4rem, 11vw, 12rem);
+  --flower-scale: 0.52;
+  opacity: 0.06;
+  animation: flowerFieldDriftA 57s ease-in-out infinite;
+  animation-delay: -43.1s;
+}
+
+.section-flowerfield--esoteric .section-flowerfield__glyph--k {
+  top: 6%;
+  right: 42%;
+  --flower-size: clamp(8.8rem, 13.4vw, 14.6rem);
+  --flower-scale: 0.64;
+  opacity: 0.08;
+  animation: flowerFieldDriftB 44s ease-in-out infinite;
+  animation-delay: -21.7s;
+}
+
+.section-flowerfield--esoteric .section-flowerfield__glyph--l {
+  top: 86%;
+  left: 8%;
+  --flower-size: clamp(7rem, 10.2vw, 11rem);
+  --flower-scale: 0.49;
+  opacity: 0.06;
+  animation: flowerFieldDriftA 69s ease-in-out infinite;
+  animation-delay: -51.4s;
 }
 
 .flower-of-life__group {
@@ -529,6 +739,76 @@ svg {
   animation-delay: -29.6s;
 }
 
+.section-treefield--hero .section-treefield__glyph--f {
+  top: 48%;
+  right: 4%;
+  --tree-size: clamp(8.2rem, 12.6vw, 13.4rem);
+  --tree-scale: 0.62;
+  opacity: 0.11;
+  animation: treeFieldDriftArchitect 53s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  animation-delay: -9.8s;
+}
+
+.section-treefield--hero .section-treefield__glyph--g {
+  top: 84%;
+  left: 36%;
+  --tree-size: clamp(7.6rem, 11.4vw, 12.2rem);
+  --tree-scale: 0.56;
+  opacity: 0.09;
+  animation: treeFieldDriftAstral 44s ease-in-out infinite;
+  animation-delay: -22.4s;
+}
+
+.section-treefield--hero .section-treefield__glyph--h {
+  top: 4%;
+  right: 34%;
+  --tree-size: clamp(9.2rem, 14vw, 15rem);
+  --tree-scale: 0.7;
+  opacity: 0.13;
+  animation: treeFieldDriftArchitect 38s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  animation-delay: -14.6s;
+}
+
+.section-treefield--hero .section-treefield__glyph--i {
+  top: 40%;
+  left: 32%;
+  --tree-size: clamp(8.6rem, 13.2vw, 14rem);
+  --tree-scale: 0.66;
+  opacity: 0.11;
+  animation: treeFieldDriftAstral 61s ease-in-out infinite;
+  animation-delay: -34.9s;
+}
+
+.section-treefield--hero .section-treefield__glyph--j {
+  top: 90%;
+  right: 18%;
+  --tree-size: clamp(7.4rem, 11vw, 11.8rem);
+  --tree-scale: 0.53;
+  opacity: 0.09;
+  animation: treeFieldDriftArchitect 47s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  animation-delay: -28.3s;
+}
+
+.section-treefield--hero .section-treefield__glyph--k {
+  top: 22%;
+  right: 24%;
+  --tree-size: clamp(9.4rem, 14.4vw, 15.4rem);
+  --tree-scale: 0.72;
+  opacity: 0.12;
+  animation: treeFieldDriftAstral 55s ease-in-out infinite;
+  animation-delay: -11.7s;
+}
+
+.section-treefield--hero .section-treefield__glyph--l {
+  top: 58%;
+  left: 3%;
+  --tree-size: clamp(8rem, 12.2vw, 13rem);
+  --tree-scale: 0.59;
+  opacity: 0.1;
+  animation: treeFieldDriftArchitect 68s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  animation-delay: -41.5s;
+}
+
 .section-treefield--history .section-treefield__glyph--b {
   top: 52%;
   right: 3%;
@@ -567,6 +847,76 @@ svg {
   opacity: 0.14;
   animation: treeFieldDriftArchitect 52s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
   animation-delay: -12.6s;
+}
+
+.section-treefield--history .section-treefield__glyph--f {
+  top: 36%;
+  left: 26%;
+  --tree-size: clamp(9rem, 14vw, 14.8rem);
+  --tree-scale: 0.72;
+  opacity: 0.15;
+  animation: treeFieldDriftArchitect 44s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  animation-delay: -7.2s;
+}
+
+.section-treefield--history .section-treefield__glyph--g {
+  top: 80%;
+  right: 30%;
+  --tree-size: clamp(8.4rem, 12.6vw, 13.4rem);
+  --tree-scale: 0.64;
+  opacity: 0.13;
+  animation: treeFieldDriftArchitect 51s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  animation-delay: -23.6s;
+}
+
+.section-treefield--history .section-treefield__glyph--h {
+  top: 62%;
+  left: 8%;
+  --tree-size: clamp(9.6rem, 15.2vw, 16.2rem);
+  --tree-scale: 0.78;
+  opacity: 0.17;
+  animation: treeFieldDriftArchitect 38s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  animation-delay: -16.4s;
+}
+
+.section-treefield--history .section-treefield__glyph--i {
+  top: 12%;
+  left: 38%;
+  --tree-size: clamp(8.8rem, 13.4vw, 14.2rem);
+  --tree-scale: 0.68;
+  opacity: 0.14;
+  animation: treeFieldDriftArchitect 57s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  animation-delay: -31.8s;
+}
+
+.section-treefield--history .section-treefield__glyph--j {
+  top: 90%;
+  left: 4%;
+  --tree-size: clamp(7.8rem, 11.6vw, 12.4rem);
+  --tree-scale: 0.58;
+  opacity: 0.11;
+  animation: treeFieldDriftArchitect 63s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  animation-delay: -42.3s;
+}
+
+.section-treefield--history .section-treefield__glyph--k {
+  top: 44%;
+  right: 6%;
+  --tree-size: clamp(9.2rem, 14.2vw, 15rem);
+  --tree-scale: 0.74;
+  opacity: 0.16;
+  animation: treeFieldDriftArchitect 46s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  animation-delay: -9.7s;
+}
+
+.section-treefield--history .section-treefield__glyph--l {
+  top: 18%;
+  left: 18%;
+  --tree-size: clamp(8rem, 12vw, 12.8rem);
+  --tree-scale: 0.6;
+  opacity: 0.12;
+  animation: treeFieldDriftArchitect 54s cubic-bezier(0.2, 0.55, 0.25, 1) infinite;
+  animation-delay: -27.1s;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--a {
@@ -617,6 +967,76 @@ svg {
   opacity: 0.12;
   animation: treeFieldDriftAstral 48s ease-in-out infinite;
   animation-delay: -21.9s;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--f {
+  top: 40%;
+  right: 28%;
+  --tree-size: clamp(8.8rem, 13.6vw, 14.4rem);
+  --tree-scale: 0.7;
+  opacity: 0.14;
+  animation: treeFieldDriftAstral 44s ease-in-out infinite;
+  animation-delay: -8.3s;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--g {
+  top: 78%;
+  left: 28%;
+  --tree-size: clamp(7.8rem, 11.8vw, 12.6rem);
+  --tree-scale: 0.58;
+  opacity: 0.11;
+  animation: treeFieldDriftAstral 53s ease-in-out infinite;
+  animation-delay: -24.7s;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--h {
+  top: 26%;
+  right: 6%;
+  --tree-size: clamp(9.4rem, 14.6vw, 15.6rem);
+  --tree-scale: 0.76;
+  opacity: 0.16;
+  animation: treeFieldDriftAstral 36s ease-in-out infinite;
+  animation-delay: -13.5s;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--i {
+  top: 54%;
+  left: 36%;
+  --tree-size: clamp(8.4rem, 12.8vw, 13.6rem);
+  --tree-scale: 0.64;
+  opacity: 0.12;
+  animation: treeFieldDriftAstral 61s ease-in-out infinite;
+  animation-delay: -38.2s;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--j {
+  top: 6%;
+  left: 44%;
+  --tree-size: clamp(8.6rem, 13.2vw, 14rem);
+  --tree-scale: 0.66;
+  opacity: 0.13;
+  animation: treeFieldDriftAstral 47s ease-in-out infinite;
+  animation-delay: -29.4s;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--k {
+  top: 86%;
+  right: 4%;
+  --tree-size: clamp(7.4rem, 10.8vw, 11.6rem);
+  --tree-scale: 0.54;
+  opacity: 0.1;
+  animation: treeFieldDriftAstral 68s ease-in-out infinite;
+  animation-delay: -46.8s;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--l {
+  top: 32%;
+  left: 8%;
+  --tree-size: clamp(9rem, 13.8vw, 14.6rem);
+  --tree-scale: 0.68;
+  opacity: 0.13;
+  animation: treeFieldDriftAstral 39s ease-in-out infinite;
+  animation-delay: -17.9s;
 }
 
 .tree-of-life__group {
@@ -681,6 +1101,90 @@ svg {
 
 .section-treefield--esoteric .section-treefield__glyph--e .tree-of-life__group {
   animation: treeGlyphSpinCw 103s linear infinite;
+}
+
+.section-treefield--hero .section-treefield__glyph--f .tree-of-life__group {
+  animation: treeGlyphSpinCcw 84s linear infinite;
+}
+
+.section-treefield--hero .section-treefield__glyph--g .tree-of-life__group {
+  animation: treeGlyphSpinPulseCw 72s ease-in-out infinite;
+}
+
+.section-treefield--hero .section-treefield__glyph--h .tree-of-life__group {
+  animation: treeGlyphSpinLiltCw 66s ease-in-out infinite;
+}
+
+.section-treefield--hero .section-treefield__glyph--i .tree-of-life__group {
+  animation: treeGlyphSpinCw 91s linear infinite;
+}
+
+.section-treefield--hero .section-treefield__glyph--j .tree-of-life__group {
+  animation: treeGlyphSpinPulseCcw 78s ease-in-out infinite;
+}
+
+.section-treefield--hero .section-treefield__glyph--k .tree-of-life__group {
+  animation: treeGlyphSpinCcw 55s linear infinite;
+}
+
+.section-treefield--hero .section-treefield__glyph--l .tree-of-life__group {
+  animation: treeGlyphSpinLiltCw 97s ease-in-out infinite;
+}
+
+.section-treefield--history .section-treefield__glyph--f .tree-of-life__group {
+  animation: treeGlyphSpinLiltCw 74s ease-in-out infinite;
+}
+
+.section-treefield--history .section-treefield__glyph--g .tree-of-life__group {
+  animation: treeGlyphSpinCw 88s linear infinite;
+}
+
+.section-treefield--history .section-treefield__glyph--h .tree-of-life__group {
+  animation: treeGlyphSpinPulseCcw 63s ease-in-out infinite;
+}
+
+.section-treefield--history .section-treefield__glyph--i .tree-of-life__group {
+  animation: treeGlyphSpinCcw 82s linear infinite;
+}
+
+.section-treefield--history .section-treefield__glyph--j .tree-of-life__group {
+  animation: treeGlyphSpinPulseCw 97s ease-in-out infinite;
+}
+
+.section-treefield--history .section-treefield__glyph--k .tree-of-life__group {
+  animation: treeGlyphSpinCw 71s linear infinite;
+}
+
+.section-treefield--history .section-treefield__glyph--l .tree-of-life__group {
+  animation: treeGlyphSpinLiltCw 93s ease-in-out infinite;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--f .tree-of-life__group {
+  animation: treeGlyphSpinCw 86s linear infinite;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--g .tree-of-life__group {
+  animation: treeGlyphSpinPulseCcw 72s ease-in-out infinite;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--h .tree-of-life__group {
+  animation: treeGlyphSpinLiltCw 58s ease-in-out infinite;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--i .tree-of-life__group {
+  animation: treeGlyphSpinCw 94s linear infinite;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--j .tree-of-life__group {
+  animation: treeGlyphSpinCcw 67s linear infinite;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--k .tree-of-life__group {
+  animation: treeGlyphSpinPulseCw 81s ease-in-out infinite;
+}
+
+.section-treefield--esoteric .section-treefield__glyph--l .tree-of-life__group {
+  animation: treeGlyphSpinLiltCw 107s ease-in-out infinite;
 }
 
 .tree-of-life__path,
