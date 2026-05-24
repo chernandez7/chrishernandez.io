@@ -86,7 +86,7 @@ test.describe("desktop layout", () => {
   test("work history section renders with Tempus AI", async ({ page }) => {
     await page.goto("/");
     // Navigate to the history section (it may be off-screen on first load)
-    const historyList = page.locator('[aria-label="LinkedIn history"]');
+    const historyList = page.locator('[aria-label="Craft chronicle"]');
     await expect(historyList).toBeAttached();
     const tempus = page.locator(".work-history__company", {
       hasText: "Tempus AI",
@@ -134,12 +134,14 @@ test.describe("mobile layout", () => {
     expect(errors).toHaveLength(0);
   });
 
-  test("sigil panel is hidden on mobile", async ({ page }) => {
+  test("sigil panel is visible on mobile", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
     const sigilPanel = page.locator(".sigil-panel");
-    // CSS applies display:none via media query at ≤1100px
-    await expect(sigilPanel).toHaveCSS("display", "none");
+    // At <=860px, the mobile override intentionally shows the panel.
+    await expect(sigilPanel).toBeVisible();
+    await expect(sigilPanel).toHaveCSS("display", "grid");
+    await expect(sigilPanel.locator("svg")).toHaveCount(1);
   });
 
   test("hero name is visible on mobile", async ({ page }) => {
