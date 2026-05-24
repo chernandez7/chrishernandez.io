@@ -54,16 +54,25 @@ npm run build
 ```
 app/
   layout.tsx      — root layout, fonts, metadata, analytics script
-  page.tsx        — the entire site (only route)
+  page.tsx        — the entire site (only route), section stack + glitch/fault runtime
 
 components/
-  Sigil.tsx       — animated SVG sacred geometry sigil, all layers
+  Sigil.tsx       — animated SVG sacred geometry sigil + floating glyph primitives
+  home/
+    HeroPanel.tsx
+    WorkHistoryPanel.tsx
+    EsotericBioPanel.tsx
+    SectionGlyphFields.tsx
 
 lib/
+  home-content.ts — section copy, quotes, equations, timeline data, skill pills
   links.ts        — social link data (SocialLink type)
 
 styles/
-  globals.css     — ALL styles (~1600 lines), no modules
+  globals.css     — ALL styles (large, flat), no modules
+
+tests/
+  site.spec.ts    — Playwright smoke/layout/accessibility checks
 ```
 
 ### No other routes exist. The whole site is `app/page.tsx`.
@@ -72,10 +81,13 @@ styles/
 
 ## Architecture Notes
 
-- **Layout**: 2-column CSS grid (hero left, sigil-panel right). At ≤1100px collapses to 1 col, sigil hidden.
-- **Overflow**: `.page` is `height: 100dvh; overflow: clip` on desktop — intentionally no scroll. Mobile gets `height: auto`.
+- **Page structure**: `app/page.tsx` hosts a multi-section `div.page-stack` with `hero`, `history`, `esoteric` sections.
+- **Section behavior**: Desktop uses guided section navigation; mobile allows continuous vertical scroll.
+- **Hero layout**: 2-column grid (hero + sigil-panel) when hero is active.
 - **Sigil**: The `<Sigil />` component is SVG-only, no JS animation — all motion is pure CSS keyframes.
+- **Sigil panel composition**: There are now two SVGs in `.sigil-panel` (`<PhilosopherStoneGlyph />` overlay + `<Sigil />`).
 - **Glitch effects**: Page-wide overlays (`page__grain`, `page__scanlines`, `page__glitch`, `page__sweep`) are fixed divs. The `.page` itself has a subtle `worldShift` skew animation.
+- **Fault mode**: A periodic runtime interruption overlays a system-fault screen and temporarily scrambles text nodes.
 - **Corner sanctuary**: Fixed bottom-right `div.corner-sanctuary` (20rem × 20rem hover zone). Contains a seraphim SVG that appears on hover + the masonic square-and-compass `<a>` mark.
 
 ---
@@ -86,7 +98,7 @@ styles/
 - **Color family**: dark occult — near-black `#060309`, deep blood crimsons, ritual purples, gold/amber. **No blues.**
 - `--serif` / `--mono` are CSS custom properties pointing to font variables
 - Animations use `steps(1)` for glitch snaps, `ease-in-out` for organic motion
-- Prime-number durations on sigil metashapes (17s / 23s / 31s / 43s) so they never sync
+- Prefer subtle symbolic numerics in copy/text over performance-costly timing gimmicks
 - `prefers-reduced-motion` block disables all glitch/animation at bottom of CSS file
 
 ---
@@ -109,7 +121,10 @@ See `VIBE.md` for the full aesthetic guide. Short version:
 
 - `transform-box: fill-box; transform-origin: center` must be set on SVG elements that rotate — otherwise rotation origin is wrong
 - The flower-of-life and rays use inline `style={{ animationDelay }}` for stagger — don't remove these
-- `worldShift` on `.page` uses `skewX`/`skewY` — this is intentional and subtle. It is the "psychedelic" feel.
+- The floating glyph fields intentionally use occasional fill/glitch pulses from palette colors; keep subtle
+- Philosopher stone geometry is strict: keep the canonical upright shape and prevent square bleed outside triangle while moving
+- `worldShift` on `.page` uses `skewX`/`skewY` — this is intentional and subtle. It is the "psychedelic" feel
 - The `corner-sanctuary` hover zone is larger than the visible mark — this is intentional so users discover the seraphim effect when approaching the corner
 - MILodges is accessible via the corner mark SVG link only, not the link grid
 - `link-card:focus-visible` and `sigil-panel:focus-visible` share an outline rule — keep them together
+- Pre-push hook runs Playwright; keep `tests/site.spec.ts` aligned with DOM reality (especially mobile sigil SVG count and section locators)

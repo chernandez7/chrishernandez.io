@@ -106,14 +106,17 @@ Never use sans-serif. The combination of old-style serif + monospace is intentio
 
 ## Layout
 
-Two columns, full viewport height, no scroll on desktop:
+Hero section is two columns, but the page itself is now a stacked multi-section experience:
 
-- **Left (1.05fr)**: Hero section — name, role, motto, signals, links
-- **Right (0.95fr)**: Sigil (dominant) + experience timeline
+- **Hero section** (2-column):
+- Left: name, role, motto, signals, links
+- Right: sigil panel with sacred overlays and equations
+- **History section**: work timeline + education
+- **Esoteric section**: off-hours interests and symbolic notes
 
 The sigil is **unboxed** — no card, no border, no background. It exists as raw light.
 
-On ≤1100px: single column, sigil hidden. The site works as pure text/links on mobile.
+On mobile, vertical scrolling across sections is intentional.
 
 ---
 
@@ -124,6 +127,7 @@ The sigil is the centerpiece. It should feel:
 - **Overwhelming** — too much to fully parse at once
 - **Alive** — never still, never the same twice
 - **Sacred** — flower of life, Star of David, pentagram, orbiting rings, rays
+- **Layered** — canonical sigil plus philosopher-stone overlay and equation ring
 
 Animation principles:
 
@@ -136,6 +140,12 @@ Animation principles:
 - It should feel **alive, breathing, transforming** — like a living mandala
 
 Do not reduce the sigil's animation. Do not box it in.
+
+Philosopher stone constraints:
+
+- Keep the canonical upright construction intact
+- Motion is allowed, but geometry should remain coherent at all times
+- Avoid visual bleed where inner square escapes triangle bounds
 
 ---
 
@@ -161,7 +171,15 @@ On individual elements:
 - Link rows — `cardFlicker` (border color flash, red then violet, then recovers)
 - Experience rows — `rowJitter` (staggered translate)
 
+Runtime interruption layer:
+
+- The page may occasionally enter a short-lived "fault/interruption" state
+- During this state, a centered system-fault panel appears and text visibly corrupts then recovers
+- Outside fault mode, lighter passive text substitutions can still happen at low frequency
+
 The glitch effects should feel **sporadic and authentic** — not regular enough to feel like a loop, irregular enough to feel like signal interference.
+
+Important: prefer applying number motifs in text content and symbolic output, not expensive global timing changes.
 
 ---
 
@@ -219,7 +237,7 @@ This is the hidden sacred detail. It rewards curiosity.
 - Do not make it "clean" or "minimal" in a conventional way
 - Do not explain the symbolism in the UI — let it speak for itself
 - Do not add more content sections — the existing three (topline, mast, signals+links) are enough
-- Do not scroll-enable the desktop layout
+- Do not remove section stacking behavior or mobile continuous scroll
 
 ---
 
