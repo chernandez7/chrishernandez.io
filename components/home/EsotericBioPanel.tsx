@@ -14,12 +14,12 @@ function EsotericBioPanelImpl({ onScrollToSection }: EsotericBioPanelProps) {
       <SectionGlyphFields variant="esoteric" />
       <div className="esoteric-bio">
         <p className="esoteric-bio__eyebrow">Inner Chamber</p>
-        <h2 className="esoteric-bio__title">Interests / Bio</h2>
+        <h2 className="esoteric-bio__title">Arcane Dossier</h2>
         <p className="esoteric-bio__lede">
           Engineering by daylight; by candlelit hours, symbols, rites, and old
           currents of thought.
         </p>
-        <ul className="esoteric-bio__list" aria-label="Interests">
+        <ul className="esoteric-bio__list" aria-label="Arcane interests">
           {bioInterests.map((interest) => (
             <li key={interest}>{interest}</li>
           ))}

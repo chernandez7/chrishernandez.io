@@ -15,14 +15,14 @@ function WorkHistoryPanelImpl({ onScrollToSection }: WorkHistoryPanelProps) {
       <div className="work-history">
         <div className="work-history__header">
           <p className="work-history__eyebrow">Field Record</p>
-          <h2 className="work-history__title">Work History</h2>
+          <h2 className="work-history__title">Craft Chronicle</h2>
           <p className="work-history__lede">
             Stations in the craft, from startup crucibles to platform-scale
             systems.
           </p>
         </div>
 
-        <ul className="work-history__list" aria-label="LinkedIn history">
+        <ul className="work-history__list" aria-label="Craft chronicle">
           {promotionTracks.map((track) => (
             <li
               key={track.company}

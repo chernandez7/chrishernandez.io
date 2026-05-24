@@ -100,6 +100,11 @@ svg {
   scroll-snap-stop: always;
 }
 
+.page-section--hero {
+  content-visibility: auto;
+  contain-intrinsic-size: 100dvh;
+}
+
 .page-section--history,
 .page-section--esoteric {
   content-visibility: auto;
@@ -249,6 +254,7 @@ svg {
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
+  contain: layout paint;
 }
 
 .section-treefield--hero {
@@ -261,6 +267,7 @@ svg {
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
+  contain: layout paint;
 }
 
 .section-flowerfield--hero {
@@ -270,14 +277,15 @@ svg {
 .section-flowerfield__glyph {
   position: absolute;
   --flower-size: clamp(11rem, 18vw, 21rem);
+  --flower-prominence: 1.22;
   --flower-scale: 1;
   width: var(--flower-size);
   height: auto;
-  opacity: 0.11;
+  opacity: 0.14;
   mix-blend-mode: screen;
   filter:
-    drop-shadow(0 0 9px rgba(223, 186, 122, 0.22))
-    drop-shadow(0 0 28px rgba(110, 8, 28, 0.18));
+    drop-shadow(0 0 14px rgba(223, 186, 122, 0.34))
+    drop-shadow(0 0 38px rgba(110, 8, 28, 0.24));
 }
 
 .section-flowerfield--hero .section-flowerfield__glyph--a {
@@ -659,8 +667,8 @@ svg {
 
 .flower-of-life__circle {
   fill: none;
-  stroke-width: 5.4;
-  opacity: 0.48;
+  stroke-width: 6.4;
+  opacity: 0.72;
   transform-box: fill-box;
   transform-origin: center;
   animation: flowerFieldPulse 13s ease-in-out infinite;
@@ -668,15 +676,16 @@ svg {
 
 .section-treefield__glyph {
   position: absolute;
+  --tree-prominence: 1.18;
   --tree-scale: 1;
   --tree-size: clamp(10rem, 18vw, 19rem);
   width: var(--tree-size);
   height: auto;
-  opacity: 0.22;
+  opacity: 0.3;
   mix-blend-mode: screen;
   filter:
-    drop-shadow(0 0 18px rgba(223, 186, 122, 0.34))
-    drop-shadow(0 0 54px rgba(110, 8, 28, 0.22));
+    drop-shadow(0 0 24px rgba(223, 186, 122, 0.46))
+    drop-shadow(0 0 64px rgba(110, 8, 28, 0.3));
 }
 
 .section-treefield--history .section-treefield__glyph--a {
@@ -1197,16 +1206,16 @@ svg {
 }
 
 .tree-of-life__path {
-  stroke-width: 6.2;
+  stroke-width: 7.2;
   stroke-dasharray: 8 16;
-  opacity: 0.52;
+  opacity: 0.7;
   animation: treeFieldPathPulse 10.4s ease-in-out infinite;
 }
 
 .tree-of-life__node {
-  stroke-width: 7;
-  fill: rgba(241, 214, 140, 0.14);
-  opacity: 0.66;
+  stroke-width: 8.2;
+  fill: rgba(241, 214, 140, 0.22);
+  opacity: 0.84;
   animation: treeFieldNodePulse 8.1s ease-in-out infinite;
 }
 
@@ -1616,7 +1625,6 @@ svg {
   overflow: visible;
   z-index: 1;
   contain: paint;
-  will-change: transform, opacity;
   transform-origin: 100% 100%;
   transform:
     translate(
@@ -1624,6 +1632,11 @@ svg {
       calc(var(--sanctuary-y) * -18px)
     )
     rotate(calc(var(--mouse-x) * 2.1deg));
+}
+
+.corner-sanctuary--visible .corner-rays,
+.corner-sanctuary:hover .corner-rays {
+  will-change: transform, opacity;
 }
 
 .corner-sanctuary:hover .corner-rays {
@@ -1859,6 +1872,7 @@ svg {
   position: fixed;
   inset: 0;
   pointer-events: none;
+  contain: paint;
 }
 
 .alchemy-mouse-trail {
@@ -1867,6 +1881,7 @@ svg {
   z-index: 10;
   pointer-events: none;
   overflow: hidden;
+  contain: paint;
 }
 
 .alchemy-mouse-trail__glyph {
@@ -1882,7 +1897,6 @@ svg {
     0 0 16px rgba(110, 8, 28, 0.42);
   transform: translate(-50%, -50%);
   opacity: 0;
-  will-change: transform, opacity;
   animation: alchemyMouseEmit var(--glyph-duration, 1100ms) ease-out forwards;
 }
 
@@ -1907,7 +1921,7 @@ svg {
   background:
     radial-gradient(circle at 72% 68%, rgba(223, 186, 122, 0.08), transparent 34%),
     radial-gradient(circle at 20% 34%, rgba(110, 8, 28, 0.06), transparent 42%);
-  animation: cadenceReturn 32s steps(1, end) infinite;
+  animation: none;
 }
 
 .page__ashlar {
@@ -1957,11 +1971,11 @@ svg {
 }
 
 .acacia__fractal--left {
-  animation-delay: -3s;
+  animation-delay: 0s;
 }
 
 .acacia__fractal--center {
-  animation-delay: -7s;
+  animation-delay: 0s;
 }
 
 .acacia__fractal--right {
@@ -1994,7 +2008,7 @@ svg {
 }
 
 .acacia__branch:nth-of-type(even) {
-  animation-delay: 0s, -5.1s;
+  animation-delay: 0s, 0s;
 }
 
 .acacia__branch--trunk {
@@ -2155,7 +2169,7 @@ svg {
 }
 
 .glitch-flicker {
-  animation: textFlicker 5s steps(1) infinite;
+  animation: none;
 }
 
 .title {
@@ -2173,7 +2187,7 @@ svg {
 .glitch-title {
   position: relative;
   isolation: isolate;
-  animation: titleShift 3s steps(1, end) infinite;
+  animation: none;
 }
 
 .glitch-title::before,
@@ -2290,12 +2304,12 @@ svg {
 }
 
 .occult-pulse li:nth-child(2) { animation-delay: -2.3s; }
-.occult-pulse li:nth-child(3) { animation-delay: -5.2s; }
-.occult-pulse li:nth-child(4) { animation-delay: -7.1s; }
+.occult-pulse li:nth-child(3) { animation-delay: 0s; }
+.occult-pulse li:nth-child(4) { animation-delay: 0s; }
 
 .signal-glitch:nth-child(1) { animation: chipJitter 6.3s steps(1) infinite; }
 .signal-glitch:nth-child(2) { animation: chipJitter 8.1s steps(1) infinite; animation-delay: -2.4s; }
-.signal-glitch:nth-child(3) { animation: chipJitter 7.7s steps(1) infinite; animation-delay: -5.1s; }
+.signal-glitch:nth-child(3) { animation: chipJitter 7.7s steps(1) infinite; animation-delay: 0s; }
 .signal-glitch:nth-child(4) { animation: chipJitter 9.2s steps(1) infinite; animation-delay: -1.8s; }
 
 .link-grid {
@@ -3329,26 +3343,26 @@ svg {
 @keyframes treeFieldDriftArchitect {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) rotate(0deg) scale(var(--tree-scale));
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(calc(var(--tree-scale) * var(--tree-prominence)));
   }
 
   50% {
-    transform: translate3d(0.35rem, -0.3rem, 0) rotate(1.8deg) scale(calc(var(--tree-scale) * 1.015));
+    transform: translate3d(0.35rem, -0.3rem, 0) rotate(1.8deg) scale(calc(var(--tree-scale) * var(--tree-prominence) * 1.015));
   }
 }
 
 @keyframes treeFieldDriftAstral {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) rotate(0deg) scale(var(--tree-scale));
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(calc(var(--tree-scale) * var(--tree-prominence)));
   }
 
   34% {
-    transform: translate3d(0.6rem, -0.7rem, 0) rotate(3.2deg) scale(calc(var(--tree-scale) * 1.03));
+    transform: translate3d(0.6rem, -0.7rem, 0) rotate(3.2deg) scale(calc(var(--tree-scale) * var(--tree-prominence) * 1.03));
   }
 
   68% {
-    transform: translate3d(-0.5rem, 0.35rem, 0) rotate(-2.4deg) scale(calc(var(--tree-scale) * 0.98));
+    transform: translate3d(-0.5rem, 0.35rem, 0) rotate(-2.4deg) scale(calc(var(--tree-scale) * var(--tree-prominence) * 0.98));
   }
 }
 
@@ -3412,48 +3426,48 @@ svg {
 @keyframes treeFieldPathPulse {
   0%,
   100% {
-    opacity: 0.28;
+    opacity: 0.44;
   }
 
   50% {
-    opacity: 0.56;
+    opacity: 0.82;
   }
 }
 
 @keyframes treeFieldNodePulse {
   0%,
   100% {
-    opacity: 0.36;
+    opacity: 0.5;
   }
 
   50% {
-    opacity: 0.72;
+    opacity: 0.94;
   }
 }
 
 @keyframes flowerFieldDriftA {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) scale(var(--flower-scale));
+    transform: translate3d(0, 0, 0) scale(calc(var(--flower-scale) * var(--flower-prominence)));
   }
 
   50% {
-    transform: translate3d(0.5rem, -0.45rem, 0) scale(calc(var(--flower-scale) * 1.02));
+    transform: translate3d(0.5rem, -0.45rem, 0) scale(calc(var(--flower-scale) * var(--flower-prominence) * 1.02));
   }
 }
 
 @keyframes flowerFieldDriftB {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) scale(var(--flower-scale));
+    transform: translate3d(0, 0, 0) scale(calc(var(--flower-scale) * var(--flower-prominence)));
   }
 
   35% {
-    transform: translate3d(-0.42rem, -0.3rem, 0) scale(calc(var(--flower-scale) * 0.985));
+    transform: translate3d(-0.42rem, -0.3rem, 0) scale(calc(var(--flower-scale) * var(--flower-prominence) * 0.985));
   }
 
   70% {
-    transform: translate3d(0.55rem, 0.32rem, 0) scale(calc(var(--flower-scale) * 1.03));
+    transform: translate3d(0.55rem, 0.32rem, 0) scale(calc(var(--flower-scale) * var(--flower-prominence) * 1.03));
   }
 }
 
@@ -3470,11 +3484,11 @@ svg {
 @keyframes flowerFieldPulse {
   0%,
   100% {
-    opacity: 0.24;
+    opacity: 0.42;
   }
 
   50% {
-    opacity: 0.56;
+    opacity: 0.86;
   }
 }
 
@@ -4267,8 +4281,10 @@ svg {
 .intro-screensaver__sigil-art .sigil__tick,
 .intro-screensaver__sigil-art .sigil__enochian,
 .intro-screensaver__sigil-art .sigil__inscription,
+.intro-screensaver__sigil-art .sigil__axiom,
+.intro-screensaver__sigil-art .sigil__masonic-glyph,
 .intro-screensaver__sigil-art .signal-glitch {
-  animation-duration: 12s;
+  animation: none !important;
 }
 
 @keyframes ssBreath {

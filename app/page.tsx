@@ -74,7 +74,9 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
         }
 
         const now = performance.now();
-        const nextGlyphs = activeGlyphs.filter((glyph) => glyph.expiresAt > now);
+        const nextGlyphs = activeGlyphs.filter(
+          (glyph) => glyph.expiresAt > now,
+        );
         if (nextGlyphs.length !== activeGlyphs.length) {
           activeGlyphs = nextGlyphs;
           syncGlyphs();
@@ -116,12 +118,12 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
             ],
           x,
           y,
-          size: 18 + Math.random() * 14,
+          size: 24 + Math.random() * 18,
           driftX: Math.cos(angle) * driftMag,
           driftY: Math.sin(angle) * driftMag,
           rotate: -40 + Math.random() * 160,
           durationMs,
-          opacity: 0.54 + Math.random() * 0.34,
+          opacity: 0.72 + Math.random() * 0.24,
           expiresAt: createdAt + durationMs + 56,
         };
 
@@ -953,7 +955,7 @@ export default function Home() {
         <section
           ref={historySectionRef}
           className="page-section page-section--history"
-          aria-label="Work history section"
+          aria-label="Craft chronicle section"
         >
           <WorkHistoryPanel onScrollToSection={scrollToSection} />
         </section>
@@ -961,7 +963,7 @@ export default function Home() {
         <section
           ref={esotericSectionRef}
           className="page-section page-section--esoteric"
-          aria-label="Esoteric bio section"
+          aria-label="Arcane dossier section"
         >
           <EsotericBioPanel onScrollToSection={scrollToSection} />
         </section>
