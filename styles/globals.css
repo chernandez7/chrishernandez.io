@@ -124,6 +124,29 @@ svg {
   isolation: isolate;
 }
 
+.perf-hud {
+  position: fixed;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 40;
+  display: inline-flex;
+  gap: 0.45rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid rgba(223, 186, 122, 0.26);
+  border-radius: 999px;
+  background: rgba(6, 2, 14, 0.82);
+  color: rgba(241, 214, 140, 0.92);
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.perf-hud__metric {
+  white-space: nowrap;
+}
+
 .section-arrow {
   position: absolute;
   left: 50%;
@@ -271,16 +294,12 @@ svg {
 
 .section-flowerfield__glyph {
   position: absolute;
-  --flower-size: clamp(11rem, 18vw, 21rem);
+  --flower-size: clamp(14rem, 24vw, 28rem);
   --flower-prominence: 1.22;
   --flower-scale: 1;
   width: var(--flower-size);
   height: auto;
-  opacity: 0.14;
-  mix-blend-mode: screen;
-  filter:
-    drop-shadow(0 0 14px rgba(223, 186, 122, 0.34))
-    drop-shadow(0 0 38px rgba(110, 8, 28, 0.24));
+  opacity: 0.18;
 }
 
 .section-flowerfield--hero .section-flowerfield__glyph--a {
@@ -645,7 +664,6 @@ svg {
 
 .flower-of-life__group {
   transform-origin: 400px 400px;
-  animation: flowerFieldSpin 122s linear infinite;
 }
 
 .section-flowerfield--hero .flower-of-life__group {
@@ -666,21 +684,16 @@ svg {
   opacity: 0.72;
   transform-box: fill-box;
   transform-origin: center;
-  animation: flowerFieldPulse 13s ease-in-out infinite;
 }
 
 .section-treefield__glyph {
   position: absolute;
   --tree-prominence: 1.18;
   --tree-scale: 1;
-  --tree-size: clamp(10rem, 18vw, 19rem);
+  --tree-size: clamp(13rem, 22vw, 24rem);
   width: var(--tree-size);
   height: auto;
-  opacity: 0.3;
-  mix-blend-mode: screen;
-  filter:
-    drop-shadow(0 0 24px rgba(223, 186, 122, 0.46))
-    drop-shadow(0 0 64px rgba(110, 8, 28, 0.3));
+  opacity: 0.34;
 }
 
 .section-treefield--history .section-treefield__glyph--a {
@@ -1048,147 +1061,111 @@ svg {
 }
 
 .section-treefield--history .section-treefield__glyph--a .tree-of-life__group {
-  animation: treeGlyphSpinCw 67s linear infinite;
 }
 
 .section-treefield--hero .section-treefield__glyph--a .tree-of-life__group {
-  animation: treeGlyphSpinPulseCcw 58s ease-in-out infinite;
 }
 
 .section-treefield--hero .section-treefield__glyph--b .tree-of-life__group {
-  animation: treeGlyphSpinCw 88s linear infinite;
 }
 
 .section-treefield--hero .section-treefield__glyph--c .tree-of-life__group {
-  animation: treeGlyphSpinLiltCw 63s ease-in-out infinite;
 }
 
 .section-treefield--hero .section-treefield__glyph--d .tree-of-life__group {
-  animation: treeGlyphSpinCcw 95s linear infinite;
 }
 
 .section-treefield--hero .section-treefield__glyph--e .tree-of-life__group {
-  animation: treeGlyphSpinPulseCw 71s ease-in-out infinite;
 }
 
 .section-treefield--history .section-treefield__glyph--b .tree-of-life__group {
-  animation: treeGlyphSpinCcw 81s linear infinite;
 }
 
 .section-treefield--history .section-treefield__glyph--c .tree-of-life__group {
-  animation: treeGlyphSpinPulseCw 73s ease-in-out infinite;
 }
 
 .section-treefield--history .section-treefield__glyph--d .tree-of-life__group {
-  animation: treeGlyphSpinPulseCcw 95s ease-in-out infinite;
 }
 
 .section-treefield--history .section-treefield__glyph--e .tree-of-life__group {
-  animation: treeGlyphSpinLiltCw 59s ease-in-out infinite;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--a .tree-of-life__group {
-  animation: treeGlyphSpinPulseCcw 54s ease-in-out infinite;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--b .tree-of-life__group {
-  animation: treeGlyphSpinLiltCw 62s ease-in-out infinite;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--c .tree-of-life__group {
-  animation: treeGlyphSpinCcw 79s linear infinite;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--d .tree-of-life__group {
-  animation: treeGlyphSpinPulseCw 69s ease-in-out infinite;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--e .tree-of-life__group {
-  animation: treeGlyphSpinCw 103s linear infinite;
 }
 
 .section-treefield--hero .section-treefield__glyph--f .tree-of-life__group {
-  animation: treeGlyphSpinCcw 84s linear infinite;
 }
 
 .section-treefield--hero .section-treefield__glyph--g .tree-of-life__group {
-  animation: treeGlyphSpinPulseCw 72s ease-in-out infinite;
 }
 
 .section-treefield--hero .section-treefield__glyph--h .tree-of-life__group {
-  animation: treeGlyphSpinLiltCw 66s ease-in-out infinite;
 }
 
 .section-treefield--hero .section-treefield__glyph--i .tree-of-life__group {
-  animation: treeGlyphSpinCw 91s linear infinite;
 }
 
 .section-treefield--hero .section-treefield__glyph--j .tree-of-life__group {
-  animation: treeGlyphSpinPulseCcw 78s ease-in-out infinite;
 }
 
 .section-treefield--hero .section-treefield__glyph--k .tree-of-life__group {
-  animation: treeGlyphSpinCcw 55s linear infinite;
 }
 
 .section-treefield--hero .section-treefield__glyph--l .tree-of-life__group {
-  animation: treeGlyphSpinLiltCw 97s ease-in-out infinite;
 }
 
 .section-treefield--history .section-treefield__glyph--f .tree-of-life__group {
-  animation: treeGlyphSpinLiltCw 74s ease-in-out infinite;
 }
 
 .section-treefield--history .section-treefield__glyph--g .tree-of-life__group {
-  animation: treeGlyphSpinCw 88s linear infinite;
 }
 
 .section-treefield--history .section-treefield__glyph--h .tree-of-life__group {
-  animation: treeGlyphSpinPulseCcw 63s ease-in-out infinite;
 }
 
 .section-treefield--history .section-treefield__glyph--i .tree-of-life__group {
-  animation: treeGlyphSpinCcw 82s linear infinite;
 }
 
 .section-treefield--history .section-treefield__glyph--j .tree-of-life__group {
-  animation: treeGlyphSpinPulseCw 97s ease-in-out infinite;
 }
 
 .section-treefield--history .section-treefield__glyph--k .tree-of-life__group {
-  animation: treeGlyphSpinCw 71s linear infinite;
 }
 
 .section-treefield--history .section-treefield__glyph--l .tree-of-life__group {
-  animation: treeGlyphSpinLiltCw 93s ease-in-out infinite;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--f .tree-of-life__group {
-  animation: treeGlyphSpinCw 86s linear infinite;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--g .tree-of-life__group {
-  animation: treeGlyphSpinPulseCcw 72s ease-in-out infinite;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--h .tree-of-life__group {
-  animation: treeGlyphSpinLiltCw 58s ease-in-out infinite;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--i .tree-of-life__group {
-  animation: treeGlyphSpinCw 94s linear infinite;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--j .tree-of-life__group {
-  animation: treeGlyphSpinCcw 67s linear infinite;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--k .tree-of-life__group {
-  animation: treeGlyphSpinPulseCw 81s ease-in-out infinite;
 }
 
 .section-treefield--esoteric .section-treefield__glyph--l .tree-of-life__group {
-  animation: treeGlyphSpinLiltCw 107s ease-in-out infinite;
 }
 
 .tree-of-life__path,
@@ -1204,14 +1181,12 @@ svg {
   stroke-width: 7.2;
   stroke-dasharray: 8 16;
   opacity: 0.7;
-  animation: treeFieldPathPulse 10.4s ease-in-out infinite;
 }
 
 .tree-of-life__node {
   stroke-width: 8.2;
   fill: rgba(241, 214, 140, 0.22);
   opacity: 0.84;
-  animation: treeFieldNodePulse 8.1s ease-in-out infinite;
 }
 
 .section-treefield--history .tree-of-life__path {
@@ -1956,7 +1931,6 @@ svg {
   mix-blend-mode: screen;
   mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 12%, rgba(0, 0, 0, 0.88) 54%, rgba(0, 0, 0, 1) 70%);
   transform-origin: 100% 100%;
-  animation: acaciaSway 35s ease-in-out infinite;
   transition: opacity 65ms linear;
   will-change: opacity, transform;
 }
@@ -1967,7 +1941,6 @@ svg {
 
 .acacia__fractal {
   transform-origin: center bottom;
-  animation: acaciaFractalPulse 19s ease-in-out infinite;
 }
 
 .acacia__fractal--left {
@@ -1998,9 +1971,6 @@ svg {
   transform-box: fill-box;
   transform-origin: center bottom;
   filter: drop-shadow(0 0 6px rgba(223, 186, 122, 0.28));
-  animation:
-    acaciaBranchFlow 17s ease-in-out infinite,
-    acaciaBranchSway var(--branch-sway-duration) ease-in-out infinite;
 }
 
 .acacia__branch:nth-of-type(odd) {
@@ -2037,7 +2007,6 @@ svg {
   stroke: rgba(243, 221, 164, 0.88);
   stroke-width: 0.84;
   opacity: 0.82;
-  animation: acaciaLeafletBlink 9s ease-in-out infinite;
 }
 
 .page-stack--active-history .page__acacia {
@@ -2153,6 +2122,7 @@ svg {
 .hero__mast {
   display: grid;
   gap: 0.5rem;
+  position: relative;
 }
 
 .hero__footer {
@@ -2196,24 +2166,33 @@ svg {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  content: none;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-.glitch-title::before {
+.hero__mast:hover .glitch-title::before,
+.hero__mast:focus-within .glitch-title::before {
   content: attr(data-text);
+  animation: glitchSliceA 1.6s steps(2, end) 2;
+}
+
+.hero__mast:hover .glitch-title::after,
+.hero__mast:focus-within .glitch-title::after {
+  content: attr(data-text);
+  animation: glitchSliceB 1.8s steps(2, end) 2;
+}
+
+.glitch-title::before {
   color: rgba(110, 8, 28, 0.88);
   transform: translate(-2px, 0);
   clip-path: polygon(0 8%, 100% 0, 100% 40%, 0 52%);
-  animation: glitchSliceA 1.6s steps(2, end) infinite;
 }
 
 .glitch-title::after {
-  content: attr(data-text);
   color: rgba(48, 0, 92, 0.82);
   transform: translate(2px, 0);
   clip-path: polygon(0 50%, 100% 42%, 100% 96%, 0 90%);
-  animation: glitchSliceB 1.8s steps(2, end) infinite;
 }
 
 .glitch-title[data-text*="#"],
@@ -2235,6 +2214,38 @@ svg {
   letter-spacing: 0.01em;
   text-transform: none;
   color: var(--muted);
+}
+
+.role-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  width: fit-content;
+  text-shadow: 0 0 10px rgba(223, 186, 122, 0.12);
+  animation: roleLinkFlicker 17s steps(1) infinite;
+}
+
+.role-link__caret {
+  color: rgba(241, 214, 140, 0.86);
+  animation: caretBlink 1.35s steps(1) infinite;
+}
+
+.hero__scan-notch {
+  position: absolute;
+  top: 3.7rem;
+  left: clamp(7.8rem, 14vw, 11rem);
+  width: clamp(3rem, 6vw, 5rem);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(241, 214, 140, 0.82) 32%,
+    rgba(241, 214, 140, 0.18) 78%,
+    transparent 100%
+  );
+  opacity: 0.5;
+  pointer-events: none;
+  animation: scanNotchDrift 6.8s ease-in-out infinite;
 }
 
 .ordo-statement {
@@ -2282,7 +2293,15 @@ svg {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--gold-bright);
-  backdrop-filter: blur(10px);
+}
+
+.signal-glitch:nth-child(1) {
+  animation: chipJitter 9.4s steps(1) infinite;
+}
+
+.signal-glitch:nth-child(3) {
+  animation: chipJitter 13.2s steps(1) infinite;
+  animation-delay: -3.8s;
 }
 
 .occult-pulse {
@@ -2301,17 +2320,7 @@ svg {
   text-transform: uppercase;
   color: rgba(241, 214, 140, 0.9);
   opacity: 0.86;
-  animation: occultBlink 9s steps(1) infinite;
 }
-
-.occult-pulse li:nth-child(2) { animation-delay: -2.3s; }
-.occult-pulse li:nth-child(3) { animation-delay: 0s; }
-.occult-pulse li:nth-child(4) { animation-delay: 0s; }
-
-.signal-glitch:nth-child(1) { animation: chipJitter 6.3s steps(1) infinite; }
-.signal-glitch:nth-child(2) { animation: chipJitter 8.1s steps(1) infinite; animation-delay: -2.4s; }
-.signal-glitch:nth-child(3) { animation: chipJitter 7.7s steps(1) infinite; animation-delay: 0s; }
-.signal-glitch:nth-child(4) { animation: chipJitter 9.2s steps(1) infinite; animation-delay: -1.8s; }
 
 .link-grid {
   display: flex;
@@ -2333,7 +2342,6 @@ svg {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  animation: cardFlicker 13s steps(1) infinite;
   transition: background 100ms ease;
 }
 
@@ -2353,6 +2361,21 @@ svg {
 .link-card:hover,
 .link-card:focus-visible {
   background: rgba(185, 140, 79, 0.07);
+  animation: possessionFlash 180ms steps(1) 1;
+}
+
+.link-card:hover .link-card__label,
+.link-card:focus-visible .link-card__label {
+  letter-spacing: 0.08em;
+  color: rgba(255, 236, 176, 0.96);
+  text-shadow:
+    -2px 0 rgba(110, 8, 28, 0.48),
+    2px 0 rgba(48, 0, 92, 0.42);
+}
+
+.link-card:hover .link-card__meta,
+.link-card:focus-visible .link-card__meta {
+  color: rgba(241, 214, 140, 0.82);
 }
 
 .link-card:hover::before,
@@ -2408,6 +2431,56 @@ svg {
 .sigil-panel:focus-visible {
   outline: 2px solid rgba(241, 214, 140, 0.8);
   outline-offset: 4px;
+}
+
+@keyframes caretBlink {
+  0%,
+  42%,
+  100% {
+    opacity: 0.9;
+  }
+
+  43%,
+  56% {
+    opacity: 0.18;
+  }
+}
+
+@keyframes scanNotchDrift {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.34;
+  }
+
+  34% {
+    transform: translateX(0.5rem);
+    opacity: 0.62;
+  }
+
+  67% {
+    transform: translateX(-0.35rem);
+    opacity: 0.28;
+  }
+}
+
+@keyframes roleLinkFlicker {
+  0%,
+  89%,
+  100% {
+    text-shadow: 0 0 10px rgba(223, 186, 122, 0.12);
+  }
+
+  90% {
+    text-shadow:
+      0 0 14px rgba(223, 186, 122, 0.24),
+      -1px 0 rgba(110, 8, 28, 0.22),
+      1px 0 rgba(48, 0, 92, 0.18);
+  }
+
+  92% {
+    text-shadow: 0 0 8px rgba(223, 186, 122, 0.08);
+  }
 }
 
 .sigil-panel {
@@ -2486,10 +2559,7 @@ svg {
   min-height: 0;
   height: auto;
   overflow: visible;
-  filter:
-    drop-shadow(0 0 60px rgba(223, 186, 122, 0.45))
-    drop-shadow(0 0 140px rgba(185, 140, 79, 0.28))
-    drop-shadow(0 0 280px rgba(140, 90, 30, 0.18));
+  filter: drop-shadow(0 0 52px rgba(223, 186, 122, 0.34));
   animation: sigilBreathe 10.5s ease-in-out infinite;
   will-change: transform, filter, opacity;
 }
@@ -2612,15 +2682,9 @@ svg {
 .sigil__tick {
   stroke-width: 1;
   opacity: 0.42;
-  will-change: opacity;
 }
 
 .sigil__ray {
-  animation: rayPulse 3.8s ease-in-out infinite;
-}
-
-.sigil__tick {
-  animation: rayPulse 5.2s ease-in-out infinite;
 }
 
 .sigil__ray {

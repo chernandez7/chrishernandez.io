@@ -1,6 +1,4 @@
 "use client";
-
-import { useEffect, useState } from "react";
 import { Sigil } from "../Sigil";
 import { socialLinks } from "../../lib/links";
 import {
@@ -13,91 +11,13 @@ import { SectionGlyphFields } from "./SectionGlyphFields";
 
 type HeroPanelProps = {
   perfLite: boolean;
-  phaseShiftActive: boolean;
   activeSection: SectionId;
   onScrollToSection: (section: SectionId) => void;
 };
 
-type PossessedLinkState = {
-  index: number;
-  text: string;
-};
-
 const canonicalName = "Christopher Hernandez";
-const enochianTransliteration = "KHRISTOFER HERNANDEZ OD ZIRDO";
-const glitchAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>[]{}|/\\+=-_*#?~";
-const linkPossessionBursts = [
-  "// TRACE : ASTRAL HANDSHAKE",
-  "// KETER->MALKUTH BRIDGE",
-  "// ORDO:CONVERGENCE:ACTIVE",
-  "// GATE SIGIL RESONANCE",
-  "// WATCHER ACKNOWLEDGED",
-];
-
-const scrambleName = (name: string, intensity = 0.35) => {
-  return name
-    .split("")
-    .map((char) => {
-      if (char === " ") {
-        return char;
-      }
-
-      if (Math.random() > intensity) {
-        return char;
-      }
-
-      const index = Math.floor(Math.random() * glitchAlphabet.length);
-      return glitchAlphabet[index];
-    })
-    .join("");
-};
-
-function GlitchTitle({
-  perfLite,
-  phaseShiftActive,
-  isActive,
-}: {
-  perfLite: boolean;
-  phaseShiftActive: boolean;
-  isActive: boolean;
-}) {
-  const [displayName, setDisplayName] = useState(canonicalName);
-
-  useEffect(() => {
-    if (perfLite || !isActive) {
-      setDisplayName(canonicalName);
-      return;
-    }
-
-    let scrambleFrames = 0;
-
-    const timer = window.setInterval(() => {
-      if (phaseShiftActive) {
-        setDisplayName(
-          scrambleName(enochianTransliteration, 0.24 + Math.random() * 0.34),
-        );
-        return;
-      }
-
-      if (scrambleFrames > 0) {
-        scrambleFrames -= 1;
-        setDisplayName(scrambleName(canonicalName, 0.28 + Math.random() * 0.5));
-        if (scrambleFrames === 0) {
-          setDisplayName(canonicalName);
-        }
-        return;
-      }
-
-      if (Math.random() < 0.17) {
-        scrambleFrames = 2 + Math.floor(Math.random() * 5);
-      }
-    }, 170);
-
-    return () => {
-      window.clearInterval(timer);
-      setDisplayName(canonicalName);
-    };
-  }, [perfLite, phaseShiftActive, isActive]);
+function GlitchTitle() {
+  const displayName = canonicalName;
 
   return (
     <h1
@@ -110,71 +30,20 @@ function GlitchTitle({
   );
 }
 
-function SocialLinksNav({
-  perfLite,
-  isActive,
-}: {
-  perfLite: boolean;
-  isActive: boolean;
-}) {
-  const [possessedLink, setPossessedLink] = useState<PossessedLinkState | null>(
-    null,
-  );
-
-  useEffect(() => {
-    if (perfLite || !isActive) {
-      setPossessedLink(null);
-      return;
-    }
-
-    let possessionFrames = 0;
-    let nextPossessed: PossessedLinkState | null = null;
-
-    const timer = window.setInterval(() => {
-      if (possessionFrames > 0 && nextPossessed) {
-        possessionFrames -= 1;
-        setPossessedLink(nextPossessed);
-        if (possessionFrames === 0) {
-          setPossessedLink(null);
-          nextPossessed = null;
-        }
-        return;
-      }
-
-      if (Math.random() < 0.08) {
-        nextPossessed = {
-          index: Math.floor(Math.random() * socialLinks.length),
-          text: linkPossessionBursts[
-            Math.floor(Math.random() * linkPossessionBursts.length)
-          ],
-        };
-        possessionFrames = 1 + Math.floor(Math.random() * 2);
-      }
-    }, 120);
-
-    return () => {
-      window.clearInterval(timer);
-      setPossessedLink(null);
-    };
-  }, [perfLite, isActive]);
-
+function SocialLinksNav() {
   return (
     <nav className="link-grid" aria-label="Social links">
-      {socialLinks.map((link, index) => (
+      {socialLinks.map((link) => (
         <a
           key={link.label}
-          className={`link-card${
-            possessedLink?.index === index ? " link-card--possessed" : ""
-          }`}
+          className="link-card"
           href={link.href}
           target="_blank"
           rel="noreferrer noopener"
         >
-          <span className="link-card__label">
-            {possessedLink?.index === index ? possessedLink.text : link.label}
-          </span>
+          <span className="link-card__label">{link.label}</span>
           <span className="link-card__meta">
-            {possessedLink?.index === index ? "ritual-channel" : link.meta}
+            {link.meta}
           </span>
         </a>
       ))}
@@ -184,49 +53,35 @@ function SocialLinksNav({
 
 export function HeroPanel({
   perfLite,
-  phaseShiftActive,
   activeSection,
   onScrollToSection,
 }: HeroPanelProps) {
   const heroActive = activeSection === "hero";
 
   return (
-    <main
-      className={`page${phaseShiftActive ? " page--phase-shift" : ""}${perfLite ? " page--perf-lite" : ""}`}
-    >
+    <main className={`page${perfLite ? " page--perf-lite" : ""}`}>
       {heroActive && <SectionGlyphFields variant="hero" />}
-      {heroActive && (
-        <>
-          <div className="page__grain" aria-hidden="true" />
-          <div className="page__cadence" aria-hidden="true" />
-          <div className="page__scanlines" aria-hidden="true" />
-          <div className="page__glitch" aria-hidden="true" />
-          <div className="page__sweep" aria-hidden="true" />
-          <div className="page__ashlar" aria-hidden="true" />
-          <div className="page__halo page__halo--one" aria-hidden="true" />
-          <div className="page__halo page__halo--two" aria-hidden="true" />
-          <div className="page__halo page__halo--three" aria-hidden="true" />
-        </>
-      )}
 
       <section className="hero">
         <div className="hero__mast">
-          <GlitchTitle
-            perfLite={perfLite}
-            phaseShiftActive={phaseShiftActive}
-            isActive={heroActive}
-          />
+          <GlitchTitle />
           <a
             className="role-link"
             href="https://www.tempus.com/"
             target="_blank"
             rel="noreferrer noopener"
           >
-            Senior Software Engineer II @ Tempus AI
+            <span className="role-link__text">
+              Senior Software Engineer II @ Tempus AI
+            </span>
+            <span className="role-link__caret" aria-hidden="true">
+              |
+            </span>
           </a>
           <p className="lede">
             I solve hard problems and build the systems around them.
           </p>
+          <span className="hero__scan-notch" aria-hidden="true" />
         </div>
 
         <div className="hero__footer">
@@ -244,7 +99,7 @@ export function HeroPanel({
             ))}
           </ul>
 
-          <SocialLinksNav perfLite={perfLite} isActive={heroActive} />
+          <SocialLinksNav />
         </div>
       </section>
 

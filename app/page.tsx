@@ -40,6 +40,13 @@ type AlchemyTrailRuntimeGlyph = AlchemyTrailGlyph & {
   expiresAt: number;
 };
 
+type PerformanceHudSnapshot = {
+  fps: number;
+  lowFps: number;
+  avgFrameMs: number;
+  slowFramePct: number;
+};
+
 const alchemyTrailSymbols = ["🜂", "🜁", "🜃", "🜄", "🜍", "🜔"];
 
 function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
@@ -97,7 +104,10 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
       velocityY: number,
       speed: number,
     ) => {
-      const burstCount = speed > 1.4 ? 2 : 1;
+      const burstCount = speed > 2.4 ? 1 : 0;
+      if (burstCount === 0) {
+        return;
+      }
       const baseAngle = Math.atan2(velocityY, velocityX) + Math.PI;
       const createdAt = performance.now();
       const newGlyphs: AlchemyTrailRuntimeGlyph[] = [];
@@ -108,8 +118,8 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
 
         const angleJitter = (Math.random() - 0.5) * 1.3;
         const angle = baseAngle + angleJitter;
-        const driftMag = 26 + Math.min(120, speed * 95) + Math.random() * 38;
-        const durationMs = 900 + Math.floor(Math.random() * 480);
+        const driftMag = 22 + Math.min(84, speed * 62) + Math.random() * 24;
+        const durationMs = 760 + Math.floor(Math.random() * 260);
         const glyph: AlchemyTrailRuntimeGlyph = {
           id,
           symbol:
@@ -118,7 +128,7 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
             ],
           x,
           y,
-          size: 24 + Math.random() * 18,
+          size: 20 + Math.random() * 12,
           driftX: Math.cos(angle) * driftMag,
           driftY: Math.sin(angle) * driftMag,
           rotate: -40 + Math.random() * 160,
@@ -130,7 +140,7 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
         newGlyphs.push(glyph);
       }
 
-      activeGlyphs = [...activeGlyphs, ...newGlyphs].slice(-44);
+      activeGlyphs = [...activeGlyphs, ...newGlyphs].slice(-14);
       syncGlyphs();
       startPruneLoop();
     };
@@ -157,7 +167,7 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
       lastY = event.clientY;
       lastTime = now;
 
-      if (distance < 12 || dt < 14) {
+      if (distance < 22 || dt < 24) {
         return;
       }
 
@@ -207,6 +217,78 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
   );
 }
 
+function PerformanceHud({ enabled }: { enabled: boolean }) {
+  const [snapshot, setSnapshot] = useState<PerformanceHudSnapshot>({
+    fps: 0,
+    lowFps: 0,
+    avgFrameMs: 0,
+    slowFramePct: 0,
+  });
+
+  useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
+    let frameId = 0;
+    let sampleStart = performance.now();
+    let previousFrameAt = sampleStart;
+    let frames = 0;
+    let totalFrameMs = 0;
+    let slowFrames = 0;
+    let lowFps = Number.POSITIVE_INFINITY;
+
+    const sample = (now: number) => {
+      const frameMs = now - previousFrameAt;
+      previousFrameAt = now;
+      frames += 1;
+      totalFrameMs += frameMs;
+      if (frameMs > 19.5) {
+        slowFrames += 1;
+      }
+
+      if (now - sampleStart >= 500) {
+        const elapsed = now - sampleStart;
+        const fps = Math.round((frames * 1000) / elapsed);
+        lowFps = Math.min(lowFps, fps);
+
+        setSnapshot({
+          fps,
+          lowFps: Number.isFinite(lowFps) ? lowFps : fps,
+          avgFrameMs: Number((totalFrameMs / frames).toFixed(1)),
+          slowFramePct: Math.round((slowFrames / frames) * 100),
+        });
+
+        sampleStart = now;
+        frames = 0;
+        totalFrameMs = 0;
+        slowFrames = 0;
+      }
+
+      frameId = requestAnimationFrame(sample);
+    };
+
+    frameId = requestAnimationFrame(sample);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, [enabled]);
+
+  if (!enabled) {
+    return null;
+  }
+
+  return (
+    <div className="perf-hud" aria-live="polite">
+      <span className="perf-hud__metric">FPS {snapshot.fps}</span>
+      <span className="perf-hud__metric">LOW {snapshot.lowFps}</span>
+      <span className="perf-hud__metric">MS {snapshot.avgFrameMs}</span>
+      <span className="perf-hud__metric">SLOW {snapshot.slowFramePct}%</span>
+    </div>
+  );
+}
+
 export default function Home() {
   const sectionStackRef = useRef<HTMLDivElement>(null);
   const heroSectionRef = useRef<HTMLElement>(null);
@@ -218,8 +300,8 @@ export default function Home() {
   const acaciaRevealTimerRef = useRef(0);
   const touchStartYRef = useRef<number | null>(null);
   const sanctuaryRef = useRef<HTMLDivElement>(null);
-  const [phaseShiftActive, setPhaseShiftActive] = useState(false);
   const [perfLite, setPerfLite] = useState(false);
+  const [showFpsHud, setShowFpsHud] = useState(false);
   const [activeSection, setActiveSection] = useState<SectionId>("hero");
   const [sanctuaryInvoked, setSanctuaryInvoked] = useState(false);
   const [sanctuaryCharge, setSanctuaryCharge] = useState(0);
@@ -259,6 +341,7 @@ export default function Home() {
     const syncPerfMode = () => {
       const params = new URLSearchParams(window.location.search);
       const manualLite = params.get("perf") === "lite";
+      const manualFpsHud = params.get("fps") === "1";
       const mobileWidth = window.matchMedia("(max-width: 860px)").matches;
       const saveData = Boolean(navigatorHints.connection?.saveData);
       const lowCpu =
@@ -268,6 +351,7 @@ export default function Home() {
         navigatorHints.deviceMemory <= 4;
 
       prefersReducedMotionRef.current = reducedMotionQuery.matches;
+      setShowFpsHud(manualFpsHud);
 
       setPerfLite(
         manualLite ||
@@ -286,35 +370,6 @@ export default function Home() {
       reducedMotionQuery.removeEventListener("change", syncPerfMode);
     };
   }, []);
-
-  useEffect(() => {
-    if (perfLite) {
-      setPhaseShiftActive(false);
-      return;
-    }
-
-    let timeoutId = 0;
-    let activeWindowId = 0;
-
-    const schedulePhaseShift = () => {
-      const waitMs = 40000 + Math.floor(Math.random() * 30000);
-      timeoutId = window.setTimeout(() => {
-        setPhaseShiftActive(true);
-        activeWindowId = window.setTimeout(() => {
-          setPhaseShiftActive(false);
-          schedulePhaseShift();
-        }, 2800);
-      }, waitMs);
-    };
-
-    schedulePhaseShift();
-
-    return () => {
-      window.clearTimeout(timeoutId);
-      window.clearTimeout(activeWindowId);
-      setPhaseShiftActive(false);
-    };
-  }, [perfLite]);
 
   useEffect(() => {
     if (perfLite) {
@@ -743,7 +798,10 @@ export default function Home() {
 
   return (
     <>
-      <AlchemyMouseTrail enabled={introPhase === "done" && !perfLite} />
+      <AlchemyMouseTrail
+        enabled={introPhase === "done" && !perfLite && activeSection !== "hero"}
+      />
+      <PerformanceHud enabled={showFpsHud} />
       <div
         className={`page-stack page-stack--active-${activeSection}${perfLite ? " page-stack--perf-lite" : ""}${acaciaHiddenByScroll ? " page-stack--scrolling" : ""}`}
         ref={sectionStackRef}
@@ -940,13 +998,20 @@ export default function Home() {
           </g>
         </svg>
         <section
+          ref={esotericSectionRef}
+          className="page-section page-section--esoteric"
+          aria-label="Arcane dossier section"
+        >
+          <EsotericBioPanel onScrollToSection={scrollToSection} />
+        </section>
+
+        <section
           ref={heroSectionRef}
           className="page-section page-section--hero"
           aria-label="Landing section"
         >
           <HeroPanel
             perfLite={perfLite}
-            phaseShiftActive={phaseShiftActive}
             activeSection={activeSection}
             onScrollToSection={scrollToSection}
           />
@@ -958,14 +1023,6 @@ export default function Home() {
           aria-label="Craft chronicle section"
         >
           <WorkHistoryPanel onScrollToSection={scrollToSection} />
-        </section>
-
-        <section
-          ref={esotericSectionRef}
-          className="page-section page-section--esoteric"
-          aria-label="Arcane dossier section"
-        >
-          <EsotericBioPanel onScrollToSection={scrollToSection} />
         </section>
       </div>
 

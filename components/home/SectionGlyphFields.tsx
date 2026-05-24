@@ -12,14 +12,6 @@ const glyphKeys = [
   "b",
   "c",
   "d",
-  "e",
-  "f",
-  "g",
-  "h",
-  "i",
-  "j",
-  "k",
-  "l",
 ] as const;
 
 function SectionGlyphFieldsImpl({ variant }: SectionGlyphFieldsProps) {

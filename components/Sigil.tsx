@@ -265,7 +265,7 @@ function SigilImpl({
               attributeName="transform"
               type="translate"
               values={`0 0; ${400 - point.x} ${400 - point.y}; 0 0`}
-              dur="12s"
+              dur="16s"
               repeatCount="indefinite"
               begin={`${-(index * 0.27).toFixed(2)}s`}
               keyTimes="0; 0.45; 1"
@@ -275,42 +275,13 @@ function SigilImpl({
             <animate
               attributeName="opacity"
               values="0.88; 0.25; 0.92"
-              dur="12s"
+              dur="16s"
               repeatCount="indefinite"
               begin={`${-(index * 0.27).toFixed(2)}s`}
             />
           </circle>
         ))}
       </g>
-
-      {/* Pentagram — slowly rotates, cross-fades with other shapes */}
-      <g className="sigil__pentagram">
-        <path d="M400,240 L306,529 L552,351 L248,351 L494,529 Z" />
-      </g>
-
-      <g className="sigil__metashape sigil__metashape--a">
-        <path d="M400 210 L560 305 L560 495 L400 590 L240 495 L240 305 Z" />
-        <path d="M400 250 L520 322 L520 478 L400 550 L280 478 L280 322 Z" />
-      </g>
-
-      <g className="sigil__metashape sigil__metashape--b">
-        <path d="M400 188 L640 400 L400 612 L160 400 Z" />
-        <path d="M400 250 L550 400 L400 550 L250 400 Z" />
-      </g>
-
-      <g className="sigil__metashape sigil__metashape--c">
-        <path d="M400 190 L510 400 L400 610 L290 400 Z" />
-        <path d="M400 240 L640 400 L400 560 L160 400 Z" />
-      </g>
-
-      <polygon
-        points="400,132 622,520 178,520"
-        className="sigil__triangle sigil__triangle--up"
-      />
-      <polygon
-        points="400,668 622,280 178,280"
-        className="sigil__triangle sigil__triangle--down"
-      />
 
       {rays.map((ray) => {
         const angle = (ray * 360) / rays.length;
@@ -358,6 +329,7 @@ function SigilImpl({
         className="sigil__ring"
       />
 
+
       <circle cx="400" cy="400" r="332" fill={`url(#${glowId})`} />
       <circle cx="400" cy="400" r="120" fill={`url(#${glowInnerId})`} />
       <circle cx="400" cy="400" r="390" className="sigil__frame" />
@@ -398,52 +370,6 @@ function SigilImpl({
           {enochianText}
         </textPath>
       </text>
-
-      <g className="sigil__tree-life" aria-hidden="true">
-        {treeLinks.map(([from, to], index) => (
-          <line
-            key={`path-${from}-${to}`}
-            x1={treeNodes[from].x}
-            y1={treeNodes[from].y}
-            x2={treeNodes[to].x}
-            y2={treeNodes[to].y}
-            className="sigil__tree-path"
-            style={{ animationDelay: `${-(index * 0.19).toFixed(2)}s` }}
-          />
-        ))}
-        {treeNodes.map((node, index) => (
-          <circle
-            key={node.name}
-            cx={node.x}
-            cy={node.y}
-            r={index === 9 ? 12 : 10}
-            className="sigil__tree-node"
-            style={{ animationDelay: `${-(index * 0.37).toFixed(2)}s` }}
-          />
-        ))}
-      </g>
-
-      <g className="sigil__square-compass" aria-hidden="true">
-        <path
-          d="M400 202 L548 556 L252 556 Z"
-          className="sigil__masonic-compass"
-        />
-        <path
-          d="M274 544 L400 350 L526 544"
-          className="sigil__masonic-compass"
-        />
-        <path
-          d="M244 536 L400 640 L556 536"
-          className="sigil__masonic-square"
-        />
-        <path
-          d="M284 506 L400 582 L516 506"
-          className="sigil__masonic-square"
-        />
-        <text x="400" y="485" className="sigil__masonic-glyph">
-          G
-        </text>
-      </g>
 
       <text x="400" y="168" className="sigil__axiom sigil__axiom--north">
         AS ABOVE
