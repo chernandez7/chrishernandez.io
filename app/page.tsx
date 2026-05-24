@@ -912,26 +912,29 @@ export default function Home() {
     };
 
     const scheduleActivation = () => {
-      activationTimer = window.setTimeout(() => {
-        setSignalFaultMessage(
-          signalFaultMessages[
-            Math.floor(Math.random() * signalFaultMessages.length)
-          ],
-        );
-        faultActive = true;
-        activeNodes = collectNodes();
-        applyScramble();
-        scrambleTimer = window.setInterval(applyScramble, 88);
-        setSignalFault(true);
+      activationTimer = window.setTimeout(
+        () => {
+          setSignalFaultMessage(
+            signalFaultMessages[
+              Math.floor(Math.random() * signalFaultMessages.length)
+            ],
+          );
+          faultActive = true;
+          activeNodes = collectNodes();
+          applyScramble();
+          scrambleTimer = window.setInterval(applyScramble, 88);
+          setSignalFault(true);
 
-        deactivationTimer = window.setTimeout(() => {
-          faultActive = false;
-          setSignalFault(false);
-          window.clearInterval(scrambleTimer);
-          restoreNodes();
-          scheduleActivation();
-        }, 760);
-      }, 12000 + Math.floor(Math.random() * 14000));
+          deactivationTimer = window.setTimeout(() => {
+            faultActive = false;
+            setSignalFault(false);
+            window.clearInterval(scrambleTimer);
+            restoreNodes();
+            scheduleActivation();
+          }, 760);
+        },
+        12000 + Math.floor(Math.random() * 14000),
+      );
     };
 
     passiveTimer = window.setInterval(() => {
@@ -1250,15 +1253,17 @@ export default function Home() {
       <AlchemyMouseTrail
         enabled={introPhase === "done" && !perfLite && activeSection !== "hero"}
       />
-      <PerformanceHud
-        activeSection={activeSection}
-        introPhase={introPhase}
-        trailEnabled={
-          introPhase === "done" && !perfLite && activeSection !== "hero"
-        }
-        scrolling={false}
-        sanctuaryInvoked={sanctuaryInvoked}
-      />
+      {!perfLite && (
+        <PerformanceHud
+          activeSection={activeSection}
+          introPhase={introPhase}
+          trailEnabled={
+            introPhase === "done" && !perfLite && activeSection !== "hero"
+          }
+          scrolling={false}
+          sanctuaryInvoked={sanctuaryInvoked}
+        />
+      )}
       <nav
         className={`ritual-nav${activeSection === "hero" ? " ritual-nav--hero" : " ritual-nav--side"}`}
         aria-label="Section navigation"

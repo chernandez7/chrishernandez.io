@@ -129,9 +129,7 @@ test.describe("desktop layout", () => {
 test.describe("mobile layout", () => {
   test.use({ viewport: { width: 390, height: 844 } }); // iPhone 14 Pro
 
-  test("page stack supports continuous vertical scroll on mobile", async ({
-    page,
-  }) => {
+  test("page stack locks to sections on mobile", async ({ page }) => {
     await page.goto("/");
 
     const stack = page.locator(".page-stack");
@@ -139,10 +137,12 @@ test.describe("mobile layout", () => {
     await expect(stack).toBeVisible();
     await expect(historySection).toBeAttached();
 
+    await expect(page.locator(".perf-hud")).toHaveCount(0);
+
     const snapType = await stack.evaluate(
       (element) => getComputedStyle(element).scrollSnapType,
     );
-    expect(snapType).toBe("none");
+    expect(snapType).toBe("y mandatory");
 
     const dimensions = await stack.evaluate((element) => ({
       clientHeight: element.clientHeight,
