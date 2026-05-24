@@ -55,14 +55,16 @@ const scrambleName = (name: string, intensity = 0.35) => {
 function GlitchTitle({
   perfLite,
   phaseShiftActive,
+  isActive,
 }: {
   perfLite: boolean;
   phaseShiftActive: boolean;
+  isActive: boolean;
 }) {
   const [displayName, setDisplayName] = useState(canonicalName);
 
   useEffect(() => {
-    if (perfLite) {
+    if (perfLite || !isActive) {
       setDisplayName(canonicalName);
       return;
     }
@@ -95,7 +97,7 @@ function GlitchTitle({
       window.clearInterval(timer);
       setDisplayName(canonicalName);
     };
-  }, [perfLite, phaseShiftActive]);
+  }, [perfLite, phaseShiftActive, isActive]);
 
   return (
     <h1
@@ -108,13 +110,19 @@ function GlitchTitle({
   );
 }
 
-function SocialLinksNav({ perfLite }: { perfLite: boolean }) {
+function SocialLinksNav({
+  perfLite,
+  isActive,
+}: {
+  perfLite: boolean;
+  isActive: boolean;
+}) {
   const [possessedLink, setPossessedLink] = useState<PossessedLinkState | null>(
     null,
   );
 
   useEffect(() => {
-    if (perfLite) {
+    if (perfLite || !isActive) {
       setPossessedLink(null);
       return;
     }
@@ -148,7 +156,7 @@ function SocialLinksNav({ perfLite }: { perfLite: boolean }) {
       window.clearInterval(timer);
       setPossessedLink(null);
     };
-  }, [perfLite]);
+  }, [perfLite, isActive]);
 
   return (
     <nav className="link-grid" aria-label="Social links">
@@ -180,26 +188,33 @@ export function HeroPanel({
   activeSection,
   onScrollToSection,
 }: HeroPanelProps) {
+  const heroActive = activeSection === "hero";
+
   return (
     <main
       className={`page${phaseShiftActive ? " page--phase-shift" : ""}${perfLite ? " page--perf-lite" : ""}`}
     >
-      <SectionGlyphFields variant="hero" />
-      <div className="page__grain" aria-hidden="true" />
-      <div className="page__cadence" aria-hidden="true" />
-      <div className="page__scanlines" aria-hidden="true" />
-      <div className="page__glitch" aria-hidden="true" />
-      <div className="page__sweep" aria-hidden="true" />
-      <div className="page__ashlar" aria-hidden="true" />
-      <div className="page__halo page__halo--one" aria-hidden="true" />
-      <div className="page__halo page__halo--two" aria-hidden="true" />
-      <div className="page__halo page__halo--three" aria-hidden="true" />
+      {heroActive && <SectionGlyphFields variant="hero" />}
+      {heroActive && (
+        <>
+          <div className="page__grain" aria-hidden="true" />
+          <div className="page__cadence" aria-hidden="true" />
+          <div className="page__scanlines" aria-hidden="true" />
+          <div className="page__glitch" aria-hidden="true" />
+          <div className="page__sweep" aria-hidden="true" />
+          <div className="page__ashlar" aria-hidden="true" />
+          <div className="page__halo page__halo--one" aria-hidden="true" />
+          <div className="page__halo page__halo--two" aria-hidden="true" />
+          <div className="page__halo page__halo--three" aria-hidden="true" />
+        </>
+      )}
 
       <section className="hero">
         <div className="hero__mast">
           <GlitchTitle
             perfLite={perfLite}
             phaseShiftActive={phaseShiftActive}
+            isActive={heroActive}
           />
           <a
             className="role-link"
@@ -229,7 +244,7 @@ export function HeroPanel({
             ))}
           </ul>
 
-          <SocialLinksNav perfLite={perfLite} />
+          <SocialLinksNav perfLite={perfLite} isActive={heroActive} />
         </div>
       </section>
 
@@ -241,7 +256,7 @@ export function HeroPanel({
             </li>
           ))}
         </ul>
-        <Sigil />
+        {heroActive && <Sigil />}
       </aside>
 
       <button

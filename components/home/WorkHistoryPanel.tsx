@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { promotionTracks, type SectionId } from "../../lib/home-content";
 import { SectionGlyphFields } from "./SectionGlyphFields";
 
@@ -7,7 +8,7 @@ type WorkHistoryPanelProps = {
   onScrollToSection: (section: SectionId) => void;
 };
 
-export function WorkHistoryPanel({ onScrollToSection }: WorkHistoryPanelProps) {
+function WorkHistoryPanelImpl({ onScrollToSection }: WorkHistoryPanelProps) {
   return (
     <>
       <SectionGlyphFields variant="history" />
@@ -64,3 +65,6 @@ export function WorkHistoryPanel({ onScrollToSection }: WorkHistoryPanelProps) {
     </>
   );
 }
+
+export const WorkHistoryPanel = memo(WorkHistoryPanelImpl);
+WorkHistoryPanel.displayName = "WorkHistoryPanel";

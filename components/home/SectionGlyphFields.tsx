@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { FlowerOfLifeGlyph, TreeOfLifeGlyph } from "../Sigil";
 
 type SectionGlyphFieldsProps = {
@@ -21,7 +22,7 @@ const glyphKeys = [
   "l",
 ] as const;
 
-export function SectionGlyphFields({ variant }: SectionGlyphFieldsProps) {
+function SectionGlyphFieldsImpl({ variant }: SectionGlyphFieldsProps) {
   return (
     <>
       <div
@@ -51,3 +52,6 @@ export function SectionGlyphFields({ variant }: SectionGlyphFieldsProps) {
     </>
   );
 }
+
+export const SectionGlyphFields = memo(SectionGlyphFieldsImpl);
+SectionGlyphFields.displayName = "SectionGlyphFields";

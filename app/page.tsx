@@ -1,8 +1,10 @@
 "use client";
 
 import {
+  useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -34,6 +36,10 @@ type AlchemyTrailGlyph = {
   opacity: number;
 };
 
+type AlchemyTrailRuntimeGlyph = AlchemyTrailGlyph & {
+  expiresAt: number;
+};
+
 const alchemyTrailSymbols = ["🜂", "🜁", "🜃", "🜄", "🜍", "🜔"];
 
 function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
@@ -49,9 +55,37 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
     let lastX = 0;
     let lastY = 0;
     let lastTime = 0;
+    let pruneFrameId = 0;
+    let activeGlyphs: AlchemyTrailRuntimeGlyph[] = [];
 
-    const removeGlyph = (id: number) => {
-      setGlyphs((current) => current.filter((glyph) => glyph.id !== id));
+    const syncGlyphs = () => {
+      setGlyphs(activeGlyphs.slice());
+    };
+
+    const startPruneLoop = () => {
+      if (pruneFrameId) {
+        return;
+      }
+
+      const prune = () => {
+        pruneFrameId = 0;
+        if (activeGlyphs.length === 0) {
+          return;
+        }
+
+        const now = performance.now();
+        const nextGlyphs = activeGlyphs.filter((glyph) => glyph.expiresAt > now);
+        if (nextGlyphs.length !== activeGlyphs.length) {
+          activeGlyphs = nextGlyphs;
+          syncGlyphs();
+        }
+
+        if (activeGlyphs.length > 0) {
+          pruneFrameId = requestAnimationFrame(prune);
+        }
+      };
+
+      pruneFrameId = requestAnimationFrame(prune);
     };
 
     const emitGlyphs = (
@@ -63,6 +97,8 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
     ) => {
       const burstCount = speed > 1.4 ? 2 : 1;
       const baseAngle = Math.atan2(velocityY, velocityX) + Math.PI;
+      const createdAt = performance.now();
+      const newGlyphs: AlchemyTrailRuntimeGlyph[] = [];
 
       for (let burst = 0; burst < burstCount; burst += 1) {
         const id = nextGlyphIdRef.current;
@@ -72,7 +108,7 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
         const angle = baseAngle + angleJitter;
         const driftMag = 26 + Math.min(120, speed * 95) + Math.random() * 38;
         const durationMs = 900 + Math.floor(Math.random() * 480);
-        const glyph: AlchemyTrailGlyph = {
+        const glyph: AlchemyTrailRuntimeGlyph = {
           id,
           symbol:
             alchemyTrailSymbols[
@@ -86,11 +122,15 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
           rotate: -40 + Math.random() * 160,
           durationMs,
           opacity: 0.54 + Math.random() * 0.34,
+          expiresAt: createdAt + durationMs + 56,
         };
 
-        setGlyphs((current) => [...current.slice(-42), glyph]);
-        window.setTimeout(() => removeGlyph(id), durationMs + 48);
+        newGlyphs.push(glyph);
       }
+
+      activeGlyphs = [...activeGlyphs, ...newGlyphs].slice(-44);
+      syncGlyphs();
+      startPruneLoop();
     };
 
     const onPointerMove = (event: PointerEvent) => {
@@ -127,6 +167,10 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
 
     return () => {
       window.removeEventListener("pointermove", onPointerMove);
+      if (pruneFrameId) {
+        cancelAnimationFrame(pruneFrameId);
+      }
+      activeGlyphs = [];
       setGlyphs([]);
     };
   }, [enabled]);
@@ -181,21 +225,28 @@ export default function Home() {
     "active" | "dismissing" | "done"
   >("active");
   const [acaciaHiddenByScroll, setAcaciaHiddenByScroll] = useState(false);
-  const personJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: "Christopher Hernandez",
-    url: "https://skate.dev",
-    sameAs: socialLinks.map((link) => link.href),
-    jobTitle: "Senior Software Engineer II",
-    worksFor: {
-      "@type": "Organization",
-      name: "Tempus AI",
-      url: "https://www.tempus.com/",
-    },
-    description:
-      "Senior Software Engineer II focused on hard systems problems, platform architecture, and resilient product delivery.",
-  };
+  const personJsonLd = useMemo(
+    () => ({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Christopher Hernandez",
+      url: "https://skate.dev",
+      sameAs: socialLinks.map((link) => link.href),
+      jobTitle: "Senior Software Engineer II",
+      worksFor: {
+        "@type": "Organization",
+        name: "Tempus AI",
+        url: "https://www.tempus.com/",
+      },
+      description:
+        "Senior Software Engineer II focused on hard systems problems, platform architecture, and resilient product delivery.",
+    }),
+    [],
+  );
+  const personJsonLdHtml = useMemo(
+    () => JSON.stringify(personJsonLd),
+    [personJsonLd],
+  );
 
   useEffect(() => {
     const navigatorHints = navigator as NavWithHints;
@@ -321,6 +372,8 @@ export default function Home() {
     let sanctuaryActive = false;
     let pointerTrackingActive = false;
     let lastChargeTick = 0;
+    let latestPointerX = 0;
+    let latestPointerY = 0;
 
     const clampUnit = (value: number) => Math.max(-1, Math.min(1, value));
 
@@ -348,13 +401,16 @@ export default function Home() {
     };
 
     const onPointerMove = (event: PointerEvent) => {
+      latestPointerX = event.clientX;
+      latestPointerY = event.clientY;
+
       if (frameId) {
-        cancelAnimationFrame(frameId);
+        return;
       }
 
-      const { clientX, clientY } = event;
       frameId = requestAnimationFrame(() => {
-        writeMouseState(clientX, clientY);
+        writeMouseState(latestPointerX, latestPointerY);
+        frameId = 0;
       });
     };
 
@@ -533,7 +589,7 @@ export default function Home() {
     setActiveSection("hero");
   }, []);
 
-  const scrollToSection = (section: SectionId) => {
+  const scrollToSection = useCallback((section: SectionId) => {
     if (navLockRef.current) {
       return;
     }
@@ -567,7 +623,7 @@ export default function Home() {
         prefersReducedMotionRef.current ? 40 : 120,
       );
     }, releaseDelay);
-  };
+  }, []);
 
   useEffect(() => {
     const stack = sectionStackRef.current;
@@ -1136,7 +1192,7 @@ export default function Home() {
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: personJsonLdHtml }}
       />
     </>
   );

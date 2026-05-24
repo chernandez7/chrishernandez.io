@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { bioInterests, type SectionId } from "../../lib/home-content";
 import { SectionGlyphFields } from "./SectionGlyphFields";
 
@@ -7,7 +8,7 @@ type EsotericBioPanelProps = {
   onScrollToSection: (section: SectionId) => void;
 };
 
-export function EsotericBioPanel({ onScrollToSection }: EsotericBioPanelProps) {
+function EsotericBioPanelImpl({ onScrollToSection }: EsotericBioPanelProps) {
   return (
     <>
       <SectionGlyphFields variant="esoteric" />
@@ -42,3 +43,6 @@ export function EsotericBioPanel({ onScrollToSection }: EsotericBioPanelProps) {
     </>
   );
 }
+
+export const EsotericBioPanel = memo(EsotericBioPanelImpl);
+EsotericBioPanel.displayName = "EsotericBioPanel";

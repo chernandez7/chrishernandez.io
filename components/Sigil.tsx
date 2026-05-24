@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 const rays = Array.from({ length: 24 }, (_, index) => index);
 const outerTicks = Array.from({ length: 8 }, (_, index) => index);
 const alchemicalMarks = ["🜂", "🜁", "🜃", "🜄", "🜍", "🜔"];
@@ -81,7 +83,7 @@ type FlowerOfLifeGlyphProps = {
   ariaHidden?: boolean;
 };
 
-export function FlowerOfLifeGlyph({
+function FlowerOfLifeGlyphImpl({
   className,
   idPrefix = "flower-of-life",
   ariaHidden = true,
@@ -124,7 +126,7 @@ export function FlowerOfLifeGlyph({
   );
 }
 
-export function TreeOfLifeGlyph({
+function TreeOfLifeGlyphImpl({
   className,
   idPrefix = "tree-of-life",
   ariaHidden = true,
@@ -179,7 +181,7 @@ export function TreeOfLifeGlyph({
   );
 }
 
-export function Sigil({
+function SigilImpl({
   className,
   idPrefix = "sigil",
   ariaHidden = false,
@@ -467,3 +469,12 @@ export function Sigil({
     </svg>
   );
 }
+
+export const FlowerOfLifeGlyph = memo(FlowerOfLifeGlyphImpl);
+FlowerOfLifeGlyph.displayName = "FlowerOfLifeGlyph";
+
+export const TreeOfLifeGlyph = memo(TreeOfLifeGlyphImpl);
+TreeOfLifeGlyph.displayName = "TreeOfLifeGlyph";
+
+export const Sigil = memo(SigilImpl);
+Sigil.displayName = "Sigil";
