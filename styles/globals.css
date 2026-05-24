@@ -111,10 +111,6 @@ svg {
   contain-intrinsic-size: 100dvh;
 }
 
-.page-section--esoteric {
-  order: -1;
-}
-
 .page {
   position: relative;
   height: 100dvh;
@@ -3841,6 +3837,40 @@ svg {
   }
 }
 
+@keyframes mobileTextShiver {
+  0%, 88%, 100% {
+    transform: translateX(0);
+    text-shadow: 0 0 22px rgba(213, 177, 92, 0.1);
+  }
+
+  90% {
+    transform: translateX(-0.8px);
+    text-shadow: 0 0 24px rgba(213, 177, 92, 0.16);
+  }
+
+  92% {
+    transform: translateX(0.9px);
+    text-shadow: 0 0 21px rgba(213, 177, 92, 0.08);
+  }
+}
+
+@keyframes mobileUiFlicker {
+  0%, 85%, 100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  87% {
+    transform: translateY(-1px);
+    opacity: 0.96;
+  }
+
+  89% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 1100px) {
   .page-stack {
     scroll-snap-type: y mandatory;
@@ -3880,24 +3910,40 @@ svg {
   }
 
   .page-stack {
+    display: flex;
+    flex-direction: column;
     height: 100dvh;
     min-height: 100dvh;
     overflow-y: auto;
     overflow-x: hidden;
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: none;
     scroll-behavior: auto;
     overscroll-behavior-y: auto;
     touch-action: pan-y;
   }
 
   .page-section {
-    min-height: 100dvh;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
+    flex: 0 0 auto;
+    min-height: auto;
+    overflow: visible;
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
   }
 
   .page-section--hero {
-    min-height: 100dvh;
+    min-height: auto;
+  }
+
+  .page-section--hero,
+  .page-section--history,
+  .page-section--esoteric {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+
+  .page-section--history,
+  .page-section--esoteric {
+    overflow: visible;
   }
 
   .page-section--esoteric {
@@ -3905,10 +3951,10 @@ svg {
   }
 
   .page {
-    height: 100dvh;
-    min-height: 100dvh;
-    max-height: 100dvh;
-    overflow: clip;
+    height: auto;
+    min-height: auto;
+    max-height: none;
+    overflow: visible;
     padding: 0.8rem;
   }
 
@@ -4008,6 +4054,23 @@ svg {
     font-size: clamp(2rem, 9.2vw, 3.2rem);
   }
 
+  .glitch-title::before,
+  .glitch-title::after {
+    content: none;
+    animation: none;
+  }
+
+  .glitch-title {
+    animation: mobileTextShiver 9.2s steps(1) infinite;
+  }
+
+  .glitch-title[data-text*="#"],
+  .glitch-title[data-text*="?"],
+  .glitch-title[data-text*="["],
+  .glitch-title[data-text*="{"] {
+    text-shadow: 0 0 22px rgba(213, 177, 92, 0.1);
+  }
+
   .lede {
     max-width: none;
     font-size: 0.86rem;
@@ -4034,6 +4097,13 @@ svg {
     bottom: 0.65rem;
     padding: 0.33rem 0.6rem;
     font-size: 0.52rem;
+    animation: mobileUiFlicker 10.8s steps(1) infinite;
+  }
+
+  .link-card {
+    animation:
+      cardFlicker 13s steps(1) infinite,
+      mobileUiFlicker 12.6s steps(1) infinite;
   }
 
   .section-arrow--hero-up {

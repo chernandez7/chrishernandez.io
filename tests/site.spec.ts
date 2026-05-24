@@ -126,6 +126,41 @@ test.describe("desktop layout", () => {
 test.describe("mobile layout", () => {
   test.use({ viewport: { width: 390, height: 844 } }); // iPhone 14 Pro
 
+  test("page stack supports continuous vertical scroll on mobile", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const stack = page.locator(".page-stack");
+    const historySection = page.locator(".page-section--history");
+    await expect(stack).toBeVisible();
+    await expect(historySection).toBeAttached();
+
+    const snapType = await stack.evaluate(
+      (element) => getComputedStyle(element).scrollSnapType,
+    );
+    expect(snapType).toBe("none");
+
+    const dimensions = await stack.evaluate((element) => ({
+      clientHeight: element.clientHeight,
+      scrollHeight: element.scrollHeight,
+    }));
+    expect(dimensions.scrollHeight).toBeGreaterThan(dimensions.clientHeight);
+
+    const initialTop = await stack.evaluate((element) => element.scrollTop);
+
+    await historySection.evaluate((element) => {
+      element.scrollIntoView({ block: "start", behavior: "auto" });
+    });
+
+    await expect
+      .poll(async () => {
+        const currentTop = await stack.evaluate((element) => element.scrollTop);
+        return currentTop !== initialTop;
+      })
+      .toBe(true);
+  });
+
   test("page loads without JS errors", async ({ page }) => {
     const errors: string[] = [];
     page.on("pageerror", (err) => errors.push(err.message));
@@ -149,6 +184,36 @@ test.describe("mobile layout", () => {
     const heading = page.locator(".hero__name, h1").first();
     await expect(heading).toBeVisible();
     await expect(heading).toContainText(/christopher/i);
+  });
+
+  test("arcane section is above hero and history on mobile", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const stack = page.locator(".page-stack");
+    const hero = page.locator(".page-section--hero");
+    const history = page.locator(".page-section--history");
+    const esoteric = page.locator(".page-section--esoteric");
+
+    await expect(stack).toBeVisible();
+    await expect(hero).toBeVisible();
+    await expect(history).toBeVisible();
+    await expect(esoteric).toBeVisible();
+
+    const positions = await page.evaluate(() => {
+      const getTop = (selector: string) =>
+        document.querySelector(selector)?.getBoundingClientRect().top ?? 0;
+
+      return {
+        heroTop: getTop(".page-section--hero"),
+        historyTop: getTop(".page-section--history"),
+        esotericTop: getTop(".page-section--esoteric"),
+      };
+    });
+
+    expect(positions.esotericTop).toBeLessThan(positions.heroTop);
+    expect(positions.historyTop).toBeGreaterThanOrEqual(positions.heroTop);
   });
 
   test("social links are visible and tappable on mobile", async ({ page }) => {
