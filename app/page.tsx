@@ -109,10 +109,10 @@ const trailProfileByDensity = {
 } as const;
 
 const sigilProfileByDensity = {
-  "ultra-low": { flower: 10, rays: 16, ticks: 16, outerTicks: 5, alchemy: 4 },
-  low: { flower: 12, rays: 18, ticks: 18, outerTicks: 6, alchemy: 4 },
-  base: { flower: 14, rays: 20, ticks: 20, outerTicks: 7, alchemy: 5 },
-  high: { flower: 17, rays: 22, ticks: 22, outerTicks: 8, alchemy: 6 },
+  "ultra-low": { flower: 19, rays: 16, ticks: 16, outerTicks: 5, alchemy: 4 },
+  low: { flower: 19, rays: 18, ticks: 18, outerTicks: 6, alchemy: 4 },
+  base: { flower: 19, rays: 20, ticks: 20, outerTicks: 7, alchemy: 5 },
+  high: { flower: 19, rays: 22, ticks: 22, outerTicks: 8, alchemy: 6 },
   ultra: { flower: 19, rays: 24, ticks: 24, outerTicks: 8, alchemy: 6 },
 } as const;
 
@@ -590,6 +590,9 @@ export default function Home() {
   );
   const [sigilDensity, setSigilDensity] = useState<SigilDensity>("ultra");
   const [runtimeLogs, setRuntimeLogs] = useState<RuntimeLogEntry[]>([]);
+  const [runtimeConsoleHeroMode, setRuntimeConsoleHeroMode] = useState<
+    "hero" | "floating"
+  >("hero");
   const perfSignalRef = useRef(1);
   const trendRef = useRef<"up" | "down" | "flat">("flat");
   const trendSamplesRef = useRef(0);
@@ -768,6 +771,10 @@ export default function Home() {
           30,
           Math.min(sectionTargetFps, estimatedRefreshHz),
         );
+        const hudFps =
+          activeSectionRef.current === "hero"
+            ? Math.min(fps, Math.round(controlTargetFps))
+            : fps;
         const targetMode: "main" | "non-main" =
           activeSectionRef.current === "hero" ? "main" : "non-main";
 
@@ -922,7 +929,7 @@ export default function Home() {
         }
 
         setPerfSnapshot({
-          fps,
+          fps: hudFps,
           lowFps: Number.isFinite(lowFps) ? lowFps : fps,
           avgFrameMs: Number((totalFrameMs / frames).toFixed(1)),
           slowFramePct: Math.round((slowFrames / frames) * 100),
@@ -1596,6 +1603,111 @@ export default function Home() {
     setActiveSection("hero");
   }, []);
 
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const stack = sectionStackRef.current;
+    const heroSection = heroSectionRef.current;
+
+    const clearRuntimeHeroBounds = () => {
+      root.style.removeProperty("--runtime-hero-top");
+      root.style.removeProperty("--runtime-hero-height");
+      root.style.removeProperty("--runtime-hero-max-height");
+    };
+
+    if (activeSection !== "hero" || !stack || !heroSection) {
+      clearRuntimeHeroBounds();
+      setRuntimeConsoleHeroMode("floating");
+      return;
+    }
+
+    const hero = heroSection.querySelector(".hero");
+    const mast = heroSection.querySelector(".hero__mast");
+    const lede = heroSection.querySelector(".lede");
+    const occultPulse = heroSection.querySelector(".occult-pulse");
+
+    if (!(hero instanceof HTMLElement) || !(lede instanceof HTMLElement)) {
+      clearRuntimeHeroBounds();
+      setRuntimeConsoleHeroMode("floating");
+      return;
+    }
+
+    const updateRuntimeHeroBounds = () => {
+      const heroRect = hero.getBoundingClientRect();
+      const ledeRect = lede.getBoundingClientRect();
+      const mastRect =
+        mast instanceof HTMLElement ? mast.getBoundingClientRect() : null;
+      const pulseRect =
+        occultPulse instanceof HTMLElement
+          ? occultPulse.getBoundingClientRect()
+          : null;
+
+      const viewportHeight = window.innerHeight;
+      const lowerBound = Math.max(8, heroRect.top + 8);
+      const pulseVisible =
+        occultPulse instanceof HTMLElement &&
+        window.getComputedStyle(occultPulse).display !== "none";
+      const upperBound = pulseVisible
+        ? Math.min(viewportHeight - 8, (pulseRect?.top ?? viewportHeight) - 12)
+        : viewportHeight - 8;
+      const anchorBottom = Math.max(
+        ledeRect.bottom,
+        mastRect?.bottom ?? ledeRect.bottom,
+      );
+      const safeGap = upperBound - (anchorBottom + 12);
+
+      if (safeGap < 96) {
+        clearRuntimeHeroBounds();
+        setRuntimeConsoleHeroMode("floating");
+        return;
+      }
+
+      let top = Math.max(lowerBound, anchorBottom + 12);
+      const preferredHeight = Math.min(205, Math.max(118, viewportHeight * 0.2));
+      let height = Math.min(preferredHeight, upperBound - top);
+
+      if (height < 88) {
+        top = Math.max(lowerBound, upperBound - 88);
+        height = upperBound - top;
+      }
+
+      top = Math.max(lowerBound, Math.min(top, upperBound - 72));
+      height = Math.max(72, Math.min(220, upperBound - top));
+
+      root.style.setProperty("--runtime-hero-top", `${top.toFixed(1)}px`);
+      root.style.setProperty("--runtime-hero-height", `${height.toFixed(1)}px`);
+      root.style.setProperty("--runtime-hero-max-height", `${height.toFixed(1)}px`);
+      setRuntimeConsoleHeroMode("hero");
+    };
+
+    updateRuntimeHeroBounds();
+
+    const handleResize = () => updateRuntimeHeroBounds();
+    const handleScroll = () => updateRuntimeHeroBounds();
+
+    window.addEventListener("resize", handleResize);
+    stack.addEventListener("scroll", handleScroll, { passive: true });
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateRuntimeHeroBounds();
+    });
+
+    resizeObserver.observe(hero);
+    if (mast instanceof HTMLElement) {
+      resizeObserver.observe(mast);
+    }
+    resizeObserver.observe(lede);
+    if (occultPulse instanceof HTMLElement) {
+      resizeObserver.observe(occultPulse);
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      stack.removeEventListener("scroll", handleScroll);
+      resizeObserver.disconnect();
+      clearRuntimeHeroBounds();
+    };
+  }, [activeSection]);
+
   const scrollToSection = useCallback((section: SectionId) => {
     if (navLockRef.current) {
       return;
@@ -1812,7 +1924,7 @@ export default function Home() {
       )}
       <RuntimeConsole
         logs={runtimeLogs}
-        mode={activeSection === "hero" ? "hero" : "floating"}
+        mode={activeSection === "hero" ? runtimeConsoleHeroMode : "floating"}
       />
       <nav
         className={`ritual-nav${activeSection === "hero" ? " ritual-nav--hero" : " ritual-nav--side"}`}

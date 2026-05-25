@@ -60,6 +60,14 @@ export function HeroPanel({
   sigilDensity,
 }: HeroPanelProps) {
   const heroActive = activeSection === "hero";
+  const quoteCountByDensity: Record<HeroPanelProps["sigilDensity"], number> = {
+    "ultra-low": 2,
+    low: 4,
+    base: 6,
+    high: sigilQuotes.length,
+    ultra: sigilQuotes.length,
+  };
+  const visibleSigilQuotes = sigilQuotes.slice(0, quoteCountByDensity[sigilDensity]);
   const glitchClass =
     glitchLevel === "low"
       ? " page--glitch-low"
@@ -117,7 +125,7 @@ export function HeroPanel({
 
       <aside className="sigil-panel" aria-label="Sacred geometry illustration">
         <ul className="sigil-quotes" aria-label="Occult inscriptions">
-          {sigilQuotes.map((quote) => (
+          {visibleSigilQuotes.map((quote) => (
             <li key={quote.text} className={quote.position}>
               {quote.text}
             </li>

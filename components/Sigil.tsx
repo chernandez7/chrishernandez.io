@@ -292,43 +292,83 @@ function SigilImpl({
   const densitySettings =
     density === "ultra-low"
       ? {
-          flowerCount: 10,
+          flowerCount: flowerCenters.length,
           rayCount: 16,
           tickCount: 16,
           outerTickCount: 5,
           alchemyCount: 4,
           outerGlowOpacity: 0.72,
           innerGlowOpacity: 0.78,
+          // Layer flags — ultra-low: only orbits, core, seed, flower, rays, ticks survive
+          showHeptagon: false,
+          showOuterTicks: false,
+          showInscription: false,
+          showEnochian: false,
+          showEnochianReverse: false,
+          showAxioms: false,
+          showAlchemy: false,
+          showDiamond: false,
+          showRing: false,
         }
       : density === "low"
         ? {
-            flowerCount: 12,
+            flowerCount: flowerCenters.length,
             rayCount: 18,
             tickCount: 18,
             outerTickCount: 6,
             alchemyCount: 4,
             outerGlowOpacity: 0.8,
             innerGlowOpacity: 0.84,
+            // Layer flags — low: diamonds/ring reappear, outer ticks return; text still stripped
+            showHeptagon: false,
+            showOuterTicks: true,
+            showInscription: false,
+            showEnochian: false,
+            showEnochianReverse: false,
+            showAxioms: false,
+            showAlchemy: false,
+            showDiamond: true,
+            showRing: true,
           }
         : density === "base"
           ? {
-              flowerCount: 14,
+              flowerCount: flowerCenters.length,
               rayCount: 20,
               tickCount: 20,
               outerTickCount: 7,
               alchemyCount: 5,
               outerGlowOpacity: 0.88,
               innerGlowOpacity: 0.9,
+              // Layer flags — base: inscription + enochian forward return; still no axioms/reverse/alchemy/heptagon
+              showHeptagon: false,
+              showOuterTicks: true,
+              showInscription: true,
+              showEnochian: true,
+              showEnochianReverse: false,
+              showAxioms: false,
+              showAlchemy: false,
+              showDiamond: true,
+              showRing: true,
             }
           : density === "high"
             ? {
-                flowerCount: 17,
+                flowerCount: flowerCenters.length,
                 rayCount: 22,
                 tickCount: 22,
                 outerTickCount: 8,
                 alchemyCount: 6,
                 outerGlowOpacity: 0.95,
                 innerGlowOpacity: 0.96,
+                // Layer flags — high: axioms + enochian reverse + alchemy return; heptagon still absent
+                showHeptagon: false,
+                showOuterTicks: true,
+                showInscription: true,
+                showEnochian: true,
+                showEnochianReverse: true,
+                showAxioms: true,
+                showAlchemy: true,
+                showDiamond: true,
+                showRing: true,
               }
             : {
                 flowerCount: flowerCenters.length,
@@ -338,6 +378,16 @@ function SigilImpl({
                 alchemyCount: alchemicalMarks.length,
                 outerGlowOpacity: 1,
                 innerGlowOpacity: 1,
+                // Layer flags — ultra: everything rendered
+                showHeptagon: true,
+                showOuterTicks: true,
+                showInscription: true,
+                showEnochian: true,
+                showEnochianReverse: true,
+                showAxioms: true,
+                showAlchemy: true,
+                showDiamond: true,
+                showRing: true,
               };
   const visibleFlowerCenters = flowerCenters.slice(
     0,
@@ -350,6 +400,8 @@ function SigilImpl({
     0,
     densitySettings.alchemyCount,
   );
+  const layerClassName = (visible: boolean) =>
+    `sigil__layer ${visible ? "sigil__layer--visible" : "sigil__layer--hidden"}`;
 
   return (
     <svg
@@ -474,18 +526,24 @@ function SigilImpl({
         );
       })}
 
-      <path
-        d="M400 182 L540 400 L400 618 L260 400 Z"
-        className="sigil__diamond"
-      />
-      <path
-        d="M400 240 L560 400 L400 560 L240 400 Z"
-        className="sigil__diamond sigil__diamond--thin"
-      />
-      <path
-        d="M400 300 C490 300, 560 360, 560 400 C560 440, 490 500, 400 500 C310 500, 240 440, 240 400 C240 360, 310 300, 400 300 Z"
-        className="sigil__ring"
-      />
+      <g
+        className={`${layerClassName(densitySettings.showDiamond)} sigil__layer--diamond`}
+      >
+        <path
+          d="M400 182 L540 400 L400 618 L260 400 Z"
+          className="sigil__diamond"
+        />
+        <path
+          d="M400 240 L560 400 L400 560 L240 400 Z"
+          className="sigil__diamond sigil__diamond--thin"
+        />
+      </g>
+      <g className={`${layerClassName(densitySettings.showRing)} sigil__layer--ring`}>
+        <path
+          d="M400 300 C490 300, 560 360, 560 400 C560 440, 490 500, 400 500 C310 500, 240 440, 240 400 C240 360, 310 300, 400 300 Z"
+          className="sigil__ring"
+        />
+      </g>
 
       <circle
         cx="400"
@@ -504,62 +562,89 @@ function SigilImpl({
       <circle cx="400" cy="400" r="390" className="sigil__frame" />
 
       {/* Heptagon — slowly counter-rotates outside the inner layers */}
-      <polygon points={heptagonPoints} className="sigil__heptagon" />
+      <g
+        className={`${layerClassName(densitySettings.showHeptagon)} sigil__layer--heptagon`}
+      >
+        <polygon points={heptagonPoints} className="sigil__heptagon" />
+      </g>
 
       {/* Outer tick marks at r≈372 — 8 radial ticks beyond the outer orbit */}
-      {visibleOuterTicks.map((tick, index) => (
-        <line
-          key={`outer-tick-${tick}`}
-          x1="400"
-          y1="18"
-          x2="400"
-          y2="34"
-          className="sigil__outer-tick"
-          transform={`rotate(${(index * 360) / visibleOuterTicks.length} 400 400)`}
-        />
-      ))}
+      <g
+        className={`${layerClassName(densitySettings.showOuterTicks)} sigil__layer--outer-ticks`}
+      >
+        {visibleOuterTicks.map((tick, index) => (
+          <line
+            key={`outer-tick-${tick}`}
+            x1="400"
+            y1="18"
+            x2="400"
+            y2="34"
+            className="sigil__outer-tick"
+            transform={`rotate(${(index * 360) / visibleOuterTicks.length} 400 400)`}
+          />
+        ))}
+      </g>
 
       {/* Inscription ring — masonic motto follows the outer orbit */}
-      <text className="sigil__inscription">
-        <textPath href={`#${ordoPathId}`} startOffset="0%">
-          {
-            "  ✦  ORDO AB CHAO  ✦  LVX IN TENEBRIS  ✦  V.I.T.R.I.O.L  ✦  FIAT LVX  ✦  "
-          }
-        </textPath>
-      </text>
+      <g
+        className={`${layerClassName(densitySettings.showInscription)} sigil__layer--inscription`}
+      >
+        <text className="sigil__inscription">
+          <textPath href={`#${ordoPathId}`} startOffset="0%">
+            {
+              "  ✦  ORDO AB CHAO  ✦  LVX IN TENEBRIS  ✦  V.I.T.R.I.O.L  ✦  FIAT LVX  ✦  "
+            }
+          </textPath>
+        </text>
+      </g>
 
-      <text className="sigil__enochian sigil__enochian--forward">
-        <textPath href={`#${enochPathId}`} startOffset="0%">
-          {enochianText}
-        </textPath>
-      </text>
+      <g
+        className={`${layerClassName(densitySettings.showEnochian)} sigil__layer--enochian-forward`}
+      >
+        <text className="sigil__enochian sigil__enochian--forward">
+          <textPath href={`#${enochPathId}`} startOffset="0%">
+            {enochianText}
+          </textPath>
+        </text>
+      </g>
 
-      <text className="sigil__enochian sigil__enochian--reverse">
-        <textPath href={`#${enochPathId}`} startOffset="50%">
-          {enochianText}
-        </textPath>
-      </text>
+      <g
+        className={`${layerClassName(densitySettings.showEnochianReverse)} sigil__layer--enochian-reverse`}
+      >
+        <text className="sigil__enochian sigil__enochian--reverse">
+          <textPath href={`#${enochPathId}`} startOffset="50%">
+            {enochianText}
+          </textPath>
+        </text>
+      </g>
 
-      <text x="400" y="168" className="sigil__axiom sigil__axiom--north">
-        AS ABOVE
-      </text>
-      <text x="400" y="636" className="sigil__axiom sigil__axiom--south">
-        SO BELOW
-      </text>
+      <g className={`${layerClassName(densitySettings.showAxioms)} sigil__layer--axioms`}>
+        <text x="400" y="168" className="sigil__axiom sigil__axiom--north">
+          AS ABOVE
+        </text>
+        <text x="400" y="636" className="sigil__axiom sigil__axiom--south">
+          SO BELOW
+        </text>
+      </g>
 
-      <g className="sigil__alchemy" aria-hidden="true">
-        {visibleAlchemicalMarks.map((mark, index) => (
-          <text
-            key={`alchemy-${mark}-${index}`}
-            x="400"
-            y="72"
-            className="sigil__alchemy-mark"
-            transform={`rotate(${(index * 360) / visibleAlchemicalMarks.length} 400 400)`}
-            style={{ animationDelay: `${-(index * 0.8).toFixed(2)}s` }}
-          >
-            {mark}
-          </text>
-        ))}
+      <g
+        className={`${layerClassName(densitySettings.showAlchemy)} sigil__layer--alchemy`}
+        aria-hidden="true"
+      >
+        <g className="sigil__alchemy">
+          {visibleAlchemicalMarks.map((mark, index) => (
+            <text
+              key={`alchemy-${mark}-${index}`}
+              x="400"
+              y="72"
+              className="sigil__alchemy-mark"
+              transform={`rotate(${(index * 360) / visibleAlchemicalMarks.length} 400 400)`}
+              style={{ animationDelay: `${-(index * 0.8).toFixed(2)}s` }}
+            >
+              {mark}
+            </text>
+          ))}
+        </g>
       </g>
     </svg>
   );

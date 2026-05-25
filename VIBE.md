@@ -118,6 +118,13 @@ The sigil is **unboxed** — no card, no border, no background. It exists as raw
 
 On mobile, vertical scrolling across sections is intentional.
 
+Main-section surface treatment:
+
+- The hero should now carry the same atmospheric depth as non-main sections, but only around text containers.
+- Add glow/gradient aura only to text-box surfaces (`hero__mast`, link container), never to the whole hero plane.
+- Keep the sigil free and dominant; do not wrap it in card-like glow blocks.
+- Aura should be warm gold/ember and soft-edged, not neon and not purple-forward.
+
 ---
 
 ## The Sigil
@@ -178,6 +185,16 @@ Runtime interruption layer:
 - Outside fault mode, lighter passive text substitutions can still happen at low frequency
 
 The glitch effects should feel **sporadic and authentic** — not regular enough to feel like a loop, irregular enough to feel like signal interference.
+
+Runtime console placement:
+
+- In hero mode, the runtime console must not overlap the occult pulse block:
+  - `AS ABOVE // SO BELOW`
+  - `TREE OF LIFE PATHWORK`
+  - `SQUARE + COMPASS FIELD`
+  - `MERCURY : SULFUR : SALT`
+- Prefer clamped top + max-height logic so short viewports still preserve a clear visual gap above that block.
+- If collision risk appears, shrink console height before moving text content.
 
 Important: prefer applying number motifs in text content and symbolic output, not expensive global timing changes.
 

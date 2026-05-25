@@ -30,6 +30,8 @@ function WorkHistoryPanelImpl({ glyphDensity }: WorkHistoryPanelProps) {
     }),
   }));
 
+  const hasActiveRole = (period: string) => /present|current/i.test(period);
+
   const emphasizeConsoleText = (text: string) => {
     const pattern =
       /(Infectious disease|team of one|frameworks|AI|CIAM|COVID|Fortune 500|machine vision|Contract|30k|word-of-mouth|Liquid Studios)/gi;
@@ -55,6 +57,13 @@ function WorkHistoryPanelImpl({ glyphDensity }: WorkHistoryPanelProps) {
     <>
       <SectionGlyphFields variant="history" density={glyphDensity} />
       <div className="work-history">
+        <div className="work-history__terminal-header" aria-hidden="true">
+          <span className="work-history__terminal-prompt">{">"}_</span>
+          <span className="work-history__terminal-cmd">
+            career_log --format=records --sort=desc --fields=all
+          </span>
+          <span className="work-history__terminal-status">EXIT 0</span>
+        </div>
         <div className="work-history__header">
           <p className="work-history__eyebrow">Experience</p>
           <h2 className="work-history__title">Career Path</h2>
@@ -74,7 +83,7 @@ function WorkHistoryPanelImpl({ glyphDensity }: WorkHistoryPanelProps) {
           {newestFirstTracks.map((track) => (
             <li
               key={track.company}
-              className="work-history__item work-history__item--track"
+              className={`work-history__item work-history__item--track${track.stages.some((stage) => hasActiveRole(stage.period)) ? " work-history__item--active" : ""}`}
             >
               <p className="work-history__company">
                 {track.company}
@@ -91,7 +100,7 @@ function WorkHistoryPanelImpl({ glyphDensity }: WorkHistoryPanelProps) {
                 {track.stages.map((stage) => (
                   <li
                     key={`${track.company}-${stage.period}`}
-                    className="work-history__stage"
+                    className={`work-history__stage${hasActiveRole(stage.period) ? " work-history__stage--active" : ""}`}
                   >
                     <p className="work-history__period">{stage.period}</p>
                     <p className="work-history__role">{stage.role}</p>

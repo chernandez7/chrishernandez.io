@@ -30,8 +30,11 @@ function EsotericBioPanelImpl({ glyphDensity }: EsotericBioPanelProps) {
     <>
       <SectionGlyphFields variant="esoteric" density={glyphDensity} />
       <div className="esoteric-bio">
-        <p className="esoteric-bio__eyebrow">Off-Hours</p>
-        <h2 className="esoteric-bio__title">Esoteric Interests</h2>
+        <div className="esoteric-bio__void-static" aria-hidden="true" />
+        <p className="esoteric-bio__eyebrow">Off-Hours // SECTOR VII</p>
+        <h2 className="esoteric-bio__title" data-glitch="Esoteric Interests">
+          Esoteric Interests
+        </h2>
         <p className="esoteric-bio__lede">
           {emphasizeEsotericText(
             "Outside of engineering work, I study symbolic frameworks, reflective practices, and creative disciplines.",
