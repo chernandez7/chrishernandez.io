@@ -628,27 +628,69 @@ export default function Home() {
     },
     [],
   );
-  const personJsonLd = useMemo(
+  const structuredDataJsonLd = useMemo(
     () => ({
       "@context": "https://schema.org",
-      "@type": "Person",
-      name: "Christopher Hernandez",
-      url: "https://skate.dev",
-      sameAs: socialLinks.map((link) => link.href),
-      jobTitle: "Senior Software Engineer II",
-      worksFor: {
-        "@type": "Organization",
-        name: "Tempus AI",
-        url: "https://www.tempus.com/",
-      },
-      description:
-        "Senior Software Engineer II focused on hard systems problems, platform architecture, and resilient product delivery.",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://skate.dev/#person",
+          name: "Christopher Hernandez",
+          url: "https://skate.dev",
+          image: "https://skate.dev/og-image.png",
+          sameAs: socialLinks.map((link) => link.href),
+          jobTitle: "Senior Software Engineer II",
+          worksFor: {
+            "@type": "Organization",
+            name: "Tempus AI",
+            url: "https://www.tempus.com/",
+          },
+          description:
+            "Senior Software Engineer II focused on hard systems problems, platform architecture, and resilient product delivery.",
+          knowsAbout: [
+            "Software Architecture",
+            "Platform Engineering",
+            "Distributed Systems",
+            "Full-Stack Development",
+          ],
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://skate.dev/#website",
+          url: "https://skate.dev",
+          name: "Christopher Hernandez",
+          inLanguage: "en-US",
+          publisher: {
+            "@id": "https://skate.dev/#person",
+          },
+        },
+        {
+          "@type": "ProfilePage",
+          "@id": "https://skate.dev/#webpage",
+          url: "https://skate.dev/",
+          name: "Christopher Hernandez | Senior Software Engineer II",
+          isPartOf: {
+            "@id": "https://skate.dev/#website",
+          },
+          about: {
+            "@id": "https://skate.dev/#person",
+          },
+          mainEntity: {
+            "@id": "https://skate.dev/#person",
+          },
+          primaryImageOfPage: {
+            "@type": "ImageObject",
+            url: "https://skate.dev/og-image.png",
+          },
+          inLanguage: "en-US",
+        },
+      ],
     }),
     [],
   );
-  const personJsonLdHtml = useMemo(
-    () => JSON.stringify(personJsonLd),
-    [personJsonLd],
+  const structuredDataJsonLdHtml = useMemo(
+    () => JSON.stringify(structuredDataJsonLd),
+    [structuredDataJsonLd],
   );
 
   useEffect(() => {
@@ -2439,7 +2481,7 @@ export default function Home() {
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: personJsonLdHtml }}
+        dangerouslySetInnerHTML={{ __html: structuredDataJsonLdHtml }}
       />
     </div>
   );
