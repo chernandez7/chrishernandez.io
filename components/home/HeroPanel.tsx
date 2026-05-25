@@ -67,7 +67,27 @@ export function HeroPanel({
     high: sigilQuotes.length,
     ultra: sigilQuotes.length,
   };
-  const visibleSigilQuotes = sigilQuotes.slice(0, quoteCountByDensity[sigilDensity]);
+  const equationCountByDensity: Record<HeroPanelProps["sigilDensity"], number> = {
+    "ultra-low": 0,
+    low: 2,
+    base: 4,
+    high: 6,
+    ultra: sigilEquations.length,
+  };
+  const sacredQuotePattern = /(as above|ordo ab chao)/i;
+  const sacredQuotes = sigilQuotes.filter((quote) => sacredQuotePattern.test(quote.text));
+  const nonSacredQuotes = sigilQuotes.filter(
+    (quote) => !sacredQuotePattern.test(quote.text),
+  );
+  const visibleQuoteBudget = quoteCountByDensity[sigilDensity];
+  const visibleSigilQuotes = [...sacredQuotes, ...nonSacredQuotes].slice(
+    0,
+    Math.max(visibleQuoteBudget, sacredQuotes.length),
+  );
+  const visibleSigilEquations = sigilEquations.slice(
+    0,
+    equationCountByDensity[sigilDensity],
+  );
   const glitchClass =
     glitchLevel === "low"
       ? " page--glitch-low"
@@ -132,7 +152,7 @@ export function HeroPanel({
           ))}
         </ul>
         <ul className="sigil-equations" aria-label="Foundational equations">
-          {sigilEquations.map((equation, index) => (
+          {visibleSigilEquations.map((equation, index) => (
             <li
               key={equation}
               className={`sigil-equation sigil-equation--${index + 1}`}

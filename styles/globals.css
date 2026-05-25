@@ -87,6 +87,39 @@ svg {
   overscroll-behavior-y: none;
   touch-action: none;
   scrollbar-width: none;
+  --chrome-border: rgba(223, 186, 122, 0.26);
+  --chrome-border-soft: rgba(223, 186, 122, 0.2);
+  --chrome-bg: rgba(6, 2, 14, 0.82);
+  --chrome-bg-soft: rgba(6, 2, 14, 0.42);
+  --chrome-text: rgba(241, 214, 140, 0.92);
+  --chrome-text-soft: rgba(241, 214, 140, 0.74);
+  --chrome-highlight-border: rgba(241, 214, 140, 0.66);
+  --chrome-highlight-bg: rgba(223, 186, 122, 0.12);
+  --chrome-highlight-text: rgba(241, 214, 140, 0.94);
+}
+
+.page-stack--active-history {
+  --chrome-border: rgba(200, 158, 92, 0.28);
+  --chrome-border-soft: rgba(200, 158, 92, 0.2);
+  --chrome-bg: rgba(8, 3, 14, 0.84);
+  --chrome-bg-soft: rgba(8, 3, 14, 0.44);
+  --chrome-text: rgba(233, 200, 146, 0.92);
+  --chrome-text-soft: rgba(219, 182, 126, 0.76);
+  --chrome-highlight-border: rgba(233, 200, 146, 0.68);
+  --chrome-highlight-bg: rgba(200, 158, 92, 0.14);
+  --chrome-highlight-text: rgba(243, 216, 170, 0.95);
+}
+
+.page-stack--active-esoteric {
+  --chrome-border: rgba(120, 16, 30, 0.46);
+  --chrome-border-soft: rgba(110, 14, 28, 0.3);
+  --chrome-bg: rgba(10, 1, 8, 0.84);
+  --chrome-bg-soft: rgba(10, 1, 8, 0.5);
+  --chrome-text: rgba(210, 176, 168, 0.92);
+  --chrome-text-soft: rgba(184, 142, 138, 0.82);
+  --chrome-highlight-border: rgba(162, 30, 46, 0.72);
+  --chrome-highlight-bg: rgba(120, 18, 32, 0.18);
+  --chrome-highlight-text: rgba(224, 190, 180, 0.95);
 }
 
 .page-stack::-webkit-scrollbar {
@@ -132,10 +165,10 @@ svg {
   align-items: center;
   z-index: 40;
   padding: 0.32rem 0.36rem;
-  border: 1px solid rgba(223, 186, 122, 0.26);
+  border: 1px solid var(--chrome-border);
   border-radius: 10px;
-  background: rgba(6, 2, 14, 0.82);
-  color: rgba(241, 214, 140, 0.92);
+  background: var(--chrome-bg);
+  color: var(--chrome-text);
   font-family: var(--mono);
   font-size: 0.53rem;
   letter-spacing: 0.1em;
@@ -163,10 +196,10 @@ svg {
 
 .perf-hud__metric {
   white-space: nowrap;
-  border: 1px solid rgba(223, 186, 122, 0.22);
+  border: 1px solid var(--chrome-border-soft);
   border-radius: 999px;
   padding: 0.2rem 0.4rem;
-  background: rgba(14, 7, 26, 0.66);
+  background: color-mix(in srgb, var(--chrome-bg) 84%, black 16%);
 }
 
 .runtime-console {
@@ -176,12 +209,12 @@ svg {
   max-height: min(34dvh, 16rem);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  border: 1px solid rgba(223, 186, 122, 0.28);
+  border: 1px solid var(--chrome-border);
   border-radius: 12px;
-  background: rgba(6, 2, 14, 0.42);
+  background: var(--chrome-bg-soft);
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.28),
-    inset 0 0 0 1px rgba(223, 186, 122, 0.08);
+    inset 0 0 0 1px color-mix(in srgb, var(--chrome-border) 34%, transparent 66%);
   pointer-events: none;
   transition:
     top 420ms cubic-bezier(0.2, 0.72, 0.22, 1),
@@ -201,8 +234,8 @@ svg {
   width: min(30rem, calc(100vw - 1.56rem));
   top: auto;
   left: auto;
-  background: rgba(6, 2, 14, 0.34);
-  border-color: rgba(223, 186, 122, 0.2);
+  background: color-mix(in srgb, var(--chrome-bg-soft) 88%, transparent 12%);
+  border-color: var(--chrome-border-soft);
   opacity: 0.82;
   transform: translateY(0);
 }
@@ -215,8 +248,8 @@ svg {
   width: min(39rem, calc(46vw - 1.8rem));
   height: var(--runtime-hero-height, clamp(7.2rem, 18dvh, 11.8rem));
   max-height: var(--runtime-hero-max-height, min(11.8rem, calc(100dvh - clamp(15.6rem, 34dvh, 21.4rem) - clamp(13rem, 23dvh, 17rem))));
-  background: rgba(6, 2, 14, 0.3);
-  border-color: rgba(223, 186, 122, 0.17);
+  background: color-mix(in srgb, var(--chrome-bg-soft) 86%, transparent 14%);
+  border-color: color-mix(in srgb, var(--chrome-border-soft) 86%, transparent 14%);
   opacity: 0.64;
   transform: translateY(-2px);
 }
@@ -258,7 +291,7 @@ svg {
   justify-content: space-between;
   gap: 0.5rem;
   padding: 0.45rem 0.56rem;
-  border-bottom: 1px solid rgba(223, 186, 122, 0.16);
+  border-bottom: 1px solid color-mix(in srgb, var(--chrome-border-soft) 88%, transparent 12%);
   font-family: var(--mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -266,12 +299,12 @@ svg {
 
 .runtime-console__title {
   font-size: 0.58rem;
-  color: rgba(241, 214, 140, 0.9);
+  color: var(--chrome-text);
 }
 
 .runtime-console__meta {
   font-size: 0.5rem;
-  color: rgba(255, 230, 172, 0.82);
+  color: var(--chrome-text-soft);
 }
 
 .runtime-console__list {
@@ -293,23 +326,23 @@ svg {
   font-size: 0.57rem;
   line-height: 1.45;
   letter-spacing: 0.03em;
-  color: rgba(238, 228, 205, 0.85);
+  color: color-mix(in srgb, var(--chrome-text) 86%, #f2eee4 14%);
 }
 
 .runtime-console__line--highlight {
-  border-left: 1px solid rgba(255, 220, 152, 0.45);
+  border-left: 1px solid var(--chrome-highlight-border);
   padding-left: 0.38rem;
   margin-left: -0.38rem;
-  background: linear-gradient(90deg, rgba(223, 186, 122, 0.12), transparent 58%);
-  color: rgba(255, 233, 182, 0.95);
+  background: linear-gradient(90deg, var(--chrome-highlight-bg), transparent 58%);
+  color: var(--chrome-highlight-text);
 }
 
 .runtime-console__line--warn {
-  color: rgba(255, 216, 147, 0.94);
+  color: color-mix(in srgb, var(--chrome-highlight-text) 92%, #ffd893 8%);
 }
 
 .runtime-console__time {
-  color: rgba(241, 214, 140, 0.64);
+  color: color-mix(in srgb, var(--chrome-text-soft) 84%, transparent 16%);
 }
 
 .runtime-console__text {
@@ -320,9 +353,9 @@ svg {
 }
 
 .runtime-console__mark {
-  color: rgba(255, 222, 148, 0.86);
+  color: var(--chrome-highlight-text);
   letter-spacing: 0.08em;
-  text-shadow: 0 0 8px rgba(223, 186, 122, 0.44);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--chrome-highlight-bg) 72%, transparent 28%);
 }
 
 .runtime-console__line--highlight .runtime-console__text {
@@ -409,9 +442,9 @@ svg {
   display: grid;
   gap: 0.34rem;
   padding: 0.45rem;
-  border: 1px solid rgba(223, 186, 122, 0.2);
+  border: 1px solid var(--chrome-border-soft);
   border-radius: 14px;
-  background: rgba(5, 2, 12, 0.78);
+  background: color-mix(in srgb, var(--chrome-bg) 96%, black 4%);
   backdrop-filter: none;
   transition:
     top 280ms ease,
@@ -442,11 +475,11 @@ svg {
 }
 
 .ritual-nav__item {
-  border: 1px solid rgba(223, 186, 122, 0.16);
+  border: 1px solid var(--chrome-border-soft);
   border-radius: 999px;
   padding: 0.34rem 0.56rem;
   background: rgba(255, 255, 255, 0.01);
-  color: rgba(241, 214, 140, 0.76);
+  color: var(--chrome-text-soft);
   font-family: var(--mono);
   font-size: 0.52rem;
   letter-spacing: 0.14em;
@@ -456,15 +489,15 @@ svg {
 
 .ritual-nav__item:hover,
 .ritual-nav__item:focus-visible {
-  border-color: rgba(241, 214, 140, 0.66);
-  color: rgba(241, 214, 140, 0.94);
-  background: rgba(223, 186, 122, 0.08);
+  border-color: var(--chrome-highlight-border);
+  color: var(--chrome-highlight-text);
+  background: color-mix(in srgb, var(--chrome-highlight-bg) 72%, transparent 28%);
 }
 
 .ritual-nav__item--active {
-  border-color: rgba(241, 214, 140, 0.72);
-  color: rgba(241, 214, 140, 0.94);
-  background: rgba(223, 186, 122, 0.12);
+  border-color: var(--chrome-highlight-border);
+  color: var(--chrome-highlight-text);
+  background: var(--chrome-highlight-bg);
 }
 
 .section-arrow {
