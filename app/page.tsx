@@ -873,10 +873,12 @@ export default function Home() {
           trendSamplesRef.current = 0;
         }
 
+        const isMainSection = activeSectionRef.current === "hero";
+
         const sigilDirection: "up" | "down" | "flat" =
-          smoothed >= 0.995 && smoothed <= 1.02
+          smoothed >= 0.998 && smoothed <= 1.015
             ? "up"
-            : smoothed <= 0.935
+            : smoothed <= 0.86
               ? "down"
               : "flat";
 
@@ -888,13 +890,15 @@ export default function Home() {
         }
 
         const canStepSigilDown =
+          !isMainSection &&
           now >= sigilHoldUntilRef.current &&
           sigilDirection === "down" &&
-          sigilTrendSamplesRef.current >= 5;
+          sigilTrendSamplesRef.current >= 8;
         const canStepSigilUp =
+          !isMainSection &&
           now >= sigilHoldUntilRef.current &&
           sigilDirection === "up" &&
-          sigilTrendSamplesRef.current >= 7;
+          sigilTrendSamplesRef.current >= 10;
 
         if (canStepSigilDown || canStepSigilUp) {
           setSigilDensity((currentDensity) => {
@@ -903,11 +907,14 @@ export default function Home() {
               "low",
               "base",
               "high",
+              "ultra",
             ];
             const currentIndex = sigilLevels.indexOf(currentDensity);
+            const resolvedCurrentIndex =
+              currentIndex === -1 ? sigilLevels.length - 1 : currentIndex;
             const nextIndex = canStepSigilDown
-              ? Math.max(0, currentIndex - 1)
-              : Math.min(sigilLevels.length - 1, currentIndex + 1);
+              ? Math.max(0, resolvedCurrentIndex - 1)
+              : Math.min(sigilLevels.length - 1, resolvedCurrentIndex + 1);
             const nextDensity = sigilLevels[nextIndex];
 
             if (nextDensity !== currentDensity) {
@@ -923,8 +930,12 @@ export default function Home() {
           });
 
           sigilHoldUntilRef.current = canStepSigilDown
-            ? now + 9000
-            : now + 12000;
+            ? now + 14000
+            : now + 18000;
+          sigilTrendSamplesRef.current = 0;
+        } else if (isMainSection) {
+          // Keep the main sigil stable at full profile; adaptivity applies only off-main.
+          sigilTrendRef.current = "flat";
           sigilTrendSamplesRef.current = 0;
         }
 

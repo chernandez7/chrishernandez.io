@@ -229,8 +229,7 @@ export const educationEntries: EducationEntry[] = [
     school: "Loyola University Chicago",
     degree: "Bachelor's Degree, Computer Science",
     period: "2013 - 2017",
-    activities:
-      "Association for Computing Machinery (ACM) student chapter.",
+    activities: "Association for Computing Machinery (ACM) student chapter.",
     skills: [
       "Computer Science Fundamentals",
       "Systems Programming",

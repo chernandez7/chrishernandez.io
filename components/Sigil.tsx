@@ -268,7 +268,7 @@ function PhilosopherStoneGlyphImpl({
         <circle
           cx="400"
           cy="425"
-          r="94"
+          r="106"
           className="philosopher-stone__core"
           stroke={`url(#${strokeId})`}
         />

@@ -122,7 +122,11 @@ export function HeroPanel({
             {occultPulse.map((line) => (
               <li
                 key={line}
-                className={sacredPhrasePattern.test(line) ? "occult-pulse__line--sacred" : undefined}
+                className={
+                  sacredPhrasePattern.test(line)
+                    ? "occult-pulse__line--sacred"
+                    : undefined
+                }
               >
                 {line}
               </li>
