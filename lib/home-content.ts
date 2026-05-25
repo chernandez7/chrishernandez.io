@@ -26,7 +26,7 @@ export const sigilQuotes = [
     position: "sigil-quote sigil-quote--east",
   },
   {
-    text: "Break, refine, ship",
+    text: "Compile, test, ship",
     position: "sigil-quote sigil-quote--south",
   },
   {
@@ -34,7 +34,7 @@ export const sigilQuotes = [
     position: "sigil-quote sigil-quote--west",
   },
   {
-    text: "Ordo ab chao // compile, test, ship",
+    text: "Ordo ab chao",
     position: "sigil-quote sigil-quote--northeast",
   },
   {
@@ -42,7 +42,7 @@ export const sigilQuotes = [
     position: "sigil-quote sigil-quote--southeast",
   },
   {
-    text: "As above, so below the stack",
+    text: "As above, so below",
     position: "sigil-quote sigil-quote--southwest",
   },
   {

@@ -538,7 +538,9 @@ function SigilImpl({
           className="sigil__diamond sigil__diamond--thin"
         />
       </g>
-      <g className={`${layerClassName(densitySettings.showRing)} sigil__layer--ring`}>
+      <g
+        className={`${layerClassName(densitySettings.showRing)} sigil__layer--ring`}
+      >
         <path
           d="M400 300 C490 300, 560 360, 560 400 C560 440, 490 500, 400 500 C310 500, 240 440, 240 400 C240 360, 310 300, 400 300 Z"
           className="sigil__ring"
@@ -618,7 +620,9 @@ function SigilImpl({
         </text>
       </g>
 
-      <g className={`${layerClassName(densitySettings.showAxioms)} sigil__layer--axioms`}>
+      <g
+        className={`${layerClassName(densitySettings.showAxioms)} sigil__layer--axioms`}
+      >
         <text x="400" y="168" className="sigil__axiom sigil__axiom--north">
           AS ABOVE
         </text>

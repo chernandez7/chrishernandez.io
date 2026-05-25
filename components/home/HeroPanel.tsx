@@ -60,30 +60,15 @@ export function HeroPanel({
   sigilDensity,
 }: HeroPanelProps) {
   const heroActive = activeSection === "hero";
-  const quoteCountByDensity: Record<HeroPanelProps["sigilDensity"], number> = {
-    "ultra-low": 2,
-    low: 4,
-    base: 6,
-    high: sigilQuotes.length,
-    ultra: sigilQuotes.length,
-  };
-  const equationCountByDensity: Record<HeroPanelProps["sigilDensity"], number> = {
-    "ultra-low": 0,
-    low: 2,
-    base: 4,
-    high: 6,
-    ultra: sigilEquations.length,
-  };
-  const sacredQuotePattern = /(as above|ordo ab chao)/i;
-  const sacredQuotes = sigilQuotes.filter((quote) => sacredQuotePattern.test(quote.text));
-  const nonSacredQuotes = sigilQuotes.filter(
-    (quote) => !sacredQuotePattern.test(quote.text),
-  );
-  const visibleQuoteBudget = quoteCountByDensity[sigilDensity];
-  const visibleSigilQuotes = [...sacredQuotes, ...nonSacredQuotes].slice(
-    0,
-    Math.max(visibleQuoteBudget, sacredQuotes.length),
-  );
+  const sacredPhrasePattern = /(as above|so below|ordo ab chao)/i;
+  const equationCountByDensity: Record<HeroPanelProps["sigilDensity"], number> =
+    {
+      "ultra-low": 0,
+      low: 2,
+      base: 4,
+      high: 6,
+      ultra: sigilEquations.length,
+    };
   const visibleSigilEquations = sigilEquations.slice(
     0,
     equationCountByDensity[sigilDensity],
@@ -135,7 +120,12 @@ export function HeroPanel({
 
           <ul className="occult-pulse" aria-label="Occult frame signals">
             {occultPulse.map((line) => (
-              <li key={line}>{line}</li>
+              <li
+                key={line}
+                className={sacredPhrasePattern.test(line) ? "occult-pulse__line--sacred" : undefined}
+              >
+                {line}
+              </li>
             ))}
           </ul>
 
@@ -145,8 +135,11 @@ export function HeroPanel({
 
       <aside className="sigil-panel" aria-label="Sacred geometry illustration">
         <ul className="sigil-quotes" aria-label="Occult inscriptions">
-          {visibleSigilQuotes.map((quote) => (
-            <li key={quote.text} className={quote.position}>
+          {sigilQuotes.map((quote) => (
+            <li
+              key={quote.text}
+              className={`${quote.position}${sacredPhrasePattern.test(quote.text) ? " sigil-quote--sacred" : ""}`}
+            >
               {quote.text}
             </li>
           ))}

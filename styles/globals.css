@@ -25,6 +25,15 @@
   --sanctuary-y: 0;
   --serif: var(--font-serif), 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
   --mono: var(--font-mono), 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --chrome-border: rgba(223, 186, 122, 0.26);
+  --chrome-border-soft: rgba(223, 186, 122, 0.2);
+  --chrome-bg: rgba(6, 2, 14, 0.82);
+  --chrome-bg-soft: rgba(6, 2, 14, 0.42);
+  --chrome-text: rgba(241, 214, 140, 0.92);
+  --chrome-text-soft: rgba(241, 214, 140, 0.74);
+  --chrome-highlight-border: rgba(241, 214, 140, 0.66);
+  --chrome-highlight-bg: rgba(223, 186, 122, 0.12);
+  --chrome-highlight-text: rgba(241, 214, 140, 0.94);
 }
 
 * {
@@ -50,6 +59,46 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
+}
+
+.home-root {
+  position: relative;
+}
+
+.home-root--hero {
+  --chrome-border: rgba(223, 186, 122, 0.26);
+  --chrome-border-soft: rgba(223, 186, 122, 0.2);
+  --chrome-bg: rgba(6, 2, 14, 0.82);
+  --chrome-bg-soft: rgba(6, 2, 14, 0.42);
+  --chrome-text: rgba(241, 214, 140, 0.92);
+  --chrome-text-soft: rgba(241, 214, 140, 0.74);
+  --chrome-highlight-border: rgba(241, 214, 140, 0.66);
+  --chrome-highlight-bg: rgba(223, 186, 122, 0.12);
+  --chrome-highlight-text: rgba(241, 214, 140, 0.94);
+}
+
+.home-root--history {
+  --chrome-border: rgba(200, 158, 92, 0.28);
+  --chrome-border-soft: rgba(200, 158, 92, 0.2);
+  --chrome-bg: rgba(8, 3, 14, 0.84);
+  --chrome-bg-soft: rgba(8, 3, 14, 0.44);
+  --chrome-text: rgba(233, 200, 146, 0.92);
+  --chrome-text-soft: rgba(219, 182, 126, 0.76);
+  --chrome-highlight-border: rgba(233, 200, 146, 0.68);
+  --chrome-highlight-bg: rgba(200, 158, 92, 0.14);
+  --chrome-highlight-text: rgba(243, 216, 170, 0.95);
+}
+
+.home-root--esoteric {
+  --chrome-border: rgba(120, 16, 30, 0.46);
+  --chrome-border-soft: rgba(110, 14, 28, 0.3);
+  --chrome-bg: rgba(10, 1, 8, 0.84);
+  --chrome-bg-soft: rgba(10, 1, 8, 0.5);
+  --chrome-text: rgba(210, 176, 168, 0.92);
+  --chrome-text-soft: rgba(184, 142, 138, 0.82);
+  --chrome-highlight-border: rgba(162, 30, 46, 0.72);
+  --chrome-highlight-bg: rgba(120, 18, 32, 0.18);
+  --chrome-highlight-text: rgba(224, 190, 180, 0.95);
 }
 
 ::selection {
@@ -3498,6 +3547,15 @@ svg {
   opacity: 0.8;
 }
 
+.occult-pulse__line--sacred {
+  color: rgba(255, 235, 170, 0.98);
+  opacity: 1;
+  text-shadow:
+    0 0 10px rgba(241, 214, 140, 0.48),
+    0 0 22px rgba(223, 186, 122, 0.22);
+  animation: sacredPhraseSignal 3.2s ease-in-out infinite;
+}
+
 .link-grid {
   display: flex;
   flex-direction: column;
@@ -3705,6 +3763,13 @@ svg {
 
 .sigil-quote {
   position: absolute;
+  --quote-base-transform: none;
+  --quote-amp-x: 0.44rem;
+  --quote-amp-y: 0.32rem;
+  --quote-rot: 1.1deg;
+  --quote-float-duration: 12.8s;
+  --quote-orbit-duration: 18.4s;
+  --quote-phase: 0s;
   margin: 0;
   max-width: 18ch;
   font-size: clamp(0.62rem, 0.82vw, 0.9rem);
@@ -3714,69 +3779,121 @@ svg {
   color: rgba(241, 214, 140, 0.58);
   text-shadow: 0 0 10px rgba(223, 186, 122, 0.18);
   opacity: 0.72;
+  animation:
+    sigilQuoteOrbit var(--quote-orbit-duration) ease-in-out infinite,
+    sigilQuoteFloat var(--quote-float-duration) ease-in-out infinite;
+  animation-delay: var(--quote-phase), calc(var(--quote-phase) * 0.5);
+}
+
+.sigil-quote--sacred {
+  color: rgba(255, 236, 174, 0.98);
+  letter-spacing: 0.16em;
+  text-shadow:
+    0 0 16px rgba(255, 235, 164, 0.62),
+    0 0 34px rgba(223, 186, 122, 0.28);
+  opacity: 0.96;
+  font-size: clamp(0.7rem, 0.92vw, 1rem);
+  z-index: 4;
 }
 
 .sigil-quote--north {
-  top: 2.5%;
-  animation: sigilQuoteDriftY 11.8s ease-in-out infinite;
-  animation-delay: 0s;
-  transform: translateX(-50%);
+  top: 3%;
+  left: 50%;
+  --quote-base-transform: translateX(-50%);
+  --quote-amp-x: 0.3rem;
+  --quote-amp-y: 0.45rem;
+  --quote-rot: 0.8deg;
+  --quote-phase: -0.4s;
+  --quote-float-duration: 13.8s;
+  --quote-orbit-duration: 20.6s;
   text-align: center;
 }
 
 .sigil-quote--east {
   top: 34%;
   right: -0.4rem;
-  animation: sigilQuoteDriftX 10.4s ease-in-out infinite;
-  animation-delay: 0s;
-  transform-origin: top right;
+  --quote-amp-x: 0.52rem;
+  --quote-amp-y: 0.2rem;
+  --quote-rot: 1.6deg;
+  --quote-phase: -2.4s;
+  --quote-float-duration: 11.6s;
+  --quote-orbit-duration: 17.6s;
+  text-align: right;
 }
 
 .sigil-quote--south {
   bottom: 2.5%;
   left: 50%;
-  transform: translateX(-50%);
-  animation: sigilQuoteDriftY 13.2s ease-in-out infinite;
-  animation-delay: -2.4s;
+  --quote-base-transform: translateX(-50%);
+  --quote-amp-x: 0.34rem;
+  --quote-amp-y: 0.5rem;
+  --quote-rot: 0.9deg;
+  --quote-phase: -1.8s;
+  --quote-float-duration: 14.2s;
+  --quote-orbit-duration: 21.8s;
+  text-align: center;
 }
 
 .sigil-quote--west {
   top: 66%;
   left: -0.4rem;
-  transform: rotate(-90deg) translateY(-50%);
-  transform-origin: top left;
-  animation: sigilQuoteDriftX 12.4s ease-in-out infinite;
-  animation-delay: -3.1s;
+  --quote-amp-x: 0.48rem;
+  --quote-amp-y: 0.22rem;
+  --quote-rot: 1.8deg;
+  --quote-phase: -3.2s;
+  --quote-float-duration: 12.2s;
+  --quote-orbit-duration: 19.2s;
+  text-align: left;
+}
 
 .sigil-quote--northeast {
   top: 12%;
   right: 8%;
+  --quote-amp-x: 0.45rem;
+  --quote-amp-y: 0.26rem;
+  --quote-rot: 1.2deg;
+  --quote-phase: -0.9s;
+  --quote-float-duration: 10.8s;
+  --quote-orbit-duration: 16.8s;
   text-align: right;
 }
-  animation: sigilQuoteDriftX 9.6s ease-in-out infinite;
-  animation-delay: -1.2s;
+
 .sigil-quote--southeast {
   bottom: 14%;
   right: 6%;
+  --quote-amp-x: 0.42rem;
+  --quote-amp-y: 0.34rem;
+  --quote-rot: 1.3deg;
+  --quote-phase: -4.2s;
+  --quote-float-duration: 12.6s;
+  --quote-orbit-duration: 18.6s;
   text-align: right;
 }
 
-  animation: sigilQuoteDriftY 12.2s ease-in-out infinite;
-  animation-delay: -4s;
+.sigil-quote--southwest {
   bottom: 15%;
   left: 6%;
+  --quote-amp-x: 0.42rem;
+  --quote-amp-y: 0.32rem;
+  --quote-rot: 1.25deg;
+  --quote-phase: -2.7s;
+  --quote-float-duration: 12.4s;
+  --quote-orbit-duration: 18.2s;
 }
 
 .sigil-quote--northwest {
-  animation: sigilQuoteDriftX 11.2s ease-in-out infinite;
-  animation-delay: -2.9s;
+  top: 12%;
   left: 8%;
+  --quote-amp-x: 0.44rem;
+  --quote-amp-y: 0.26rem;
+  --quote-rot: 1.2deg;
+  --quote-phase: -1.4s;
+  --quote-float-duration: 11.2s;
+  --quote-orbit-duration: 17.2s;
 }
 
 .sigil-panel__stone-mark {
   position: absolute;
-  animation: sigilQuoteDriftY 10.8s ease-in-out infinite;
-  animation-delay: -1.7s;
   width: auto;
   height: auto;
   z-index: 2;
@@ -3786,25 +3903,58 @@ svg {
     drop-shadow(0 0 58px rgba(223, 186, 122, 0.2));
   animation: sigilStonePulse 14s ease-in-out infinite;
 }
-@keyframes sigilQuoteDriftX {
+@keyframes sigilQuoteOrbit {
   0%,
   100% {
-    margin-left: 0;
+    transform: var(--quote-base-transform) translateX(0) rotate(0deg);
   }
 
-  50% {
-    margin-left: 0.45rem;
+  24% {
+    transform: var(--quote-base-transform) translateX(var(--quote-amp-x)) rotate(var(--quote-rot));
+  }
+
+  56% {
+    transform: var(--quote-base-transform) translateX(calc(var(--quote-amp-x) * -0.85)) rotate(calc(var(--quote-rot) * -0.65));
+  }
+
+  78% {
+    transform: var(--quote-base-transform) translateX(calc(var(--quote-amp-x) * 0.5)) rotate(calc(var(--quote-rot) * 0.6));
   }
 }
 
-@keyframes sigilQuoteDriftY {
+@keyframes sigilQuoteFloat {
   0%,
   100% {
     margin-top: 0;
+    opacity: 0.66;
   }
 
-  50% {
-    margin-top: 0.35rem;
+  35% {
+    margin-top: calc(var(--quote-amp-y) * -1);
+    opacity: 0.82;
+  }
+
+  68% {
+    margin-top: var(--quote-amp-y);
+    opacity: 0.74;
+  }
+}
+
+@keyframes sacredPhraseSignal {
+  0%,
+  100% {
+    opacity: 0.88;
+    transform: translateX(0);
+  }
+
+  40% {
+    opacity: 1;
+    transform: translateX(1px);
+  }
+
+  52% {
+    opacity: 0.92;
+    transform: translateX(-1px);
   }
 }
 
@@ -6210,10 +6360,27 @@ svg {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 50% 42%, rgba(112, 12, 22, 0.16), transparent 42%),
+    radial-gradient(circle at 50% 64%, rgba(58, 14, 82, 0.16), transparent 44%),
+    radial-gradient(circle at 8% 12%, rgba(223, 186, 122, 0.08), transparent 30%),
+    linear-gradient(180deg, #06020f 0%, #010007 100%);
   pointer-events: none;
   transform-origin: center;
   overflow: hidden;
+}
+
+.intro-screensaver::before {
+  content: "";
+  position: absolute;
+  inset: 11% 17%;
+  border: 1px solid rgba(223, 186, 122, 0.2);
+  box-shadow:
+    inset 0 0 0 1px rgba(223, 186, 122, 0.08),
+    0 0 38px rgba(223, 186, 122, 0.08);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  opacity: 0.5;
+  animation: introSealPulse 4.2s ease-in-out infinite;
 }
 
 .intro-screensaver__flower {
@@ -6221,6 +6388,70 @@ svg {
   height: min(64vmin, 46rem);
   animation: ssBreath 3.6s ease-in-out 1 both, ssChromaticJitter 1.1s steps(1) infinite;
   transform-origin: center;
+}
+
+.intro-screensaver__stone {
+  position: absolute;
+  width: min(44vmin, 30rem);
+  height: min(44vmin, 30rem);
+  opacity: 0.26;
+  filter:
+    drop-shadow(0 0 20px rgba(223, 186, 122, 0.36))
+    drop-shadow(0 0 48px rgba(223, 186, 122, 0.18));
+  animation: introStoneHum 3.6s ease-in-out 1 both;
+}
+
+.intro-screensaver__motto {
+  position: absolute;
+  margin: 0;
+  text-transform: uppercase;
+  text-align: center;
+  font-family: var(--mono);
+  letter-spacing: 0.22em;
+  color: rgba(241, 214, 140, 0.86);
+  text-shadow:
+    0 0 10px rgba(223, 186, 122, 0.42),
+    0 0 24px rgba(223, 186, 122, 0.16);
+}
+
+.intro-screensaver__motto--top {
+  top: 15%;
+  font-size: clamp(0.62rem, 1.2vw, 0.86rem);
+  opacity: 0.86;
+  animation: introMottoPulse 3.6s ease-in-out 1 both;
+}
+
+.intro-screensaver__motto--center {
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 3.4vw, 2.9rem);
+  letter-spacing: 0.3em;
+  color: rgba(255, 237, 178, 0.96);
+  animation: introOrdoReveal 3.6s ease-in-out 1 both;
+}
+
+.intro-screensaver__motto--bottom {
+  bottom: 14%;
+  font-size: clamp(0.56rem, 1vw, 0.74rem);
+  opacity: 0.72;
+  animation: introMottoPulse 3.6s ease-in-out 1 both;
+  animation-delay: 100ms;
+}
+
+.intro-screensaver__signature {
+  position: absolute;
+  right: clamp(0.9rem, 2.6vw, 2.1rem);
+  bottom: clamp(0.75rem, 2.2vw, 1.6rem);
+  margin: 0;
+  font-family: var(--mono);
+  font-size: clamp(0.42rem, 0.74vw, 0.56rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(241, 214, 140, 0.42);
+  opacity: 0.42;
+  text-shadow: 0 0 8px rgba(223, 186, 122, 0.16);
+  animation: introSignatureHum 3.6s ease-in-out 1 both;
 }
 
 .intro-screensaver__flower .flower-of-life__group {
@@ -6413,6 +6644,83 @@ svg {
   86% {
     opacity: 0.08;
     transform: translateY(2px);
+  }
+}
+
+@keyframes introStoneHum {
+  0%,
+  100% {
+    opacity: 0.18;
+    transform: scale(0.96) rotate(0deg);
+  }
+
+  50% {
+    opacity: 0.34;
+    transform: scale(1.02) rotate(3deg);
+  }
+}
+
+@keyframes introMottoPulse {
+  0%,
+  100% {
+    opacity: 0.56;
+    letter-spacing: 0.2em;
+  }
+
+  48% {
+    opacity: 0.9;
+    letter-spacing: 0.24em;
+  }
+}
+
+@keyframes introOrdoReveal {
+  0% {
+    opacity: 0;
+    letter-spacing: 0.42em;
+    filter: blur(2px);
+  }
+
+  18% {
+    opacity: 0.64;
+    filter: blur(1px);
+  }
+
+  52% {
+    opacity: 1;
+    letter-spacing: 0.34em;
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 0.94;
+    letter-spacing: 0.3em;
+    filter: blur(0);
+  }
+}
+
+@keyframes introSealPulse {
+  0%,
+  100% {
+    opacity: 0.38;
+    transform: scale(0.98) rotate(0deg);
+  }
+
+  50% {
+    opacity: 0.54;
+    transform: scale(1.02) rotate(3deg);
+  }
+}
+
+@keyframes introSignatureHum {
+  0%,
+  100% {
+    opacity: 0.28;
+    letter-spacing: 0.12em;
+  }
+
+  52% {
+    opacity: 0.5;
+    letter-spacing: 0.16em;
   }
 }
 

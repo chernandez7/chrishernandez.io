@@ -9,7 +9,7 @@ import {
   useState,
   type CSSProperties,
 } from "react";
-import { FlowerOfLifeGlyph } from "../components/Sigil";
+import { FlowerOfLifeGlyph, PhilosopherStoneGlyph } from "../components/Sigil";
 import { EsotericBioPanel } from "../components/home/EsotericBioPanel";
 import { HeroPanel } from "../components/home/HeroPanel";
 import { WorkHistoryPanel } from "../components/home/WorkHistoryPanel";
@@ -1662,7 +1662,10 @@ export default function Home() {
       }
 
       let top = Math.max(lowerBound, anchorBottom + 12);
-      const preferredHeight = Math.min(205, Math.max(118, viewportHeight * 0.2));
+      const preferredHeight = Math.min(
+        205,
+        Math.max(118, viewportHeight * 0.2),
+      );
       let height = Math.min(preferredHeight, upperBound - top);
 
       if (height < 88) {
@@ -1675,7 +1678,10 @@ export default function Home() {
 
       root.style.setProperty("--runtime-hero-top", `${top.toFixed(1)}px`);
       root.style.setProperty("--runtime-hero-height", `${height.toFixed(1)}px`);
-      root.style.setProperty("--runtime-hero-max-height", `${height.toFixed(1)}px`);
+      root.style.setProperty(
+        "--runtime-hero-max-height",
+        `${height.toFixed(1)}px`,
+      );
       setRuntimeConsoleHeroMode("hero");
     };
 
@@ -1895,7 +1901,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <div className={`home-root home-root--${activeSection}`}>
       {signalFault && (
         <div className="signal-fault" aria-hidden="true">
           <div className="signal-fault__frame">
@@ -2396,12 +2402,27 @@ export default function Home() {
           className={`intro-screensaver${introPhase === "dismissing" ? " intro-screensaver--dismissing" : ""}`}
           aria-hidden="true"
         >
+          <p className="intro-screensaver__motto intro-screensaver__motto--top">
+            AS ABOVE // SO BELOW
+          </p>
           <FlowerOfLifeGlyph
             className="intro-screensaver__flower"
             idPrefix="intro-flower"
             introCycleMs={3600}
             ariaHidden
           />
+          <PhilosopherStoneGlyph
+            className="intro-screensaver__stone"
+            idPrefix="intro-stone"
+            ariaHidden
+          />
+          <p className="intro-screensaver__motto intro-screensaver__motto--center">
+            ORDO AB CHAO
+          </p>
+          <p className="intro-screensaver__motto intro-screensaver__motto--bottom">
+            SIGNAL CONSOLE // INITIATION
+          </p>
+          <p className="intro-screensaver__signature">Christopher Hernandez</p>
         </div>
       )}
 
@@ -2409,6 +2430,6 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: personJsonLdHtml }}
       />
-    </>
+    </div>
   );
 }
