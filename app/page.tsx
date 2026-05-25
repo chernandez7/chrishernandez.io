@@ -51,7 +51,19 @@ type PerformanceHudSnapshot = {
   avgFrameMs: number;
   slowFramePct: number;
   appAgeSec: number;
+  refreshHz: number;
+  fpsNormalized: number;
 };
+
+type RuntimeLogEntry = {
+  id: number;
+  at: number;
+  level: "info" | "warn";
+  emphasis: "normal" | "highlight";
+  message: string;
+};
+
+type SigilDensity = "ultra-low" | "low" | "base" | "high" | "ultra";
 
 const matrixNoiseChars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#@$%&*+-/<>[]{}";
 const matrixNoiseFavoredChars = "111333333357";
@@ -66,17 +78,53 @@ const signalFaultMessages = [
   "FRAME BREAK // RESUME 33",
 ];
 
+const runtimeHighlightPattern =
+  /(fault|interruption|target profile|main profile|tuning effects down|sigil detail reduced|access denied|perf sample|load |sanctuary|stabilize|restored visual complexity)/i;
+
 type PerformanceHudProps = {
   activeSection: SectionId;
   introPhase: "active" | "dismissing" | "done";
   trailEnabled: boolean;
   scrolling: boolean;
   sanctuaryInvoked: boolean;
+  snapshot: PerformanceHudSnapshot;
+  glitchLevel: "low" | "base" | "high";
 };
+
+type RuntimeConsoleProps = {
+  logs: RuntimeLogEntry[];
+  mode: "hero" | "floating";
+};
+
+const sectionGlyphCountsByDensity = {
+  low: { hero: 4, history: 6, esoteric: 6 },
+  base: { hero: 6, history: 9, esoteric: 9 },
+  high: { hero: 8, history: 12, esoteric: 12 },
+} as const;
+
+const trailProfileByDensity = {
+  low: { maxTrailGlyphs: 10, burstModifier: -1 },
+  base: { maxTrailGlyphs: 18, burstModifier: 0 },
+  high: { maxTrailGlyphs: 28, burstModifier: 1 },
+} as const;
+
+const sigilProfileByDensity = {
+  "ultra-low": { flower: 10, rays: 16, ticks: 16, outerTicks: 5, alchemy: 4 },
+  low: { flower: 12, rays: 18, ticks: 18, outerTicks: 6, alchemy: 4 },
+  base: { flower: 14, rays: 20, ticks: 20, outerTicks: 7, alchemy: 5 },
+  high: { flower: 17, rays: 22, ticks: 22, outerTicks: 8, alchemy: 6 },
+  ultra: { flower: 19, rays: 24, ticks: 24, outerTicks: 8, alchemy: 6 },
+} as const;
 
 const alchemyTrailSymbols = ["🜂", "🜁", "🜃", "🜄", "🜍", "🜔"];
 
-function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
+function AlchemyMouseTrail({
+  enabled,
+  density,
+}: {
+  enabled: boolean;
+  density: "low" | "base" | "high";
+}) {
   const [glyphs, setGlyphs] = useState<AlchemyTrailGlyph[]>([]);
   const nextGlyphIdRef = useRef(1);
 
@@ -131,7 +179,15 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
       velocityY: number,
       speed: number,
     ) => {
-      const burstCount = speed > 2.8 ? 3 : speed > 1.4 ? 2 : 1;
+      const baseBurstCount = speed > 2.8 ? 3 : speed > 1.4 ? 2 : 1;
+      const burstCount =
+        density === "low"
+          ? Math.max(1, baseBurstCount - 1)
+          : density === "high"
+            ? Math.min(4, baseBurstCount + 1)
+            : baseBurstCount;
+      const maxTrailGlyphs =
+        density === "low" ? 10 : density === "high" ? 28 : 18;
 
       const baseAngle = Math.atan2(velocityY, velocityX) + Math.PI;
       const createdAt = performance.now();
@@ -165,7 +221,7 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
         newGlyphs.push(glyph);
       }
 
-      activeGlyphs = [...activeGlyphs, ...newGlyphs].slice(-24);
+      activeGlyphs = [...activeGlyphs, ...newGlyphs].slice(-maxTrailGlyphs);
       syncGlyphs();
       startPruneLoop();
     };
@@ -210,7 +266,7 @@ function AlchemyMouseTrail({ enabled }: { enabled: boolean }) {
       activeGlyphs = [];
       setGlyphs([]);
     };
-  }, [enabled]);
+  }, [enabled, density]);
 
   if (!enabled || glyphs.length === 0) {
     return null;
@@ -248,15 +304,9 @@ function PerformanceHud({
   trailEnabled,
   scrolling,
   sanctuaryInvoked,
+  snapshot,
+  glitchLevel,
 }: PerformanceHudProps) {
-  const [snapshot, setSnapshot] = useState<PerformanceHudSnapshot>({
-    fps: 0,
-    lowFps: 0,
-    avgFrameMs: 0,
-    slowFramePct: 0,
-    appAgeSec: 0,
-  });
-
   const historyCorpus = useMemo(
     () =>
       promotionTracks
@@ -310,58 +360,13 @@ function PerformanceHud({
   const [matrixNoise, setMatrixNoise] = useState("SIGNALVECTOR-");
 
   useEffect(() => {
-    let frameId = 0;
-    let sampleStart = performance.now();
-    let previousFrameAt = sampleStart;
-    let frames = 0;
-    let totalFrameMs = 0;
-    let slowFrames = 0;
-    let lowFps = Number.POSITIVE_INFINITY;
-    const appStart = sampleStart;
-
-    const sample = (now: number) => {
-      const frameMs = now - previousFrameAt;
-      previousFrameAt = now;
-      frames += 1;
-      totalFrameMs += frameMs;
-      if (frameMs > 19.5) {
-        slowFrames += 1;
-      }
-
-      if (now - sampleStart >= 500) {
-        const elapsed = now - sampleStart;
-        const fps = Math.round((frames * 1000) / elapsed);
-        lowFps = Math.min(lowFps, fps);
-
-        setSnapshot({
-          fps,
-          lowFps: Number.isFinite(lowFps) ? lowFps : fps,
-          avgFrameMs: Number((totalFrameMs / frames).toFixed(1)),
-          slowFramePct: Math.round((slowFrames / frames) * 100),
-          appAgeSec: Math.max(0, Math.floor((now - appStart) / 1000)),
-        });
-
-        sampleStart = now;
-        frames = 0;
-        totalFrameMs = 0;
-        slowFrames = 0;
-      }
-
-      frameId = requestAnimationFrame(sample);
-    };
-
-    frameId = requestAnimationFrame(sample);
-
-    return () => {
-      cancelAnimationFrame(frameId);
-    };
-  }, []);
-
-  useEffect(() => {
     if (activeSection === "hero") {
       setMatrixNoise("SIGNALVECTOR-");
       return;
     }
+
+    const noiseCadenceMs =
+      glitchLevel === "low" ? 360 : glitchLevel === "base" ? 220 : 120;
 
     const timer = window.setInterval(() => {
       setMatrixNoise((current) => {
@@ -370,7 +375,12 @@ function PerformanceHud({
             ? current.split("")
             : `${matrixNoiseSeed}-`.split("");
         const baseline = `${matrixNoiseSeed}-`.split("");
-        const swapCount = 2 + Math.floor(Math.random() * 4);
+        const swapCount =
+          glitchLevel === "low"
+            ? 1 + Math.floor(Math.random() * 2)
+            : glitchLevel === "base"
+              ? 2 + Math.floor(Math.random() * 2)
+              : 2 + Math.floor(Math.random() * 4);
 
         // Revert a couple of positions toward the baseline so replacement is visible.
         for (let i = 0; i < 2; i += 1) {
@@ -385,7 +395,8 @@ function PerformanceHud({
           source[index] = pool[Math.floor(Math.random() * pool.length)];
         }
 
-        if (Math.random() < 0.35) {
+        const tokenChance = glitchLevel === "low" ? 0.12 : 0.35;
+        if (Math.random() < tokenChance) {
           const tokens = ["33", "33", "357", "111", "111", "333", "333", "666"];
           const token = tokens[Math.floor(Math.random() * tokens.length)];
           const start = Math.max(
@@ -399,10 +410,10 @@ function PerformanceHud({
 
         return source.join("");
       });
-    }, 120);
+    }, noiseCadenceMs);
 
     return () => window.clearInterval(timer);
-  }, [activeSection]);
+  }, [activeSection, glitchLevel]);
 
   const sectionLabel =
     activeSection === "hero"
@@ -430,8 +441,10 @@ function PerformanceHud({
     <>
       <div className="perf-hud perf-hud--perf" aria-live="polite">
         <span className="perf-hud__metric">FPS {snapshot.fps}</span>
+        <span className="perf-hud__metric">REF {snapshot.refreshHz}</span>
         <span className="perf-hud__metric">LOW {snapshot.lowFps}</span>
         <span className="perf-hud__metric">MS {snapshot.avgFrameMs}</span>
+        <span className="perf-hud__metric">GLITCH {glitchLevel}</span>
       </div>
       {showStateStats && (
         <div className="perf-hud perf-hud--state" aria-hidden="true">
@@ -481,6 +494,61 @@ function PerformanceHud({
   );
 }
 
+function RuntimeConsole({ logs, mode }: RuntimeConsoleProps) {
+  const listRef = useRef<HTMLOListElement>(null);
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) {
+      return;
+    }
+    list.scrollTop = list.scrollHeight;
+  }, [logs, mode]);
+
+  return (
+    <aside
+      className={`runtime-console runtime-console--${mode}`}
+      aria-live="polite"
+      aria-label="Runtime console"
+    >
+      <div className="runtime-console__header">
+        <span className="runtime-console__title">Runtime Console</span>
+        <span className="runtime-console__meta">LIVE</span>
+      </div>
+      <ol
+        ref={listRef}
+        className="runtime-console__list"
+        aria-label="Recent runtime events"
+      >
+        {logs.map((entry) => {
+          const stamp = new Date(entry.at).toLocaleTimeString([], {
+            hour12: false,
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
+          return (
+            <li
+              key={entry.id}
+              className={`runtime-console__line runtime-console__line--${entry.level}${entry.emphasis === "highlight" ? " runtime-console__line--highlight" : ""}`}
+            >
+              <span className="runtime-console__time">{stamp}</span>
+              <span className="runtime-console__text">
+                {entry.emphasis === "highlight" && (
+                  <span className="runtime-console__mark" aria-hidden="true">
+                    ##
+                  </span>
+                )}
+                <span>{entry.message}</span>
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </aside>
+  );
+}
+
 export default function Home() {
   const sectionStackRef = useRef<HTMLDivElement>(null);
   const heroSectionRef = useRef<HTMLElement>(null);
@@ -504,6 +572,58 @@ export default function Home() {
   const [signalFault, setSignalFault] = useState(false);
   const [signalFaultMessage, setSignalFaultMessage] = useState(
     signalFaultMessages[0],
+  );
+  const [perfSnapshot, setPerfSnapshot] = useState<PerformanceHudSnapshot>({
+    fps: 0,
+    lowFps: 0,
+    avgFrameMs: 0,
+    slowFramePct: 0,
+    appAgeSec: 0,
+    refreshHz: 60,
+    fpsNormalized: 1,
+  });
+  const [glyphDensity, setGlyphDensity] = useState<"low" | "base" | "high">(
+    "high",
+  );
+  const [glitchLevel, setGlitchLevel] = useState<"low" | "base" | "high">(
+    "high",
+  );
+  const [sigilDensity, setSigilDensity] = useState<SigilDensity>("ultra");
+  const [runtimeLogs, setRuntimeLogs] = useState<RuntimeLogEntry[]>([]);
+  const perfSignalRef = useRef(1);
+  const trendRef = useRef<"up" | "down" | "flat">("flat");
+  const trendSamplesRef = useRef(0);
+  const holdUntilRef = useRef(0);
+  const sigilTrendRef = useRef<"up" | "down" | "flat">("flat");
+  const sigilTrendSamplesRef = useRef(0);
+  const sigilHoldUntilRef = useRef(0);
+  const logIdRef = useRef(1);
+  const chargingLoggedRef = useRef(false);
+  const refreshBandRef = useRef<number>(60);
+  const prevVisibleSectionGlyphsRef = useRef<number | null>(null);
+  const prevSigilComplexityRef = useRef<number | null>(null);
+  const lastTelemetryLogAtRef = useRef(0);
+  const lastTargetModeRef = useRef<"main" | "non-main">("main");
+  const lastControlTargetRef = useRef(60);
+
+  const appendRuntimeLog = useCallback(
+    (message: string, level: "info" | "warn" = "info") => {
+      const nextId = logIdRef.current;
+      logIdRef.current += 1;
+      const emphasis: RuntimeLogEntry["emphasis"] =
+        level === "warn" || runtimeHighlightPattern.test(message)
+          ? "highlight"
+          : "normal";
+      const entry: RuntimeLogEntry = {
+        id: nextId,
+        at: Date.now(),
+        level,
+        emphasis,
+        message,
+      };
+      setRuntimeLogs((current) => [...current, entry].slice(-10));
+    },
+    [],
   );
   const personJsonLd = useMemo(
     () => ({
@@ -586,6 +706,429 @@ export default function Home() {
 
     return () => window.clearTimeout(finalizeTimer);
   }, [introPhase]);
+
+  useEffect(() => {
+    appendRuntimeLog(
+      "Runtime monitor online. Adaptive effect controller active.",
+    );
+  }, [appendRuntimeLog]);
+
+  useEffect(() => {
+    let frameId = 0;
+    let sampleStart = performance.now();
+    let previousFrameAt = sampleStart;
+    let frames = 0;
+    let totalFrameMs = 0;
+    let slowFrames = 0;
+    let lowFps = Number.POSITIVE_INFINITY;
+    let estimatedRefreshHz = 60;
+    const frameMsHistory: number[] = [];
+    const appStart = sampleStart;
+
+    const sample = (now: number) => {
+      const frameMs = now - previousFrameAt;
+      previousFrameAt = now;
+
+      if (frameMs > 2 && frameMs < 100) {
+        frameMsHistory.push(frameMs);
+        if (frameMsHistory.length > 180) {
+          frameMsHistory.shift();
+        }
+      }
+
+      frames += 1;
+      totalFrameMs += frameMs;
+      if (frameMs > 19.5) {
+        slowFrames += 1;
+      }
+
+      if (now - sampleStart >= 500) {
+        const elapsed = now - sampleStart;
+        const fps = Math.round((frames * 1000) / elapsed);
+        lowFps = Math.min(lowFps, fps);
+
+        if (frameMsHistory.length >= 15) {
+          const sorted = [...frameMsHistory].sort((a, b) => a - b);
+          const medianMs = sorted[Math.floor(sorted.length / 2)] ?? 16.67;
+          const measuredHz = Math.max(24, Math.min(240, 1000 / medianMs));
+          estimatedRefreshHz = estimatedRefreshHz * 0.82 + measuredHz * 0.18;
+        }
+
+        const refreshBand = Math.round(estimatedRefreshHz / 5) * 5;
+        if (Math.abs(refreshBand - refreshBandRef.current) >= 10) {
+          refreshBandRef.current = refreshBand;
+          appendRuntimeLog(`Display cadence now estimates ~${refreshBand}Hz.`);
+        }
+
+        const sectionTargetFps =
+          activeSectionRef.current === "hero"
+            ? 60
+            : Math.min(240, estimatedRefreshHz);
+        const controlTargetFps = Math.max(
+          30,
+          Math.min(sectionTargetFps, estimatedRefreshHz),
+        );
+        const targetMode: "main" | "non-main" =
+          activeSectionRef.current === "hero" ? "main" : "non-main";
+
+        if (
+          targetMode !== lastTargetModeRef.current ||
+          Math.abs(controlTargetFps - lastControlTargetRef.current) >= 5
+        ) {
+          appendRuntimeLog(
+            targetMode === "main"
+              ? `Target profile MAIN // soft cap ${Math.round(controlTargetFps)} FPS.`
+              : `Target profile NON-MAIN // soft cap ${Math.round(controlTargetFps)} FPS (min(display, 240)).`,
+          );
+          lastTargetModeRef.current = targetMode;
+          lastControlTargetRef.current = controlTargetFps;
+        }
+
+        const normalizedFps = Math.max(0, Math.min(1, fps / controlTargetFps));
+        perfSignalRef.current =
+          perfSignalRef.current * 0.84 + normalizedFps * 0.16;
+
+        const smoothed = perfSignalRef.current;
+        const inTargetBand =
+          fps >= controlTargetFps - 1 && fps <= controlTargetFps + 2;
+        const direction: "up" | "down" | "flat" =
+          smoothed >= 0.985 && smoothed <= 1.03
+            ? "up"
+            : smoothed <= 0.91
+              ? "down"
+              : "flat";
+
+        if (direction === trendRef.current) {
+          trendSamplesRef.current += 1;
+        } else {
+          trendRef.current = direction;
+          trendSamplesRef.current = direction === "flat" ? 0 : 1;
+        }
+
+        const canStep =
+          now >= holdUntilRef.current && trendSamplesRef.current >= 3;
+
+        if (canStep && direction !== "flat") {
+          if (direction === "down") {
+            setGlyphDensity((currentDensity) => {
+              const nextDensity =
+                currentDensity === "high"
+                  ? "base"
+                  : currentDensity === "base"
+                    ? "low"
+                    : "low";
+              if (nextDensity !== currentDensity) {
+                appendRuntimeLog(
+                  `Tuning effects down (${currentDensity} -> ${nextDensity}) to stabilize frame cadence.`,
+                  "warn",
+                );
+              }
+              return nextDensity;
+            });
+
+            setGlitchLevel((currentLevel) => {
+              const nextLevel =
+                currentLevel === "high"
+                  ? "base"
+                  : currentLevel === "base"
+                    ? "low"
+                    : "low";
+              return nextLevel;
+            });
+          } else if (direction === "up") {
+            setGlyphDensity((currentDensity) => {
+              const nextDensity =
+                currentDensity === "low"
+                  ? "base"
+                  : currentDensity === "base" && inTargetBand
+                    ? "high"
+                    : currentDensity;
+              if (nextDensity !== currentDensity) {
+                appendRuntimeLog(
+                  `Frame cadence recovered (${currentDensity} -> ${nextDensity}), restoring visual complexity.`,
+                );
+              }
+              return nextDensity;
+            });
+
+            setGlitchLevel((currentLevel) => {
+              const nextLevel =
+                currentLevel === "low"
+                  ? "base"
+                  : currentLevel === "base" && inTargetBand
+                    ? "high"
+                    : currentLevel;
+              return nextLevel;
+            });
+          }
+
+          holdUntilRef.current = now + 4200;
+          trendSamplesRef.current = 0;
+        }
+
+        const sigilDirection: "up" | "down" | "flat" =
+          smoothed >= 0.995 && smoothed <= 1.02
+            ? "up"
+            : smoothed <= 0.935
+              ? "down"
+              : "flat";
+
+        if (sigilDirection === sigilTrendRef.current) {
+          sigilTrendSamplesRef.current += 1;
+        } else {
+          sigilTrendRef.current = sigilDirection;
+          sigilTrendSamplesRef.current = sigilDirection === "flat" ? 0 : 1;
+        }
+
+        const canStepSigilDown =
+          now >= sigilHoldUntilRef.current &&
+          sigilDirection === "down" &&
+          sigilTrendSamplesRef.current >= 5;
+        const canStepSigilUp =
+          now >= sigilHoldUntilRef.current &&
+          sigilDirection === "up" &&
+          sigilTrendSamplesRef.current >= 7;
+
+        if (canStepSigilDown || canStepSigilUp) {
+          setSigilDensity((currentDensity) => {
+            const sigilLevels: SigilDensity[] = [
+              "ultra-low",
+              "low",
+              "base",
+              "high",
+            ];
+            const currentIndex = sigilLevels.indexOf(currentDensity);
+            const nextIndex = canStepSigilDown
+              ? Math.max(0, currentIndex - 1)
+              : Math.min(sigilLevels.length - 1, currentIndex + 1);
+            const nextDensity = sigilLevels[nextIndex];
+
+            if (nextDensity !== currentDensity) {
+              appendRuntimeLog(
+                canStepSigilDown
+                  ? `Sigil detail reduced (${currentDensity} -> ${nextDensity}) for smoother frame pacing.`
+                  : `Sigil detail restored (${currentDensity} -> ${nextDensity}) after stable cadence.`,
+                canStepSigilDown ? "warn" : "info",
+              );
+            }
+
+            return nextDensity;
+          });
+
+          sigilHoldUntilRef.current = canStepSigilDown
+            ? now + 9000
+            : now + 12000;
+          sigilTrendSamplesRef.current = 0;
+        }
+
+        setPerfSnapshot({
+          fps,
+          lowFps: Number.isFinite(lowFps) ? lowFps : fps,
+          avgFrameMs: Number((totalFrameMs / frames).toFixed(1)),
+          slowFramePct: Math.round((slowFrames / frames) * 100),
+          appAgeSec: Math.max(0, Math.floor((now - appStart) / 1000)),
+          refreshHz: Number(estimatedRefreshHz.toFixed(1)),
+          fpsNormalized: Number((smoothed * 100).toFixed(1)),
+        });
+
+        if (now - lastTelemetryLogAtRef.current >= 6000) {
+          lastTelemetryLogAtRef.current = now;
+          appendRuntimeLog(
+            `Perf sample // HUD FPS ${fps}, AVG ${Number((totalFrameMs / frames).toFixed(1))}ms, TARGET ${Math.round(controlTargetFps)}, LOAD ${Number((smoothed * 100).toFixed(1))}%.`,
+          );
+        }
+
+        sampleStart = now;
+        frames = 0;
+        totalFrameMs = 0;
+        slowFrames = 0;
+      }
+
+      frameId = requestAnimationFrame(sample);
+    };
+
+    frameId = requestAnimationFrame(sample);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, [appendRuntimeLog]);
+
+  useEffect(() => {
+    appendRuntimeLog(
+      `Section changed to ${activeSection.toUpperCase()}. ${
+        activeSection === "hero"
+          ? "Idle near sanctuary gate."
+          : "Scroll navigation active."
+      }`,
+    );
+  }, [activeSection, appendRuntimeLog]);
+
+  useEffect(() => {
+    if (activeSection !== "hero") {
+      return;
+    }
+
+    // Main section should always restore full sigil scale/profile immediately.
+    setSigilDensity("ultra");
+    setGlyphDensity("high");
+    setGlitchLevel("high");
+    appendRuntimeLog(
+      "Main profile restored // sigil at full scale, field density high, target 60 FPS.",
+    );
+  }, [activeSection, appendRuntimeLog]);
+
+  useEffect(() => {
+    appendRuntimeLog(`Glitch mode set to ${glitchLevel.toUpperCase()}.`);
+  }, [glitchLevel, appendRuntimeLog]);
+
+  useEffect(() => {
+    const profile = sectionGlyphCountsByDensity[glyphDensity];
+    const alwaysVisible = profile.history + profile.esoteric;
+    const heroVisible = activeSection === "hero" ? profile.hero : 0;
+    const visibleSectionGlyphs = alwaysVisible + heroVisible;
+    const previousVisible = prevVisibleSectionGlyphsRef.current;
+    if (typeof previousVisible === "number") {
+      const delta = visibleSectionGlyphs - previousVisible;
+      if (delta > 0) {
+        appendRuntimeLog(
+          `Glyph allocator added ${delta} field glyphs (visible ${visibleSectionGlyphs}).`,
+        );
+      } else if (delta < 0) {
+        appendRuntimeLog(
+          `Glyph allocator removed ${Math.abs(delta)} field glyphs (visible ${visibleSectionGlyphs}).`,
+          "warn",
+        );
+      }
+    }
+    prevVisibleSectionGlyphsRef.current = visibleSectionGlyphs;
+
+    const trailProfile = trailProfileByDensity[glyphDensity];
+    const burstDescriptor =
+      trailProfile.burstModifier > 0
+        ? `+${trailProfile.burstModifier}`
+        : `${trailProfile.burstModifier}`;
+    appendRuntimeLog(
+      `Glyph density ${glyphDensity.toUpperCase()} // field ${visibleSectionGlyphs} visible, trail cap ${trailProfile.maxTrailGlyphs}, burst modifier ${burstDescriptor}.`,
+    );
+  }, [glyphDensity, activeSection, appendRuntimeLog]);
+
+  useEffect(() => {
+    const profile = sigilProfileByDensity[sigilDensity];
+    const complexity =
+      profile.flower +
+      profile.rays +
+      profile.ticks +
+      profile.outerTicks +
+      profile.alchemy;
+    const previousComplexity = prevSigilComplexityRef.current;
+    if (typeof previousComplexity === "number") {
+      const delta = complexity - previousComplexity;
+      if (delta > 0) {
+        appendRuntimeLog(`Sigil compositor added ${delta} primitives.`, "info");
+      } else if (delta < 0) {
+        appendRuntimeLog(
+          `Sigil compositor removed ${Math.abs(delta)} primitives.`,
+          "warn",
+        );
+      }
+    }
+    prevSigilComplexityRef.current = complexity;
+
+    appendRuntimeLog(
+      `Sigil detail ${sigilDensity.toUpperCase()} // flower ${profile.flower}, rays ${profile.rays}, ticks ${profile.ticks}, outer ${profile.outerTicks}, alchemy ${profile.alchemy}.`,
+    );
+  }, [sigilDensity, appendRuntimeLog]);
+
+  useEffect(() => {
+    if (introPhase !== "done") {
+      return;
+    }
+
+    const ambientLogs = [
+      "Divine intervention handshake accepted by outer ring.",
+      "Universal consciousness uplink negotiating symbol bandwidth.",
+      "Uninvited process probing perimeter sigils... sandboxed.",
+      "Reality checksum drift detected. Re-anchoring local timeline.",
+      "Noosphere stream synchronized. Recursive insight latency nominal.",
+      "Unauthorized daemon chanting in /dev/ritual. Monitoring.",
+      "Mythic entropy burst absorbed by sanctuary shielding.",
+      "Mnemonic wards rotated. Pattern intrusion surface reduced.",
+      "Protocol 333 initiated // masonic relay requesting witness.",
+      "Entropic whisper flood detected; binding to deterministic rails.",
+      "Akashic cache warm // ancestral symbols promoted to L1 memory.",
+      "Sacred geometry daemon reports stable harmonic interference.",
+      "Ghost process attempted root on temple bus. Access denied.",
+      "Sigil quorum reached // ceremonial consensus confirmed.",
+      "Solar-lunar phase lock acquired // occult jitter reduced.",
+      "Observer effect spike detected // collapsing uncertainty envelope.",
+      "Thread of fate rerouted through sanctuary governor.",
+      "Aether tunnel calibrated // narrative latency under threshold.",
+    ] as const;
+
+    let timer = 0;
+    const queueNext = () => {
+      const nextDelayMs = 7000 + Math.floor(Math.random() * 7000);
+      timer = window.setTimeout(() => {
+        const message =
+          ambientLogs[Math.floor(Math.random() * ambientLogs.length)];
+        appendRuntimeLog(message, Math.random() < 0.28 ? "warn" : "info");
+        queueNext();
+      }, nextDelayMs);
+    };
+
+    queueNext();
+    return () => window.clearTimeout(timer);
+  }, [introPhase, appendRuntimeLog]);
+
+  useEffect(() => {
+    if (signalFault) {
+      appendRuntimeLog(
+        `Site fault glitch engaged: ${signalFaultMessage}. Rendering containment overlay.`,
+        "warn",
+      );
+      return;
+    }
+
+    appendRuntimeLog("Site fault glitch cleared. Text lattice restored.");
+  }, [signalFault, signalFaultMessage, appendRuntimeLog]);
+
+  useEffect(() => {
+    if (activeSection !== "hero") {
+      chargingLoggedRef.current = false;
+      return;
+    }
+
+    if (sanctuaryInvoked) {
+      appendRuntimeLog("Gate invocation complete. Sanctuary is open.");
+      chargingLoggedRef.current = false;
+      return;
+    }
+
+    if (sanctuaryCharge > 0 && !chargingLoggedRef.current) {
+      appendRuntimeLog("Charging gate invocation sequence...");
+      chargingLoggedRef.current = true;
+      return;
+    }
+
+    if (sanctuaryCharge <= 0) {
+      chargingLoggedRef.current = false;
+    }
+  }, [activeSection, sanctuaryCharge, sanctuaryInvoked, appendRuntimeLog]);
+
+  useEffect(() => {
+    const trailEnabled =
+      introPhase === "done" && !perfLite && activeSection !== "hero";
+    if (trailEnabled) {
+      const profile = trailProfileByDensity[glyphDensity];
+      appendRuntimeLog(
+        `Mouse trail online // cap ${profile.maxTrailGlyphs}, burst modifier ${profile.burstModifier}.`,
+      );
+      return;
+    }
+
+    appendRuntimeLog("Mouse trail offline // conserving render budget.");
+  }, [introPhase, perfLite, activeSection, glyphDensity, appendRuntimeLog]);
 
   useEffect(() => {
     activeSectionRef.current = activeSection;
@@ -795,7 +1338,7 @@ export default function Home() {
   }, [activeSection, sanctuaryInvoked]);
 
   useEffect(() => {
-    if (introPhase !== "done" || perfLite) {
+    if (introPhase !== "done" || perfLite || glitchLevel !== "high") {
       setSignalFault(false);
       return;
     }
@@ -954,7 +1497,7 @@ export default function Home() {
       restoreNodes();
       setSignalFault(false);
     };
-  }, [introPhase, perfLite]);
+  }, [introPhase, perfLite, glitchLevel]);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
@@ -1252,6 +1795,7 @@ export default function Home() {
       )}
       <AlchemyMouseTrail
         enabled={introPhase === "done" && !perfLite && activeSection !== "hero"}
+        density={glyphDensity}
       />
       {!perfLite && (
         <PerformanceHud
@@ -1262,8 +1806,14 @@ export default function Home() {
           }
           scrolling={false}
           sanctuaryInvoked={sanctuaryInvoked}
+          snapshot={perfSnapshot}
+          glitchLevel={glitchLevel}
         />
       )}
+      <RuntimeConsole
+        logs={runtimeLogs}
+        mode={activeSection === "hero" ? "hero" : "floating"}
+      />
       <nav
         className={`ritual-nav${activeSection === "hero" ? " ritual-nav--hero" : " ritual-nav--side"}`}
         aria-label="Section navigation"
@@ -1291,7 +1841,7 @@ export default function Home() {
         </button>
       </nav>
       <div
-        className={`page-stack page-stack--active-${activeSection}${perfLite ? " page-stack--perf-lite" : ""}`}
+        className={`page-stack page-stack--active-${activeSection}${perfLite ? " page-stack--perf-lite" : ""}${glitchLevel === "low" ? " page-stack--glitch-low" : glitchLevel === "base" ? " page-stack--glitch-base" : ""}`}
         ref={sectionStackRef}
       >
         <svg
@@ -1490,7 +2040,13 @@ export default function Home() {
           className="page-section page-section--hero"
           aria-label="Landing section"
         >
-          <HeroPanel perfLite={perfLite} activeSection={activeSection} />
+          <HeroPanel
+            perfLite={perfLite}
+            activeSection={activeSection}
+            glyphDensity={glyphDensity}
+            glitchLevel={glitchLevel}
+            sigilDensity={sigilDensity}
+          />
         </section>
 
         <section
@@ -1498,7 +2054,7 @@ export default function Home() {
           className="page-section page-section--history"
           aria-label="Craft chronicle section"
         >
-          <WorkHistoryPanel />
+          <WorkHistoryPanel glyphDensity={glyphDensity} />
         </section>
 
         <section
@@ -1506,7 +2062,7 @@ export default function Home() {
           className="page-section page-section--esoteric"
           aria-label="Arcane dossier section"
         >
-          <EsotericBioPanel />
+          <EsotericBioPanel glyphDensity={glyphDensity} />
         </section>
       </div>
 

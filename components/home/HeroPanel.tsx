@@ -13,6 +13,9 @@ import { SectionGlyphFields } from "./SectionGlyphFields";
 type HeroPanelProps = {
   perfLite: boolean;
   activeSection: SectionId;
+  glyphDensity: "low" | "base" | "high";
+  glitchLevel: "low" | "base" | "high";
+  sigilDensity: "ultra-low" | "low" | "base" | "high" | "ultra";
 };
 
 const canonicalName = "Christopher Hernandez";
@@ -49,12 +52,26 @@ function SocialLinksNav() {
   );
 }
 
-export function HeroPanel({ perfLite, activeSection }: HeroPanelProps) {
+export function HeroPanel({
+  perfLite,
+  activeSection,
+  glyphDensity,
+  glitchLevel,
+  sigilDensity,
+}: HeroPanelProps) {
   const heroActive = activeSection === "hero";
+  const glitchClass =
+    glitchLevel === "low"
+      ? " page--glitch-low"
+      : glitchLevel === "base"
+        ? " page--glitch-base"
+        : "";
 
   return (
-    <main className={`page${perfLite ? " page--perf-lite" : ""}`}>
-      {heroActive && <SectionGlyphFields variant="hero" />}
+    <main className={`page${perfLite ? " page--perf-lite" : ""}${glitchClass}`}>
+      {heroActive && (
+        <SectionGlyphFields variant="hero" density={glyphDensity} />
+      )}
 
       <section className="hero">
         <div className="hero__mast">
@@ -79,7 +96,6 @@ export function HeroPanel({ perfLite, activeSection }: HeroPanelProps) {
           </p>
           <span className="hero__scan-notch" aria-hidden="true" />
         </div>
-
         <div className="hero__footer">
           <ul className="signal-list" aria-label="Design signals">
             {signals.map((signal) => (
@@ -109,7 +125,10 @@ export function HeroPanel({ perfLite, activeSection }: HeroPanelProps) {
         </ul>
         <ul className="sigil-equations" aria-label="Foundational equations">
           {sigilEquations.map((equation, index) => (
-            <li key={equation} className={`sigil-equation sigil-equation--${index + 1}`}>
+            <li
+              key={equation}
+              className={`sigil-equation sigil-equation--${index + 1}`}
+            >
               {equation}
             </li>
           ))}
@@ -120,7 +139,7 @@ export function HeroPanel({ perfLite, activeSection }: HeroPanelProps) {
             idPrefix="hero-sigil-stone"
           />
         )}
-        {heroActive && <Sigil />}
+        {heroActive && <Sigil density={sigilDensity} />}
       </aside>
     </main>
   );

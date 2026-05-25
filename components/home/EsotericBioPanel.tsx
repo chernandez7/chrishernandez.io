@@ -4,7 +4,11 @@ import { memo } from "react";
 import { bioInterests } from "../../lib/home-content";
 import { SectionGlyphFields } from "./SectionGlyphFields";
 
-function EsotericBioPanelImpl() {
+type EsotericBioPanelProps = {
+  glyphDensity: "low" | "base" | "high";
+};
+
+function EsotericBioPanelImpl({ glyphDensity }: EsotericBioPanelProps) {
   const emphasizeEsotericText = (text: string) => {
     const pattern =
       /(symbolic frameworks|reflective practices|creative disciplines|chemistry|software architecture|meditation|journaling|attention|clarity|imagination|rigor)/gi;
@@ -24,7 +28,7 @@ function EsotericBioPanelImpl() {
 
   return (
     <>
-      <SectionGlyphFields variant="esoteric" />
+      <SectionGlyphFields variant="esoteric" density={glyphDensity} />
       <div className="esoteric-bio">
         <p className="esoteric-bio__eyebrow">Off-Hours</p>
         <h2 className="esoteric-bio__title">Esoteric Interests</h2>

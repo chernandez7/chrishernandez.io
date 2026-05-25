@@ -69,6 +69,7 @@ type SigilProps = {
   className?: string;
   idPrefix?: string;
   ariaHidden?: boolean;
+  density?: "ultra-low" | "low" | "base" | "high" | "ultra";
 };
 
 type TreeOfLifeGlyphProps = {
@@ -280,6 +281,7 @@ function SigilImpl({
   className,
   idPrefix = "sigil",
   ariaHidden = false,
+  density = "ultra",
 }: SigilProps = {}) {
   const rootClassName = className ? `sigil ${className}` : "sigil";
   const glowId = `${idPrefix}-glow`;
@@ -287,6 +289,67 @@ function SigilImpl({
   const strokeId = "sigilStroke";
   const ordoPathId = `${idPrefix}-ordo-path`;
   const enochPathId = `${idPrefix}-enoch-path`;
+  const densitySettings =
+    density === "ultra-low"
+      ? {
+          flowerCount: 10,
+          rayCount: 16,
+          tickCount: 16,
+          outerTickCount: 5,
+          alchemyCount: 4,
+          outerGlowOpacity: 0.72,
+          innerGlowOpacity: 0.78,
+        }
+      : density === "low"
+        ? {
+            flowerCount: 12,
+            rayCount: 18,
+            tickCount: 18,
+            outerTickCount: 6,
+            alchemyCount: 4,
+            outerGlowOpacity: 0.8,
+            innerGlowOpacity: 0.84,
+          }
+        : density === "base"
+          ? {
+              flowerCount: 14,
+              rayCount: 20,
+              tickCount: 20,
+              outerTickCount: 7,
+              alchemyCount: 5,
+              outerGlowOpacity: 0.88,
+              innerGlowOpacity: 0.9,
+            }
+          : density === "high"
+            ? {
+                flowerCount: 17,
+                rayCount: 22,
+                tickCount: 22,
+                outerTickCount: 8,
+                alchemyCount: 6,
+                outerGlowOpacity: 0.95,
+                innerGlowOpacity: 0.96,
+              }
+            : {
+                flowerCount: flowerCenters.length,
+                rayCount: rays.length,
+                tickCount: rays.length,
+                outerTickCount: outerTicks.length,
+                alchemyCount: alchemicalMarks.length,
+                outerGlowOpacity: 1,
+                innerGlowOpacity: 1,
+              };
+  const visibleFlowerCenters = flowerCenters.slice(
+    0,
+    densitySettings.flowerCount,
+  );
+  const visibleRays = rays.slice(0, densitySettings.rayCount);
+  const visibleTicks = rays.slice(0, densitySettings.tickCount);
+  const visibleOuterTicks = outerTicks.slice(0, densitySettings.outerTickCount);
+  const visibleAlchemicalMarks = alchemicalMarks.slice(
+    0,
+    densitySettings.alchemyCount,
+  );
 
   return (
     <svg
@@ -348,7 +411,7 @@ function SigilImpl({
       <circle cx="400" cy="400" r="42" className="sigil__seed" />
 
       <g className="sigil__flower-life">
-        {flowerCenters.map((point, index) => (
+        {visibleFlowerCenters.map((point, index) => (
           <circle
             key={`flower-${index}`}
             cx={point.x}
@@ -378,8 +441,8 @@ function SigilImpl({
         ))}
       </g>
 
-      {rays.map((ray) => {
-        const angle = (ray * 360) / rays.length;
+      {visibleRays.map((ray, index) => {
+        const angle = (index * 360) / visibleRays.length;
         return (
           <line
             key={ray}
@@ -390,14 +453,14 @@ function SigilImpl({
             className="sigil__ray"
             style={{
               transform: `rotate(${angle}deg)`,
-              animationDelay: `${-(ray * 0.19).toFixed(2)}s`,
+              animationDelay: `${-(index * 0.19).toFixed(2)}s`,
             }}
           />
         );
       })}
 
-      {rays.map((ray) => {
-        const angle = (ray * 360) / rays.length + 7.5;
+      {visibleTicks.map((ray, index) => {
+        const angle = (index * 360) / visibleTicks.length + 7.5;
         return (
           <line
             key={`tick-${ray}`}
@@ -424,15 +487,27 @@ function SigilImpl({
         className="sigil__ring"
       />
 
-      <circle cx="400" cy="400" r="332" fill={`url(#${glowId})`} />
-      <circle cx="400" cy="400" r="120" fill={`url(#${glowInnerId})`} />
+      <circle
+        cx="400"
+        cy="400"
+        r="332"
+        fill={`url(#${glowId})`}
+        style={{ opacity: densitySettings.outerGlowOpacity }}
+      />
+      <circle
+        cx="400"
+        cy="400"
+        r="120"
+        fill={`url(#${glowInnerId})`}
+        style={{ opacity: densitySettings.innerGlowOpacity }}
+      />
       <circle cx="400" cy="400" r="390" className="sigil__frame" />
 
       {/* Heptagon — slowly counter-rotates outside the inner layers */}
       <polygon points={heptagonPoints} className="sigil__heptagon" />
 
       {/* Outer tick marks at r≈372 — 8 radial ticks beyond the outer orbit */}
-      {outerTicks.map((tick) => (
+      {visibleOuterTicks.map((tick, index) => (
         <line
           key={`outer-tick-${tick}`}
           x1="400"
@@ -440,7 +515,7 @@ function SigilImpl({
           x2="400"
           y2="34"
           className="sigil__outer-tick"
-          transform={`rotate(${tick * 45} 400 400)`}
+          transform={`rotate(${(index * 360) / visibleOuterTicks.length} 400 400)`}
         />
       ))}
 
@@ -473,13 +548,13 @@ function SigilImpl({
       </text>
 
       <g className="sigil__alchemy" aria-hidden="true">
-        {alchemicalMarks.map((mark, index) => (
+        {visibleAlchemicalMarks.map((mark, index) => (
           <text
             key={`alchemy-${mark}-${index}`}
             x="400"
             y="72"
             className="sigil__alchemy-mark"
-            transform={`rotate(${index * 60} 400 400)`}
+            transform={`rotate(${(index * 360) / visibleAlchemicalMarks.length} 400 400)`}
             style={{ animationDelay: `${-(index * 0.8).toFixed(2)}s` }}
           >
             {mark}

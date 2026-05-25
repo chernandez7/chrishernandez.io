@@ -4,7 +4,11 @@ import { memo } from "react";
 import { educationEntries, promotionTracks } from "../../lib/home-content";
 import { SectionGlyphFields } from "./SectionGlyphFields";
 
-function WorkHistoryPanelImpl() {
+type WorkHistoryPanelProps = {
+  glyphDensity: "low" | "base" | "high";
+};
+
+function WorkHistoryPanelImpl({ glyphDensity }: WorkHistoryPanelProps) {
   const chronologicalTracks = [...promotionTracks].sort((a, b) => {
     const getFirstYear = (period: string) => {
       const match = period.match(/(\d{4})/);
@@ -49,7 +53,7 @@ function WorkHistoryPanelImpl() {
 
   return (
     <>
-      <SectionGlyphFields variant="history" />
+      <SectionGlyphFields variant="history" density={glyphDensity} />
       <div className="work-history">
         <div className="work-history__header">
           <p className="work-history__eyebrow">Experience</p>
@@ -136,10 +140,7 @@ function WorkHistoryPanelImpl() {
               aria-label="Education list"
             >
               {educationEntries.map((entry) => (
-                <li
-                  key={entry.school}
-                  className="work-history__education-item"
-                >
+                <li key={entry.school} className="work-history__education-item">
                   <p className="work-history__company">{entry.school}</p>
                   <p className="work-history__period">{entry.period}</p>
                   <p className="work-history__role">{entry.degree}</p>

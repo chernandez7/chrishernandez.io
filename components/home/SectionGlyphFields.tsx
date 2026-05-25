@@ -9,6 +9,7 @@ import {
 
 type SectionGlyphFieldsProps = {
   variant: "hero" | "history" | "esoteric";
+  density: "low" | "base" | "high";
 };
 
 const treeGlyphKeysByVariant = {
@@ -29,14 +30,43 @@ const stoneGlyphKeysByVariant = {
   esoteric: ["a", "b", "c", "d"],
 } as const;
 
-function SectionGlyphFieldsImpl({ variant }: SectionGlyphFieldsProps) {
+const glyphCountByDensity = {
+  low: {
+    hero: { tree: 1, flower: 1, stone: 2 },
+    history: { tree: 2, flower: 2, stone: 2 },
+    esoteric: { tree: 2, flower: 2, stone: 2 },
+  },
+  base: {
+    hero: { tree: 2, flower: 2, stone: 2 },
+    history: { tree: 3, flower: 3, stone: 3 },
+    esoteric: { tree: 3, flower: 3, stone: 3 },
+  },
+  high: {
+    hero: { tree: 2, flower: 2, stone: 4 },
+    history: { tree: 4, flower: 4, stone: 4 },
+    esoteric: { tree: 4, flower: 4, stone: 4 },
+  },
+} as const;
+
+function SectionGlyphFieldsImpl({ variant, density }: SectionGlyphFieldsProps) {
+  const counts = glyphCountByDensity[density][variant];
+  const treeGlyphKeys = treeGlyphKeysByVariant[variant].slice(0, counts.tree);
+  const flowerGlyphKeys = flowerGlyphKeysByVariant[variant].slice(
+    0,
+    counts.flower,
+  );
+  const stoneGlyphKeys = stoneGlyphKeysByVariant[variant].slice(
+    0,
+    counts.stone,
+  );
+
   return (
     <>
       <div
         className={`section-treefield section-treefield--${variant}`}
         aria-hidden="true"
       >
-        {treeGlyphKeysByVariant[variant].map((key) => (
+        {treeGlyphKeys.map((key) => (
           <TreeOfLifeGlyph
             key={`${variant}-tree-${key}`}
             className={`section-treefield__glyph section-treefield__glyph--${key}`}
@@ -48,7 +78,7 @@ function SectionGlyphFieldsImpl({ variant }: SectionGlyphFieldsProps) {
         className={`section-flowerfield section-flowerfield--${variant}`}
         aria-hidden="true"
       >
-        {flowerGlyphKeysByVariant[variant].map((key) => (
+        {flowerGlyphKeys.map((key) => (
           <FlowerOfLifeGlyph
             key={`${variant}-flower-${key}`}
             className={`section-flowerfield__glyph section-flowerfield__glyph--${key}`}
@@ -60,7 +90,7 @@ function SectionGlyphFieldsImpl({ variant }: SectionGlyphFieldsProps) {
         className={`section-stonefield section-stonefield--${variant}`}
         aria-hidden="true"
       >
-        {stoneGlyphKeysByVariant[variant].map((key) => (
+        {stoneGlyphKeys.map((key) => (
           <PhilosopherStoneGlyph
             key={`${variant}-stone-${key}`}
             className={`section-stonefield__glyph section-stonefield__glyph--${key}`}

@@ -169,6 +169,170 @@ svg {
   background: rgba(14, 7, 26, 0.66);
 }
 
+.runtime-console {
+  position: fixed;
+  z-index: 41;
+  width: min(34rem, 100%);
+  max-height: min(34dvh, 16rem);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  border: 1px solid rgba(223, 186, 122, 0.28);
+  border-radius: 12px;
+  background: rgba(6, 2, 14, 0.42);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(223, 186, 122, 0.08);
+  pointer-events: none;
+  transition:
+    top 420ms cubic-bezier(0.2, 0.72, 0.22, 1),
+    right 420ms cubic-bezier(0.2, 0.72, 0.22, 1),
+    left 420ms cubic-bezier(0.2, 0.72, 0.22, 1),
+    bottom 420ms cubic-bezier(0.2, 0.72, 0.22, 1),
+    width 420ms cubic-bezier(0.2, 0.72, 0.22, 1),
+    max-height 420ms cubic-bezier(0.2, 0.72, 0.22, 1),
+    opacity 260ms ease,
+    transform 420ms cubic-bezier(0.2, 0.72, 0.22, 1);
+  will-change: top, right, left, bottom, width, max-height, opacity, transform;
+}
+
+.runtime-console--floating {
+  right: 0.78rem;
+  bottom: 0.78rem;
+  width: min(30rem, calc(100vw - 1.56rem));
+  top: auto;
+  left: auto;
+  background: rgba(6, 2, 14, 0.34);
+  border-color: rgba(223, 186, 122, 0.2);
+  opacity: 0.82;
+  transform: translateY(0);
+}
+
+.runtime-console--hero {
+  left: clamp(0.9rem, 1.9vw, 1.6rem);
+  right: auto;
+  top: clamp(19.4rem, 41dvh, 24.8rem);
+  bottom: auto;
+  width: min(39rem, calc(46vw - 1.8rem));
+  height: clamp(9.8rem, 25dvh, 15.6rem);
+  max-height: none;
+  background: rgba(6, 2, 14, 0.3);
+  border-color: rgba(223, 186, 122, 0.17);
+  opacity: 0.64;
+  transform: translateY(-2px);
+}
+
+:root[data-fullscreen="1"] .runtime-console--hero {
+  top: auto;
+  bottom: clamp(0.9rem, 5dvh, 3rem);
+  max-height: min(32dvh, 14rem);
+  transform: none;
+}
+
+.runtime-console--hero .runtime-console__header {
+  padding: 0.38rem 0.48rem;
+}
+
+.runtime-console--hero .runtime-console__title {
+  font-size: 0.52rem;
+}
+
+.runtime-console--hero .runtime-console__meta {
+  font-size: 0.46rem;
+}
+
+.runtime-console--hero .runtime-console__list {
+  min-height: 0;
+  padding: 0.38rem 0.48rem 0.46rem;
+  gap: 0.2rem;
+}
+
+.runtime-console--hero .runtime-console__line {
+  font-size: 0.54rem;
+  gap: 0.44rem;
+  line-height: 1.38;
+}
+
+.runtime-console__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0.56rem;
+  border-bottom: 1px solid rgba(223, 186, 122, 0.16);
+  font-family: var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.runtime-console__title {
+  font-size: 0.58rem;
+  color: rgba(241, 214, 140, 0.9);
+}
+
+.runtime-console__meta {
+  font-size: 0.5rem;
+  color: rgba(255, 230, 172, 0.82);
+}
+
+.runtime-console__list {
+  margin: 0;
+  padding: 0.44rem 0.56rem 0.56rem;
+  list-style: none;
+  overflow: auto;
+  display: grid;
+  align-content: start;
+  gap: 0.22rem;
+}
+
+.runtime-console__line {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 0.55rem;
+  font-family: var(--mono);
+  font-size: 0.57rem;
+  line-height: 1.45;
+  letter-spacing: 0.03em;
+  color: rgba(238, 228, 205, 0.85);
+}
+
+.runtime-console__line--highlight {
+  border-left: 1px solid rgba(255, 220, 152, 0.45);
+  padding-left: 0.38rem;
+  margin-left: -0.38rem;
+  background: linear-gradient(90deg, rgba(223, 186, 122, 0.12), transparent 58%);
+  color: rgba(255, 233, 182, 0.95);
+}
+
+.runtime-console__line--warn {
+  color: rgba(255, 216, 147, 0.94);
+}
+
+.runtime-console__time {
+  color: rgba(241, 214, 140, 0.64);
+}
+
+.runtime-console__text {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.34rem;
+  overflow-wrap: anywhere;
+}
+
+.runtime-console__mark {
+  color: rgba(255, 222, 148, 0.86);
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 8px rgba(223, 186, 122, 0.44);
+}
+
+.runtime-console__line--highlight .runtime-console__text {
+  animation: runtimeLogFlicker 2.2s steps(1) infinite;
+  text-shadow:
+    -1px 0 rgba(126, 24, 40, 0.38),
+    1px 0 rgba(72, 24, 120, 0.3),
+    0 0 10px rgba(223, 186, 122, 0.2);
+}
+
 .perf-hud__metric--noise {
   color: rgba(255, 233, 165, 0.98);
   border-color: rgba(255, 233, 165, 0.55);
@@ -2026,9 +2190,111 @@ svg {
   animation: dossierPanelHum 5.2s ease-in-out infinite;
 }
 
+.page-stack--active-esoteric .page-section--esoteric::before {
+  background:
+    radial-gradient(circle at 14% 18%, rgba(96, 8, 28, 0.24), transparent 34%),
+    radial-gradient(circle at 82% 10%, rgba(66, 8, 92, 0.18), transparent 28%),
+    linear-gradient(180deg, rgba(5, 1, 12, 0.97), rgba(1, 0, 4, 1));
+}
+
+.page-stack--active-esoteric .page-section--esoteric::after {
+  opacity: 0.24;
+  animation: esotericRift 5.6s steps(1) infinite;
+}
+
+.page-stack--active-esoteric .esoteric-bio {
+  border-color: rgba(223, 186, 122, 0.28);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent 14%),
+    linear-gradient(90deg, rgba(223, 186, 122, 0.06), transparent 12%),
+    rgba(3, 1, 10, 0.74);
+  box-shadow:
+    inset 0 0 0 1px rgba(223, 186, 122, 0.08),
+    0 26px 88px rgba(0, 0, 0, 0.42);
+}
+
+.page-stack--active-esoteric .esoteric-bio__list li {
+  animation:
+    dossierTilePulse 4.2s ease-in-out infinite,
+    esotericTileGlitch 8.4s steps(1) infinite;
+  text-shadow:
+    -1px 0 rgba(104, 22, 32, 0.26),
+    1px 0 rgba(60, 18, 94, 0.2);
+}
+
+.page-stack--active-esoteric .section-treefield--esoteric .section-treefield__glyph,
+.page-stack--active-esoteric .section-flowerfield--esoteric .section-flowerfield__glyph,
+.page-stack--active-esoteric .section-stonefield--esoteric .section-stonefield__glyph {
+  filter: drop-shadow(0 0 22px rgba(110, 8, 28, 0.22));
+}
+
+.page-stack--active-esoteric .page__glitch {
+  opacity: 0.14 !important;
+  animation: pageGlitch 4.3s linear infinite !important;
+}
+
+.page-stack--active-esoteric .page__scanlines {
+  opacity: 0.18;
+  animation-duration: 5.8s;
+}
+
+.page-stack--active-esoteric .page__sweep {
+  opacity: 0.18;
+  animation-duration: 7.6s;
+}
+
+.page-stack--active-esoteric .page__ashlar {
+  opacity: 0.072;
+}
+
 .page-stack--active-history .page-section--history::after,
 .page-stack--active-esoteric .page-section--esoteric::after {
   animation: sectionFieldPulse 6.5s ease-in-out infinite;
+}
+
+.page--glitch-base .signal-glitch,
+.page--glitch-base .occult-pulse li,
+.page--glitch-base .sigil-equation,
+.page--glitch-base .hero__hl,
+.page--glitch-base .role-link,
+.page--glitch-base .hero__scan-notch,
+.page-stack--glitch-base .work-history__hl,
+.page-stack--glitch-base .work-history__hl::before,
+.page-stack--glitch-base .work-history__hl::after,
+.page-stack--glitch-base .esoteric-bio__hl,
+.page-stack--glitch-base .page-section--history::after,
+.page-stack--glitch-base .page-section--esoteric::after {
+  animation: none !important;
+}
+
+.page--glitch-low .sigil,
+.page--glitch-low .sigil-panel__stone-mark,
+.page--glitch-low .signal-glitch,
+.page--glitch-low .occult-pulse li,
+.page--glitch-low .sigil-equation,
+.page--glitch-low .hero__hl,
+.page--glitch-low .role-link,
+.page--glitch-low .hero__scan-notch,
+.page--glitch-low .link-card,
+.page-stack--glitch-low .work-history__item,
+.page-stack--glitch-low .work-history__hl,
+.page-stack--glitch-low .work-history__hl::before,
+.page-stack--glitch-low .work-history__hl::after,
+.page-stack--glitch-low .esoteric-bio,
+.page-stack--glitch-low .esoteric-bio__hl,
+.page-stack--glitch-low .esoteric-bio__list li,
+.page-stack--glitch-low .section-treefield__glyph,
+.page-stack--glitch-low .section-flowerfield__glyph,
+.page-stack--glitch-low .section-stonefield__glyph,
+.page-stack--glitch-low .page-section--history::after,
+.page-stack--glitch-low .page-section--esoteric::after,
+.page-stack--glitch-low .page__acacia {
+  animation: none !important;
+}
+
+.page-stack--glitch-low .page__acacia {
+  opacity: 0.18;
+  filter: none;
 }
 
 .page--perf-lite {
@@ -4329,6 +4595,60 @@ svg {
   }
 }
 
+@keyframes runtimeLogFlicker {
+  0%,
+  82%,
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  84% {
+    opacity: 0.74;
+    transform: translateX(-1px);
+  }
+
+  86% {
+    opacity: 1;
+    transform: translateX(1px);
+  }
+}
+
+@keyframes esotericRift {
+  0%,
+  78%,
+  100% {
+    opacity: 0.24;
+  }
+
+  80% {
+    opacity: 0.34;
+  }
+
+  82% {
+    opacity: 0.18;
+  }
+}
+
+@keyframes esotericTileGlitch {
+  0%,
+  84%,
+  100% {
+    filter: none;
+    transform: translateX(0);
+  }
+
+  86% {
+    filter: contrast(1.08) brightness(1.03);
+    transform: translateX(-1px);
+  }
+
+  88% {
+    filter: contrast(0.95) brightness(0.96);
+    transform: translateX(1px);
+  }
+}
+
 @keyframes stoneUnityMotion {
   0%,
   100% {
@@ -5068,6 +5388,33 @@ svg {
 
   .perf-hud {
     display: none;
+  }
+
+  .runtime-console--floating {
+    left: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+    bottom: 0.5rem;
+    max-height: min(28dvh, 12rem);
+  }
+
+  .runtime-console {
+    display: none;
+  }
+
+  .runtime-console--hero {
+    left: 0.5rem;
+    right: 0.5rem;
+    top: auto;
+    bottom: 3.8rem;
+    width: auto;
+    max-height: min(20dvh, 8.5rem);
+    opacity: 0.78;
+  }
+
+  .runtime-console__line {
+    font-size: 0.52rem;
+    gap: 0.42rem;
   }
 
   .ritual-nav {
