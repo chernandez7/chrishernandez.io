@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://skate.dev/sitemap.xml

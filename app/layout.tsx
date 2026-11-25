@@ -3,6 +3,14 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Cinzel, IBM_Plex_Mono } from "next/font/google";
 
+import {
+  buildStructuredData,
+  ogImage,
+  siteDescription,
+  siteName,
+  siteTitle,
+  siteUrl,
+} from "../lib/structured-data";
 import "../styles/globals.css";
 
 const serif = Cinzel({
@@ -20,14 +28,13 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://skate.dev"),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Christopher Hernandez | Senior Software Engineer II",
+    default: siteTitle,
     template: "%s | Christopher Hernandez",
   },
-  description:
-    "Christopher Hernandez is a Senior Software Engineer II at Tempus AI solving hard systems problems through architecture, platform design, and execution.",
-  applicationName: "Christopher Hernandez",
+  description: siteDescription,
+  applicationName: siteName,
   keywords: [
     "Christopher Hernandez",
     "Senior Software Engineer",
@@ -39,7 +46,7 @@ export const metadata: Metadata = {
     "occult design",
     "alchemical aesthetics",
   ],
-  authors: [{ name: "Christopher Hernandez", url: "https://skate.dev" }],
+  authors: [{ name: siteName, url: siteUrl }],
   creator: "Christopher Hernandez",
   publisher: "Christopher Hernandez",
   category: "technology",
@@ -67,28 +74,23 @@ export const metadata: Metadata = {
     shortcut: ["/favicon.ico"],
   },
   openGraph: {
-    title: "Christopher Hernandez | Senior Software Engineer II",
+    title: siteTitle,
     description:
       "Systems-minded engineering portfolio shaped by architecture, execution, and ritual aesthetics.",
     url: "/",
-    siteName: "Christopher Hernandez",
+    siteName,
     locale: "en_US",
-    type: "website",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Christopher Hernandez — Senior Software Engineer II",
-      },
-    ],
+    type: "profile",
+    firstName: "Christopher",
+    lastName: "Hernandez",
+    images: [ogImage],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Christopher Hernandez | Senior Software Engineer II",
+    title: siteTitle,
     description:
       "Systems-minded engineering portfolio shaped by architecture, execution, and ritual aesthetics.",
-    images: ["/og-image.png"],
+    images: [{ url: ogImage.url, alt: ogImage.alt }],
   },
 };
 
@@ -97,6 +99,10 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
+const structuredDataJson = JSON.stringify(
+  buildStructuredData(new Date().toISOString()),
+).replace(/</g, "\\u003c");
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -104,7 +110,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${serif.variable} ${mono.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: structuredDataJson }}
+        />
+      </body>
       <Script
         defer
         src="https://static.cloudflareinsights.com/beacon.min.js"

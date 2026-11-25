@@ -53,7 +53,9 @@ npm run build
 
 ```
 app/
-  layout.tsx      — root layout, fonts, metadata, analytics script
+  layout.tsx      — root layout, fonts, metadata, JSON-LD, analytics script
+  sitemap.ts      — build-time sitemap.xml (static export)
+  robots.ts       — build-time robots.txt (static export)
   page.tsx        — the entire site (only route), section stack + glitch/fault runtime
 
 components/
@@ -67,6 +69,7 @@ components/
 lib/
   home-content.ts — section copy, quotes, equations, timeline data, skill pills
   links.ts        — social link data (SocialLink type)
+  structured-data.ts — site URL/title/OG image constants + schema.org JSON-LD graph
 
 styles/
   globals.css     — ALL styles (large, flat), no modules

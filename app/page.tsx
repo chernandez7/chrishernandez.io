@@ -19,7 +19,6 @@ import {
   sectionOrder,
   type SectionId,
 } from "../lib/home-content";
-import { socialLinks } from "../lib/links";
 
 type NavWithHints = Navigator & {
   connection?: {
@@ -628,71 +627,6 @@ export default function Home() {
     },
     [],
   );
-  const structuredDataJsonLd = useMemo(
-    () => ({
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "Person",
-          "@id": "https://skate.dev/#person",
-          name: "Christopher Hernandez",
-          url: "https://skate.dev",
-          image: "https://skate.dev/og-image.png",
-          sameAs: socialLinks.map((link) => link.href),
-          jobTitle: "Senior Software Engineer II",
-          worksFor: {
-            "@type": "Organization",
-            name: "Tempus AI",
-            url: "https://www.tempus.com/",
-          },
-          description:
-            "Senior Software Engineer II focused on hard systems problems, platform architecture, and resilient product delivery.",
-          knowsAbout: [
-            "Software Architecture",
-            "Platform Engineering",
-            "Distributed Systems",
-            "Full-Stack Development",
-          ],
-        },
-        {
-          "@type": "WebSite",
-          "@id": "https://skate.dev/#website",
-          url: "https://skate.dev",
-          name: "Christopher Hernandez",
-          inLanguage: "en-US",
-          publisher: {
-            "@id": "https://skate.dev/#person",
-          },
-        },
-        {
-          "@type": "ProfilePage",
-          "@id": "https://skate.dev/#webpage",
-          url: "https://skate.dev/",
-          name: "Christopher Hernandez | Senior Software Engineer II",
-          isPartOf: {
-            "@id": "https://skate.dev/#website",
-          },
-          about: {
-            "@id": "https://skate.dev/#person",
-          },
-          mainEntity: {
-            "@id": "https://skate.dev/#person",
-          },
-          primaryImageOfPage: {
-            "@type": "ImageObject",
-            url: "https://skate.dev/og-image.png",
-          },
-          inLanguage: "en-US",
-        },
-      ],
-    }),
-    [],
-  );
-  const structuredDataJsonLdHtml = useMemo(
-    () => JSON.stringify(structuredDataJsonLd),
-    [structuredDataJsonLd],
-  );
-
   useEffect(() => {
     const navigatorHints = navigator as NavWithHints;
     const reducedMotionQuery = window.matchMedia(
@@ -2478,11 +2412,6 @@ export default function Home() {
           <p className="intro-screensaver__signature">Christopher Hernandez</p>
         </div>
       )}
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: structuredDataJsonLdHtml }}
-      />
     </div>
   );
 }
